@@ -1,0 +1,80 @@
+{
+  "private": true,
+  "name": "@dedis/kyber",
+  "version": "3.0.9",
+  "description": "A typescript implementation of Kyber interfaces",
+  "main": "index.js",
+  "browser": "bundle.min.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node_modules/.bin/nyc --reporter=lcov --reporter=text node_modules/jasmine/bin/jasmine.js",
+    "test:nocover": "ts-node node_modules/jasmine/bin/jasmine.js",
+    "coveralls": "cat ./coverage/lcov.info | node_modules/.bin/coveralls",
+    "bundle": "node node_modules/.bin/webpack",
+    "doc": "node_modules/.bin/typedoc --out doc/ src/",
+    "link": "./publish.sh --link"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dedis/cothority.git"
+  },
+  "keywords": [
+    "ed25519",
+    "elliptic",
+    "curve25519",
+    "nist"
+  ],
+  "author": "DEDIS",
+  "license": "LGPL-3.0-or-later",
+  "homepage": "https://github.com/dedis/cothority",
+  "dependencies": {
+    "@stablelib/blake2xs": "^0.10.4",
+    "@types/bn.js": "^4.11.5",
+    "bn.js": "^4.11.8",
+    "elliptic": "^6.4.1",
+    "hash.js": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.2",
+    "@types/jasmine": "^3.3.5",
+    "@types/node": "^9.6.6",
+    "ajv": "^6.9.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.5.0",
+    "jasmine": "^3.3.1",
+    "jsverify": "^0.8.4",
+    "nyc": "^14.1.1",
+    "prettier": "^1.10.2",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^7.0.1",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.1",
+    "webpack-cli": "^3.2.1"
+  },
+  "nyc": {
+    "all": true,
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "spec/**/*",
+      "**/*.d.ts",
+      "**/*.config.js",
+      "coverage/**/*",
+      "dist/**/*",
+      "doc/**/*",
+      "spec/**/*"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}
