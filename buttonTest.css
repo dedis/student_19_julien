@@ -1,0 +1,31 @@
+body{
+    background: rgb(255, 255, 255);
+}
+
+#monitoring{
+    background: #1594e5;
+    color: #fff;
+    display: block;
+    width: 140px;
+    font-size: 24px;
+    text-transform: uppercase;
+    padding: 10px;
+    text-align: center;
+    margin: 20px auto;
+    cursor: pointer;
+
+}
+
+#monitoring2{
+    background: #1594e5;
+    color: #fff;
+    display: block;
+    width: 140px;
+    font-size: 24px;
+    text-transform: uppercase;
+    padding: 10px;
+    text-align: center;
+    margin: 20px auto;
+    cursor: pointer;
+
+}
