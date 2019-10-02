@@ -46,3 +46,55 @@ button1.onclick = function() {
   );
   performance.clearMeasures();
 };
+
+button2.onclick = function() {
+  performance.mark("Begin signing");
+  console.log("Signing");
+  var signs = [];
+  const msg = Buffer.from("abc"); // new uint8array 
+  for (let i = 0; i < 10; i++) {
+    var bn256secret = new kyber.pairing.BN256Scalar().pick();
+    var bn256public = new kyber.pairing.point.BN256G2Point(
+      bn256secret.getValue()
+    );
+    var signature = sign(msg, bn256secret);
+    signs.push(signature);
+  }
+  performance.mark("End signing");
+  performance.mark("Begin verifying");
+  performance.measure("Timing signing", "Begin signing", "End signing");
+
+  console.log("Verifying");
+  var mask = Buffer.from([0b1]);
+  for (let i = 0; i < 10; i++) {
+    var verification = verify(msg, mask, signs[i]);
+  }
+  performance.mark("End verifying");
+  performance.measure("Timing verifying", "Begin verifying", "End verifying");
+
+  performance.mark("Begin Aggreggation");
+  console.log("Aggreggation");
+
+  var aggreggation = aggregateSignatures(mask, signs);
+  performance.mark("End Aggreggation");
+  performance.measure(
+    "Timing Aggreggation",
+    "Begin Aggreggation",
+    "End Aggreggation"
+  );
+  const myMeasure = performance.getEntriesByType("measure");
+  var average = 0;
+  var min = myMeasure[0].duration;
+  var max = 0;
+  for (let i = 0; i < myMeasure.length; i++) {
+    let timeMeasure = myMeasure[i].duration;
+    console.log("Monitoring with performance.mark is : " + timeMeasure);
+    if (min > timeMeasure) min = timeMeasure;
+    if (max < timeMeasure) max = timeMeasure;
+    average += timeMeasure;
+  }
+  console.log(
+    "Average: " + average / myMeasure.length + ", min : " + min + ", max : " + max
+  );
+  performance.clearMeasures();
+};
