@@ -1,3 +1,5 @@
+import { sign } from "/src/sign/bdn/index.ts";
+
 var button1 = document.getElementById("monitoring");
 var button2 = document.getElementById("monitoring2");
 
@@ -48,16 +50,23 @@ button1.onclick = function() {
 };
 
 button2.onclick = function() {
+  /*  What to do: 1)Timing from beginning to the end of the test, might not be real value cause of in-testg
+                  2)Timing for signing X signatures
+                  3)Timing for verifying X signatures
+                  4)Timing for one aggregation: see how long it is, in case it is too short, generate random aggregation to test 
+                  5)Output Average, min, max, median, std dev
+                  6)Look at the memory when the tests are working properly 
+   */
   performance.mark("Begin signing");
   console.log("Signing");
   var signs = [];
-  const msg = Buffer.from("abc"); // new uint8array 
+  const msg = new Uint8Array("abc");
   for (let i = 0; i < 10; i++) {
     var bn256secret = new kyber.pairing.BN256Scalar().pick();
     var bn256public = new kyber.pairing.point.BN256G2Point(
       bn256secret.getValue()
     );
-    var signature = sign(msg, bn256secret);
+    var signature = sign(msg, bn256secret); //Not working yet
     signs.push(signature);
   }
   performance.mark("End signing");
@@ -65,7 +74,7 @@ button2.onclick = function() {
   performance.measure("Timing signing", "Begin signing", "End signing");
 
   console.log("Verifying");
-  var mask = Buffer.from([0b1]);
+  var mask = new Uint8Array("0b1");
   for (let i = 0; i < 10; i++) {
     var verification = verify(msg, mask, signs[i]);
   }
