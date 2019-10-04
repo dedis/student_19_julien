@@ -1,4 +1,3 @@
-import { sign } from "/src/sign/bdn/index.ts";
 
 var button1 = document.getElementById("monitoring");
 var button2 = document.getElementById("monitoring2");
@@ -66,7 +65,7 @@ button2.onclick = function() {
     var bn256public = new kyber.pairing.point.BN256G2Point(
       bn256secret.getValue()
     );
-    var signature = sign(msg, bn256secret); //Not working yet
+    var signature = kyber.sign.bdn.sign(msg, bn256secret); //Not working yet
     signs.push(signature);
   }
   performance.mark("End signing");
@@ -76,7 +75,7 @@ button2.onclick = function() {
   console.log("Verifying");
   var mask = new Uint8Array("0b1");
   for (let i = 0; i < 10; i++) {
-    var verification = verify(msg, mask, signs[i]);
+    var verification = kyber.sign.bdn.verify(msg, mask, signs[i]);
   }
   performance.mark("End verifying");
   performance.measure("Timing verifying", "Begin verifying", "End verifying");
