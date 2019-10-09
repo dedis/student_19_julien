@@ -61,7 +61,7 @@ function sign() {
   var signs = [];
   var publics = [];
   performance.mark("Begin test signing");
-  for (let i = 0; i < 650; i++) { //650 is used to have a test of around 20 seconds
+  for (let i = 0; i < 100; i++) { //650 is used to have a test of around 20 seconds
     performance.mark("Signing one key start");
     var bn256secret = new kyber.pairing.BN256Scalar().pick();
     var bn256public = new kyber.pairing.point.BN256G2Point(
@@ -135,7 +135,7 @@ function aggregate(signs, publics, maxj) {
   var publicInAggregation = [];
   var aggregations =[];
   performance.mark("Aggregate all keys start");
-  for (let j = 0; j < maxj; j++) { 
+  for (let j = 0; j < 5; j++) { 
     for (let i = 0; i < 5; i++) { // the value 5 should not be increased
       signaToBeAggregate.push(signs[j * 5 + i]);
       publicInAggregation.push(publics[j * 5 + i]);
@@ -168,9 +168,9 @@ function verify(signatures, publics, maxj){
   for (let j = 0; j < maxj; j++) { 
     publicInVerify.push(publics[j]);
     var mask = new kyber.sign.Mask(publicInVerify, maskBuffer[0]);
+    var siga = kyber.sign.bdn.aggregateSignatures(mask, [signatures[j]]);
     performance.mark("single verification start");
-    var acc = kyber.sign.bdn.verify(msg, mask, signatures[j]);
-    console.log(acc);
+    var acc = kyber.sign.bdn.verify(msg, mask, siga.marshalBinary());
     performance.mark("single verification end");
     performance.measure("single verification", "single verification start", "single verification end" );
     publicInVerify.pop();
@@ -193,12 +193,12 @@ button2.onclick = function() {
                   5)Output Average, min, max, median, std dev
                   6)Look at the memory when the tests are working properly 
    */
-  var maxj = 10;
+  var maxj = 100;
   performance.mark("Test start");
   var values = sign();
   var signatures = values[0];
   var publics = values[1];
-  var aggregations = aggregate(signatures, publics, maxj);
+  //var aggregations = aggregate(signatures, publics, maxj);
   verify(signatures, publics, maxj);
   performance.mark("Test end");
   performance.measure("Test performance", "Test start", "Test end");
