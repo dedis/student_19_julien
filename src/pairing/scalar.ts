@@ -1,26 +1,25 @@
 import { randomBytes } from 'crypto';
-import BN from 'bn.js';
 import { Scalar } from '../index';
 import { p } from './constants';
 import { int } from '../random';
 
-export type BNType = number | string | number[] | Buffer | BN;
+export type BNType = number | string | number[] | Buffer | bigint;
 
 /**
  * Scalar used in combination with G1 and G2 points
  */
 export default class BN256Scalar implements Scalar {
-    private v: BN;
+    private v: bigint;
 
     constructor(value?: BNType) {
-        this.v = new BN(value).umod(p);
+        this.v = BigInt(value).umod(p);
     }
 
     /**
      * Get the BigNumber value of the scalar
      * @returns the value
      */
-    getValue(): BN {
+    getValue(): bigint {
         return this.v;
     }
 

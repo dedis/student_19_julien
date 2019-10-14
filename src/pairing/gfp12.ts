@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import GfP6 from './gfp6';
 import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6 } from './constants';
@@ -154,10 +153,10 @@ export default class GfP12 {
      * @param k the coefficient
      * @returns the new element
      */
-    exp(k: BN): GfP12 {
+    exp(k: bigint): GfP12 {
         let sum = GfP12.one();
         let t : GfP12;
-
+        
         for (let i = k.bitLength() - 1; i >= 0; i--) {
             t = sum.square();
             if (k.testn(i)) {
