@@ -1,8 +1,7 @@
-import BN from 'bn.js';
 import GfP from './gfp';
 import { p } from './constants';
 
-type BNType = Buffer | string | number | BN;
+type BNType = Buffer | string | number | bigint ;
 
 /**
  * Group field of size p^2
@@ -50,7 +49,7 @@ export default class GfP2 {
      * @returns true when zero, false otherwise
      */
     isZero(): boolean {
-        return this.x.getValue().eqn(0) && this.y.getValue().eqn(0);
+        return this.x.getValue() === 0n && this.y.getValue() === 0n;
     }
 
     /**
@@ -58,7 +57,7 @@ export default class GfP2 {
      * @returns true when one, false otherwise
      */
     isOne(): boolean {
-        return this.x.getValue().eqn(0) && this.y.getValue().eqn(1);
+        return this.x.getValue() === 0n && this.y.getValue() === 1n;
     }
 
     /**
