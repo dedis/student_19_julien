@@ -58,7 +58,8 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     neg(a: BN256Scalar): BN256Scalar {
-        this.v = a.v.neg() % p;
+        if(a.v > 0) a.v *= (-1n); 
+        this.v = a.v % p;
         while(this.v < 0) this.v += p
         return this;
     }
@@ -79,7 +80,8 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     inv(a: BN256Scalar): BN256Scalar {
-        this.v = a.v.invm(p);
+        this.v = this.egcd(a.v, p).a % a.v;
+        //this.v = a.v.invm(p);
         return this;
     }
 
@@ -128,5 +130,16 @@ export default class BN256Scalar implements Scalar {
     /** @inheritdoc */
     equals(s2: BN256Scalar): boolean {
         return this.v === s2.v;
+    }
+
+    egcd(e1: bigint, e2: bigint): {a:bigint, b:bigint,gcd:bigint}{
+        //egcd between p and e1
+        return {
+            a:1n,
+            b:2n,
+            gcd:3n
+        
+        };
+
     }
 }
