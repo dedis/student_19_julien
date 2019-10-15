@@ -80,7 +80,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     inv(a: BN256Scalar): BN256Scalar {
-        this.v = this.egcd(a.v, p).a % a.v;
+        this.v = this.egcd(a.v, p).a % p;
         //this.v = a.v.invm(p);
         return this;
     }
