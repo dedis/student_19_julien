@@ -119,6 +119,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     clone(): BN256Scalar {
+        //from: https://stackoverflow.com/questions/31712808/how-to-force-javascript-to-deep-copy-a-string
         let str : String = this.v.toString(16);
         var string_copy = (' ' + str).slice(1);
         
@@ -134,6 +135,7 @@ export default class BN256Scalar implements Scalar {
 
     egcd(e1: bigint, e2: bigint): {a:bigint, b:bigint,gcd:bigint}{
         //egcd between p and e1
+        //can be done from https://github.com/lpcsmath/egcd/blob/master/javascript/egcd.js
         return {
             a:1n,
             b:2n,
