@@ -1,6 +1,6 @@
 import BN from "bn.js";
 
-export type BNType = number | string | number[] | Buffer | BN | bigint;
+export type BNType = number | string | number[] | Buffer | bigint;
 
-export const zeroBN = new BN(0);
-export const oneBN = new BN(1);
+export const zeroBN = 0n;
+export const oneBN = 1n;

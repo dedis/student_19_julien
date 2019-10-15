@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import GfP2 from './gfp2';
 
 const twistB = new GfP2(
@@ -198,11 +197,12 @@ export default class TwistPoint {
      * @param a the point
      * @param k the scalar
      */
-    mul(a: TwistPoint, k: BN): void {
+    mul(a: TwistPoint, k: bigint): void {
         const sum = new TwistPoint();
         const t = new TwistPoint();
+        let s :string = k.toString();
 
-        for (let i = k.bitLength(); i >= 0; i--) {
+        for (let i = (Buffer.byteLength(s) * 8); i >= 0; i--) {
             t.double(sum);
             if (k.testn(i)) {
                 sum.add(t, a);

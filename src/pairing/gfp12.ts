@@ -156,8 +156,10 @@ export default class GfP12 {
     exp(k: bigint): GfP12 {
         let sum = GfP12.one();
         let t : GfP12;
-        
-        for (let i = k.bitLength() - 1; i >= 0; i--) {
+        let s :string = k.toString();
+        //Get the string of the BigInt, convert to byte, then get number of bits
+
+        for (let i = (Buffer.byteLength(s) * 8) - 1; i >= 0; i--) {
             t = sum.square();
             if (k.testn(i)) {
                 sum = t.mul(this);

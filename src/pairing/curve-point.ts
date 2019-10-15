@@ -1,5 +1,4 @@
 import { createHash } from 'crypto';
-import BN from 'bn.js';
 import GfP from './gfp';
 import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
@@ -21,19 +20,20 @@ export default class CurvePoint {
     static hashToPoint(msg: Buffer): CurvePoint {
         const h = createHash('sha256');
         h.update(msg);
+        let stringH : String = h.digest().toString();
 
-        let x = new BN(h.digest(), null, 'be').mod(p);
+        let x = BigInt(stringH) % p;
 
         for (;;) {
-            const xxx = x.mul(x).mul(x).mod(p);
-            const t = xxx.add(curveB.getValue());
+            const xxx = x * x * x % p;
+            const t = xxx + curveB.getValue();
 
             const y = modSqrt(t, p);
             if (y != null) {
                 return new CurvePoint(x, y, 1, 1);
             }
 
-            x = x.add(oneBN);
+            x += oneBN;
         }
     }
     
@@ -74,7 +74,7 @@ export default class CurvePoint {
      */
     isOnCurve(): boolean {
         let yy = this.y.sqr();
-        const xxx = this.x.pow(new BN(3));
+        const xxx = this.x.pow(3n);
 
         yy = yy.sub(xxx);
         yy = yy.sub(curveB);
@@ -200,12 +200,13 @@ export default class CurvePoint {
      * @param a      the point to multiply
      * @param scalar the scalar
      */
-    mul(a: CurvePoint, scalar: BN): void {
+    mul(a: CurvePoint, scalar: bigint): void {
         const sum = new CurvePoint();
         sum.setInfinity();
         const t = new CurvePoint();
-
-        for (let i = scalar.bitLength(); i >= 0; i--) {
+        let s :string = scalar.toString();
+        //Get the string of the BigInt, convert to byte, then get number of bits
+        for (let i = (Buffer.byteLength(s) * 8); i >= 0; i--) {
             t.dbl(sum);
             if (scalar.testn(i)) {
                 sum.add(t, a);

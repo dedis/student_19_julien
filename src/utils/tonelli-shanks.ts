@@ -1,16 +1,15 @@
-import BN from 'bn.js';
 import { BNType, zeroBN, oneBN } from '../constants';
 
 const ZERO = zeroBN;
 const ONE = oneBN;
-const TWO = new BN(2);
-const FOUR = new BN(4);
+const TWO = 2n;
+const FOUR = 4n;
 
-function powMod(a: BN, e: BN, p: BN): BN {
+function powMod(a: bigint, e: bigint, p: bigint): bigint {
     return a.toRed(BN.red(p)).redPow(e).fromRed();
 }
 
-function ls(a: BN, p: BN): BN {
+function ls(a: bigint, p: bigint): bigint {
     return powMod(a, p.sub(ONE).div(TWO), p);
 }
 
@@ -20,7 +19,7 @@ function ls(a: BN, p: BN): BN {
  * The implementation is adapted from https://rosettacode.org/wiki/Tonelli-Shanks_algorithm#Java
  * to reflect the Java library.
  */
-export function modSqrt(n: BNType, p: BNType): BN {
+export function modSqrt(n: BNType, p: BNType): bigint {
     n = new BN(n);
     p = new BN(p);
 

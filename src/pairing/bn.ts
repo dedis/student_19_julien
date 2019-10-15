@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import CurvePoint from './curve-point';
 import TwistPoint from './twist-point';
 import GfP2 from './gfp2';
@@ -6,7 +5,7 @@ import GfP12 from './gfp12';
 import GfP6 from './gfp6';
 import { optimalAte } from './opt-ate';
 
-export type BNType = number | string | number[] | Buffer | BN;
+export type BNType = number | string | number[] | Buffer | bigint;
 
 /**
  * Wrapper around the basic curve point. It acts as a mutable object and
@@ -34,7 +33,7 @@ export class G1 {
         this.p = new CurvePoint();
 
         if (k) {
-            this.scalarBaseMul(new BN(k));
+            this.scalarBaseMul(BigInt(k));
         }
     }
 
@@ -72,7 +71,7 @@ export class G1 {
      * Multiply the generator by the scalar k and set the value
      * @param k the scalar
      */
-    scalarBaseMul(k: BN): void {
+    scalarBaseMul(k: bigint): void {
         this.p.mul(CurvePoint.generator, k);
     }
 
@@ -81,7 +80,7 @@ export class G1 {
      * @param a the point
      * @param k the scalar
      */
-    scalarMul(a: G1, k: BN): void {
+    scalarMul(a: G1, k: bigint): void {
         this.p.mul(a.p, k);
     }
 
@@ -197,7 +196,7 @@ export class G2 {
         this.p = new TwistPoint();
 
         if (k) {
-            this.scalarBaseMul(new BN(k));
+            this.scalarBaseMul(BigInt(k));
         }
     }
 
@@ -235,7 +234,7 @@ export class G2 {
      * Mutliply the generator by a scalar k and set the value
      * @param k the scalar
      */
-    scalarBaseMul(k?: BN): void {
+    scalarBaseMul(k?: bigint): void {
         this.p.mul(TwistPoint.generator, k);
     }
 
@@ -244,7 +243,7 @@ export class G2 {
      * @param a the point
      * @param k the scalar
      */
-    scalarMul(a: G2, k: BN): void {
+    scalarMul(a: G2, k: bigint): void {
         this.p.mul(a.p, k);
     }
 
@@ -392,7 +391,7 @@ export class GT {
      * @param a the point
      * @param k the scalar
      */
-    scalarMul(a: GT, k: BN): void {
+    scalarMul(a: GT, k: bigint): void {
         this.g = a.g.exp(k);
     }
 

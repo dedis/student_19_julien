@@ -177,7 +177,7 @@ export default class GfP {
      * @returns the buffer
      */
     toBytes(): Buffer {
-        return new Buffer("Null", "be");
+        return new Buffer(this.v.toString(), "be");
         //return this.v.toArrayLike(Buffer, 'be', GfP.ELEM_SIZE);
     }
 
