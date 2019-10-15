@@ -208,11 +208,18 @@ export default class CurvePoint {
         //Get the string of the BigInt, convert to byte, then get number of bits
         for (let i = (Buffer.byteLength(s) * 8); i >= 0; i--) {
             t.dbl(sum);
+
+            let mask = 1n;
+            let maskn = mask << BigInt(i);
+            let maskAndNumber = maskn & scalar;
+            if(maskAndNumber != 0n) sum.add(t,a);
+            else sum.copy(t);
+/*
             if (scalar.testn(i)) {
                 sum.add(t, a);
             } else {
                 sum.copy(t);
-            }
+            }*/
         }
 
         this.copy(sum);

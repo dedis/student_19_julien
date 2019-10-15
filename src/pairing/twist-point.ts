@@ -204,11 +204,17 @@ export default class TwistPoint {
 
         for (let i = (Buffer.byteLength(s) * 8); i >= 0; i--) {
             t.double(sum);
+            let mask = 1n;
+            let maskn = mask << BigInt(i);
+            let maskAndNumber = maskn & k;
+            if(maskAndNumber != 0n)sum.add(t,a);
+            else sum.copy(t)
+/*
             if (k.testn(i)) {
                 sum.add(t, a);
             } else {
                 sum.copy(t);
-            }
+            }*/
         }
 
         this.copy(sum);

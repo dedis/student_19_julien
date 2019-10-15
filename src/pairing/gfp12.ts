@@ -161,11 +161,17 @@ export default class GfP12 {
 
         for (let i = (Buffer.byteLength(s) * 8) - 1; i >= 0; i--) {
             t = sum.square();
+            let mask = 1n;
+            let maskn = mask << BigInt(i);
+            let maskAndNumber = maskn & k;
+            if(maskAndNumber != 0n) sum = t.mul(this);
+            else sum = t;
+            /*
             if (k.testn(i)) {
                 sum = t.mul(this);
             } else {
                 sum = t;
-            }
+            }*/
         }
 
         return sum;
