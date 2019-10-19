@@ -19,7 +19,7 @@ function ls(a: bigint, p: bigint): bigint {
  * The implementation is adapted from https://rosettacode.org/wiki/Tonelli-Shanks_algorithm#Java
  * to reflect the Java library.
  */
-export function modSqrt(n: BNType, p: BNType): bigint {
+export function modSqrt(n: bigint, p: bigint): bigint {
     n = new BN(n);
     p = new BN(p);
 
