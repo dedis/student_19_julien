@@ -1,4 +1,5 @@
-import { BNType } from '../constants';
+import { egcd } from './util-bigint';
+import { toBufferBE } from 'bigint-buffer';
 
 /**
  * Field of size p
@@ -10,7 +11,7 @@ export default class GfP {
 
     private v: bigint;
 
-    constructor(value: BNType) {
+    constructor(value: bigint) {
         this.v = BigInt(value);
     }
 
@@ -63,9 +64,7 @@ export default class GfP {
      * @return the new value
      */
     sub(a: GfP): GfP {
-        if (this.v > a.v) return new GfP(this.v - a.v);
-        else return new GfP(a.v - this.v)
-        //return new GfP(this.v.sub(a.v));
+        return new GfP(this.v - a.v)
     }
 
     /**
@@ -82,23 +81,7 @@ export default class GfP {
      * @returns the new value
      */
     sqr(): GfP {
-        if (this.v < 0n) {
-			throw 'square root of negative numbers is not supported'
-		}
-
-		if (this.v < 2n) {
-			return new GfP(this.v);
-		}
-
-		function newtonIteration(n: bigint, x0: bigint): bigint{
-			const x1 = ((n / x0) + x0) >> 1n;
-			if (x0 === x1 || x0 === (x1 - 1n)) {
-				return x0;
-			}
-			return newtonIteration(n, x1);
-		}
-
-		return new GfP(newtonIteration(this.v, 1n));
+        return this.mul(this)
 	}
 
     /**
@@ -116,8 +99,8 @@ export default class GfP {
      * @returns the new value
      */
     mod(p: bigint): GfP {
-        if(this.v < 0) return new GfP(p +(this.v % p));
-        else return new GfP(this.v % p)
+        if(this.v < 0) this.v = p + (this.v % p);
+        return new GfP(this.v % p)
         }
 
     /**
@@ -126,11 +109,7 @@ export default class GfP {
      * @returns the new value
      */
     invmod(p: bigint): GfP {
-        let a : bigint = this.v % p;
-        for(let x = 1n; x<p; x++){
-            if((a*x)%p==1n)return new GfP(x);
-        }
-        //https://www.geeksforgeeks.org/multiplicative-inverse-under-modulo-m/
+        return new GfP(egcd(this.v, p).a % p);
     }
 
     /**
@@ -177,7 +156,7 @@ export default class GfP {
      * @returns the buffer
      */
     toBytes(): Buffer {
-        return new Buffer(this.v.toString(), "be");
+        return toBufferBE(this.v, GfP.ELEM_SIZE);
         //return this.v.toArrayLike(Buffer, 'be', GfP.ELEM_SIZE);
     }
 
