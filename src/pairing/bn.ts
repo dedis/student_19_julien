@@ -4,8 +4,10 @@ import GfP2 from './gfp2';
 import GfP12 from './gfp12';
 import GfP6 from './gfp6';
 import { optimalAte } from './opt-ate';
+import BN from 'bn.js';
+import { toBigIntBE } from 'bigint-buffer';
 
-export type BNType = number | string | number[] | Buffer | bigint;
+export type BNType = number | string | number[] | Buffer | BN;
 
 /**
  * Wrapper around the basic curve point. It acts as a mutable object and
@@ -29,7 +31,7 @@ export class G1 {
 
     private p: CurvePoint;
 
-    constructor(k?: BNType) {
+    constructor(k?: bigint) {
         this.p = new CurvePoint();
 
         if (k) {
@@ -138,7 +140,7 @@ export class G1 {
             throw new Error('wrong buffer size for a G1 point');
         }
 
-        this.p = new CurvePoint(bytes.slice(0, G1.ELEM_SIZE), bytes.slice(G1.ELEM_SIZE), 1, 1);
+        this.p = new CurvePoint(toBigIntBE(bytes.slice(0, G1.ELEM_SIZE)), toBigIntBE(bytes.slice(G1.ELEM_SIZE)), 1n, 1n);
 
         if (this.p.getX().isZero() && this.p.getY().isZero()) {
             this.p.setInfinity();
@@ -192,7 +194,7 @@ export class G2 {
 
     private p: TwistPoint;
 
-    constructor(k?: BNType) {
+    constructor(k?: bigint) {
         this.p = new TwistPoint();
 
         if (k) {
@@ -307,8 +309,8 @@ export class G2 {
         const yyBytes = bytes.slice(G2.ELEM_SIZE * 3);
 
         this.p = new TwistPoint(
-            new GfP2(xxBytes, xyBytes),
-            new GfP2(yxBytes, yyBytes),
+            new GfP2(toBigIntBE(xxBytes), toBigIntBE(xyBytes)),
+            new GfP2(toBigIntBE(yxBytes), toBigIntBE(yyBytes)),
             GfP2.one(),
             GfP2.one(),
         );
@@ -448,18 +450,18 @@ export class GT {
         }
 
         const n = GT.ELEM_SIZE;
-        const xxxBytes = bytes.slice(0, n);
-        const xxyBytes = bytes.slice(n, n*2);
-        const xyxBytes = bytes.slice(n*2, n*3);
-        const xyyBytes = bytes.slice(n*3, n*4);
-        const xzxBytes = bytes.slice(n*4, n*5);
-        const xzyBytes = bytes.slice(n*5, n*6);
-        const yxxBytes = bytes.slice(n*6, n*7);
-        const yxyBytes = bytes.slice(n*7, n*8);
-        const yyxBytes = bytes.slice(n*8, n*9);
-        const yyyBytes = bytes.slice(n*9, n*10);
-        const yzxBytes = bytes.slice(n*10, n*11);
-        const yzyBytes = bytes.slice(n*11);
+        const xxxBytes = toBigIntBE(bytes.slice(0, n));
+        const xxyBytes = toBigIntBE(bytes.slice(n, n*2));
+        const xyxBytes = toBigIntBE(bytes.slice(n*2, n*3));
+        const xyyBytes = toBigIntBE(bytes.slice(n*3, n*4));
+        const xzxBytes = toBigIntBE(bytes.slice(n*4, n*5));
+        const xzyBytes = toBigIntBE(bytes.slice(n*5, n*6));
+        const yxxBytes = toBigIntBE(bytes.slice(n*6, n*7));
+        const yxyBytes = toBigIntBE(bytes.slice(n*7, n*8));
+        const yyxBytes = toBigIntBE(bytes.slice(n*8, n*9));
+        const yyyBytes = toBigIntBE(bytes.slice(n*9, n*10));
+        const yzxBytes = toBigIntBE(bytes.slice(n*10, n*11));
+        const yzyBytes = toBigIntBE(bytes.slice(n*11));
 
         this.g = new GfP12(
             new GfP6(new GfP2(xxxBytes, xxyBytes), new GfP2(xyxBytes, xyyBytes), new GfP2(xzxBytes, xzyBytes)),
