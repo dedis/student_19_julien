@@ -1,7 +1,7 @@
 import GfP6 from './gfp6';
 import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6 } from './constants';
-
+import {toBigIntBE, toBufferBE} from 'bigint-buffer';
 /**
  * Group field element of size p^12
  * This object acts as an immutable and then any modification will instantiate
