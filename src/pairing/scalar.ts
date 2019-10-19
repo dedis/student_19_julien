@@ -2,8 +2,9 @@ import { randomBytes } from 'crypto';
 import { Scalar } from '../index';
 import { p } from './constants';
 import { int } from '../random';
+import BN from 'bn.js'
 
-export type BNType = number | string | number[] | Buffer | bigint;
+export type BNType = number | string | number[] | Buffer | BN;
 
 /**
  * Scalar used in combination with G1 and G2 points
@@ -11,7 +12,7 @@ export type BNType = number | string | number[] | Buffer | bigint;
 export default class BN256Scalar implements Scalar {
     private v: bigint;
 
-    constructor(value?: BNType) {
+    constructor(value?: bigint) {
         this.v = BigInt(value) % p;
     }
 
@@ -24,7 +25,7 @@ export default class BN256Scalar implements Scalar {
     }
 
     /** @inheritdoc */
-    set(a: BN256Scalar): BN256Scalar {
+    set(a: BN256Scalar): BN256Scalar { //une ligne
         let s : String = this.v.toString(16);
         var string_copy = (' ' + s).slice(1);
         this.v = BigInt(string_copy);
@@ -50,14 +51,14 @@ export default class BN256Scalar implements Scalar {
     }
 
     /** @inheritdoc */
-    sub(a: BN256Scalar, b: BN256Scalar): BN256Scalar {
+    sub(a: BN256Scalar, b: BN256Scalar): BN256Scalar { //a-b
         this.v = a.v - b.v % p;
         while(this.v < 0) this.v += p 
         return this;
     }
 
     /** @inheritdoc */
-    neg(a: BN256Scalar): BN256Scalar {
+    neg(a: BN256Scalar): BN256Scalar {//thisv = -av
         if(a.v > 0) a.v *= (-1n); 
         this.v = a.v % p;
         while(this.v < 0) this.v += p
@@ -122,8 +123,6 @@ export default class BN256Scalar implements Scalar {
         //from: https://stackoverflow.com/questions/31712808/how-to-force-javascript-to-deep-copy-a-string
         let str : String = this.v.toString(16);
         var string_copy = (' ' + str).slice(1);
-        
-        
         const s = new BN256Scalar(BigInt(string_copy));
         return s;
     }
@@ -131,17 +130,5 @@ export default class BN256Scalar implements Scalar {
     /** @inheritdoc */
     equals(s2: BN256Scalar): boolean {
         return this.v === s2.v;
-    }
-
-    egcd(e1: bigint, e2: bigint): {a:bigint, b:bigint,gcd:bigint}{
-        //egcd between p and e1
-        //can be done from https://github.com/lpcsmath/egcd/blob/master/javascript/egcd.js
-        return {
-            a:1n,
-            b:2n,
-            gcd:3n
-        
-        };
-
     }
 }
