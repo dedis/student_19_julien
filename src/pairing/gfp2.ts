@@ -1,7 +1,8 @@
 import GfP from './gfp';
 import { p } from './constants';
+import BN from 'bn.js'
 
-type BNType = Buffer | string | number | bigint ;
+type BNType = Buffer | string | number | BN ;
 
 /**
  * Group field of size p^2
@@ -9,8 +10,8 @@ type BNType = Buffer | string | number | bigint ;
  * a new object.
  */
 export default class GfP2 {
-    private static ZERO = new GfP2(0, 0);
-    private static ONE = new GfP2(0, 1);
+    private static ZERO = new GfP2(0n, 0n);
+    private static ONE = new GfP2(0n, 1n);
 
     public static zero(): GfP2 {
         return GfP2.ZERO;
@@ -23,9 +24,9 @@ export default class GfP2 {
     private x: GfP;
     private y: GfP;
 
-    constructor(x: BNType | GfP, y: BNType | GfP) {
-        this.x = x instanceof GfP ? x : new GfP(x || 0);
-        this.y = y instanceof GfP ? y : new GfP(y || 0);
+    constructor(x: bigint | GfP, y: bigint | GfP) {
+        this.x = x instanceof GfP ? x : new GfP(x || 0n);
+        this.y = y instanceof GfP ? y : new GfP(y || 0n);
     }
 
     /**
