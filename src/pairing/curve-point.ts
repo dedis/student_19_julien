@@ -2,15 +2,15 @@ import { createHash } from 'crypto';
 import GfP from './gfp';
 import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
-import { BNType, oneBN } from '../constants';
+import { oneBN } from '../constants';
 
-const curveB = new GfP(3);
+const curveB = new GfP(3n);
 
 /**
  * Point class used by G1
  */
 export default class CurvePoint {
-    static generator = new CurvePoint(1, -2, 1, 1);
+    static generator = new CurvePoint(1n, -2n, 1n, 1n);
 
     /**
      * Hash the message to a point
@@ -30,7 +30,7 @@ export default class CurvePoint {
 
             const y = modSqrt(t, p);
             if (y != null) {
-                return new CurvePoint(x, y, 1, 1);
+                return new CurvePoint(x, y, 1n, 1n);
             }
 
             x += oneBN;
@@ -42,14 +42,14 @@ export default class CurvePoint {
     private z: GfP;
     private t: GfP;
 
-    constructor(x?: BNType, y?: BNType, z?: BNType, t?: BNType) {
+    constructor(x?: bigint, y?: bigint, z?: bigint, t?: bigint) {
         // the coefficient are modulo p to insure we have same
         // values when it comes to comparison
         // Other arithmetic operations are already modulo.
-        this.x = new GfP(x || 0).mod(p);
-        this.y = new GfP(y || 1).mod(p);
-        this.z = new GfP(z || 0).mod(p);
-        this.t = new GfP(t || 0).mod(p);
+        this.x = new GfP(x || 0n).mod(p);
+        this.y = new GfP(y || 1n).mod(p);
+        this.z = new GfP(z || 0n).mod(p);
+        this.t = new GfP(t || 0n).mod(p);
     }
 
     /**
@@ -89,10 +89,10 @@ export default class CurvePoint {
      * Set the point to the infinity
      */
     setInfinity(): void {
-        this.x = new GfP(0);
-        this.y = new GfP(1);
-        this.z = new GfP(0);
-        this.t = new GfP(0);
+        this.x = new GfP(0n);
+        this.y = new GfP(1n);
+        this.z = new GfP(0n);
+        this.t = new GfP(0n);
     }
 
     /**
@@ -242,8 +242,8 @@ export default class CurvePoint {
         this.y = t.mul(zInv2).mod(p);
         t = this.x.mul(zInv2).mod(p);
         this.x = t;
-        this.z = new GfP(1);
-        this.t = new GfP(1);
+        this.z = new GfP(1n);
+        this.t = new GfP(1n);
     }
 
     /**
