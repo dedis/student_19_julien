@@ -1,8 +1,8 @@
 import { randomBytes } from 'crypto';
 import { Point } from '../index';
-import { G1, G2, GT, BNType } from './bn';
+import { G1, G2, GT } from './bn';
 import BN256Scalar from './scalar';
-
+import { toBigIntBE } from 'bigint-buffer'
 /**
  * Implementation of the point interface for G1
  */
@@ -23,7 +23,7 @@ export class BN256G1Point implements Point {
 
     private g1: G1;
 
-    constructor(k?: BNType) {
+    constructor(k?: bigint) {
         this.g1 = new G1(k);
     }
 
@@ -51,7 +51,7 @@ export class BN256G1Point implements Point {
     pick(callback?: (length: number) => Buffer): BN256G1Point {
         callback = callback || randomBytes;
         const bytes = callback(this.g1.marshalSize());
-        this.g1 = new G1(bytes);
+        this.g1 = new G1(toBigIntBE(bytes));
 
         return this;
     }
@@ -159,7 +159,7 @@ export class BN256G2Point implements Point {
 
     private g2: G2;
 
-    constructor(k?: BNType) {
+    constructor(k?: bigint) {
         this.g2 = new G2(k);
     }
 
@@ -187,7 +187,7 @@ export class BN256G2Point implements Point {
     pick(callback?: (length: number) => Buffer): BN256G2Point {
         callback = callback || randomBytes;
         const bytes = callback(32);
-        this.g2 = new G2(bytes);
+        this.g2 = new G2(toBigIntBE(bytes));
 
         return this;
     }
