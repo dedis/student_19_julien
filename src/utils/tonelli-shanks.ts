@@ -1,15 +1,15 @@
 import { BNType, zeroBN, oneBN } from '../constants';
-
+import BN from 'bn.js'
 const ZERO = zeroBN;
 const ONE = oneBN;
-const TWO = 2n;
-const FOUR = 4n;
+const TWO = new BN(2);
+const FOUR = new BN(4);
 
-function powMod(a: bigint, e: bigint, p: bigint): bigint {
+function powMod(a: BN, e: BN, p: BN): BN {
     return a.toRed(BN.red(p)).redPow(e).fromRed();
 }
 
-function ls(a: bigint, p: bigint): bigint {
+function ls(a: BN, p: BN): BN {
     return powMod(a, p.sub(ONE).div(TWO), p);
 }
 
@@ -19,9 +19,10 @@ function ls(a: bigint, p: bigint): bigint {
  * The implementation is adapted from https://rosettacode.org/wiki/Tonelli-Shanks_algorithm#Java
  * to reflect the Java library.
  */
-export function modSqrt(n: bigint, p: bigint): bigint {
-    n = new BN(n);
-    p = new BN(p);
+export function modSqrt(n_1: bigint, p_1: bigint): bigint {
+
+    let n : BN = new BN(n_1.toString());
+    let p : BN = new BN(p_1.toString());
 
     if (!ls(n, p).eq(ONE)) {
         return null;
@@ -35,7 +36,7 @@ export function modSqrt(n: bigint, p: bigint): bigint {
     }
 
     if (ss.eq(ONE)) {
-        return powMod(n, p.add(ONE).div(FOUR), p);
+        return BigInt(powMod(n, p.add(ONE).div(FOUR), p).toString());
     }
 
     let z = TWO;
@@ -50,7 +51,7 @@ export function modSqrt(n: bigint, p: bigint): bigint {
 
     for (;;) {
         if (t.eq(ONE)) {
-            return r;
+            return BigInt(r.toString());
         }
 
         let i = ZERO;
