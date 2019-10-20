@@ -39,7 +39,7 @@ describe('GfP2', () => {
     });
 
     it('should square', () => {
-        const a = new GfP2(BigInt('23423492374', BigInt('12934872398472394827398479');
+        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
         const s = a.square();
         const m = a.mul(a);
 

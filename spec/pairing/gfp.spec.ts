@@ -36,6 +36,6 @@ describe('GfP', () => {
     it('should compute the modulo', () => {
         const v = new GfP(BigInt(-3));
 
-        expect(v.mod(BigInt(5)).getValue().toNumber()).toBe(2);
+        expect(v.mod(BigInt(5)).getValue()).toBe(BigInt(2));
     });
 });
