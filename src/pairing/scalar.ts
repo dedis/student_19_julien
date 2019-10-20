@@ -5,6 +5,7 @@ import { int } from '../random';
 import BN from 'bn.js'
 import { egcd } from './util-bigint'
 import { oneBI, zeroBI } from '../constants';
+import {toBigIntBE, toBufferBE} from 'bigint-buffer'
 
 export type BNType = number | string | number[] | Buffer | BN;
 
@@ -105,14 +106,14 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     marshalBinary(): Buffer {
-        return new Buffer(this.v.toString(), "be");
+        return toBufferBE(this.v, 32)
         //return this.v.toArrayLike(Buffer, 'be', 32);
     }
 
     /** @inheritdoc */
     unmarshalBinary(buf: Buffer | string): void {
-        
-        this.v = BigInt(buf.toString());
+        if(typeof buf === 'string') buf = Buffer.from(buf)
+        this.v = toBigIntBE(buf);
     }
 
     /** @inheritdoc */
