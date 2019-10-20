@@ -1,10 +1,12 @@
+import { oneBI, zeroBI } from "../constants";
+
 export function egcd(m: bigint, n: bigint): {a:bigint, b:bigint,gcd:bigint}{
     //egcd between p and e1
     //can be done from https://github.com/lpcsmath/egcd/blob/master/javascript/egcd.js
-        let a1 : bigint = 1n;
-        let b1 : bigint = 0n;
-        let a : bigint  = 0n;
-        let b : bigint = 1n;
+        let a1 : bigint = oneBI;
+        let b1 : bigint = zeroBI;
+        let a : bigint  = zeroBI;
+        let b : bigint = oneBI;
         let c : bigint = m;
         let d :bigint = n;
         let q : bigint = c/d;

@@ -1,5 +1,6 @@
 import { egcd } from './util-bigint';
 import { toBufferBE } from 'bigint-buffer';
+import { oneBI, zeroBI } from '../constants';
 
 /**
  * Field of size p
@@ -38,7 +39,7 @@ export default class GfP {
      * @returns true for one, false otherwise
      */
     isOne(): boolean {
-        return this.v === 1n;
+        return this.v === oneBI;
     }
 
     /**
@@ -46,7 +47,7 @@ export default class GfP {
      * @returns true for zero, false otherwise
      */
     isZero(): boolean {
-        return this.v === 0n;
+        return this.v === zeroBI;
     }
 
     /**

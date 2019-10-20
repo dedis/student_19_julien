@@ -2,15 +2,15 @@ import { createHash } from 'crypto';
 import GfP from './gfp';
 import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
-import { oneBI } from '../constants';
+import { oneBI, zeroBI } from '../constants';
 
-const curveB = new GfP(3n);
+const curveB = new GfP(BigInt(3));
 
 /**
  * Point class used by G1
  */
 export default class CurvePoint {
-    static generator = new CurvePoint(1n, -2n, 1n, 1n);
+    static generator = new CurvePoint(oneBI, BigInt(-2), oneBI, oneBI);
 
     /**
      * Hash the message to a point
@@ -30,7 +30,7 @@ export default class CurvePoint {
 
             const y = modSqrt(t, p);
             if (y != null) {
-                return new CurvePoint(x, y, 1n, 1n);
+                return new CurvePoint(x, y, oneBI, oneBI);
             }
 
             x += oneBI;
@@ -46,10 +46,10 @@ export default class CurvePoint {
         // the coefficient are modulo p to insure we have same
         // values when it comes to comparison
         // Other arithmetic operations are already modulo.
-        this.x = new GfP(x || 0n).mod(p);
-        this.y = new GfP(y || 1n).mod(p);
-        this.z = new GfP(z || 0n).mod(p);
-        this.t = new GfP(t || 0n).mod(p);
+        this.x = new GfP(x || zeroBI).mod(p);
+        this.y = new GfP(y || oneBI).mod(p);
+        this.z = new GfP(z || zeroBI).mod(p);
+        this.t = new GfP(t || zeroBI).mod(p);
     }
 
     /**
@@ -74,7 +74,7 @@ export default class CurvePoint {
      */
     isOnCurve(): boolean {
         let yy = this.y.sqr();
-        const xxx = this.x.pow(3n);
+        const xxx = this.x.pow(BigInt(3));
 
         yy = yy.sub(xxx);
         yy = yy.sub(curveB);
@@ -89,10 +89,10 @@ export default class CurvePoint {
      * Set the point to the infinity
      */
     setInfinity(): void {
-        this.x = new GfP(0n);
-        this.y = new GfP(1n);
-        this.z = new GfP(0n);
-        this.t = new GfP(0n);
+        this.x = new GfP(zeroBI);
+        this.y = new GfP(oneBI);
+        this.z = new GfP(zeroBI);
+        this.t = new GfP(zeroBI);
     }
 
     /**
@@ -209,10 +209,10 @@ export default class CurvePoint {
         for (let i = (Buffer.byteLength(s) * 8); i >= 0; i--) {
             t.dbl(sum);
 
-            let mask = 1n;
+            let mask = oneBI;
             let maskn = mask << BigInt(i);
             let maskAndNumber = maskn & scalar;
-            if(maskAndNumber != 0n) sum.add(t,a);
+            if(maskAndNumber != zeroBI) sum.add(t,a);
             else sum.copy(t);
 /*
             if (scalar.testn(i)) {
@@ -242,8 +242,8 @@ export default class CurvePoint {
         this.y = t.mul(zInv2).mod(p);
         t = this.x.mul(zInv2).mod(p);
         this.x = t;
-        this.z = new GfP(1n);
-        this.t = new GfP(1n);
+        this.z = new GfP(oneBI);
+        this.t = new GfP(oneBI);
     }
 
     /**

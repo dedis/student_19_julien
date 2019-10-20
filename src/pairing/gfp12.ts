@@ -2,6 +2,7 @@ import GfP6 from './gfp6';
 import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6 } from './constants';
 import {toBigIntBE, toBufferBE} from 'bigint-buffer';
+import { oneBI, zeroBI } from '../constants';
 /**
  * Group field element of size p^12
  * This object acts as an immutable and then any modification will instantiate
@@ -161,10 +162,10 @@ export default class GfP12 {
 
         for (let i = (Buffer.byteLength(s) * 8) - 1; i >= 0; i--) {
             t = sum.square();
-            let mask = 1n;
+            let mask = oneBI;
             let maskn = mask << BigInt(i);
             let maskAndNumber = maskn & k;
-            if(maskAndNumber != 0n) sum = t.mul(this);
+            if(maskAndNumber != zeroBI) sum = t.mul(this);
             else sum = t;
             /*
             if (k.testn(i)) {

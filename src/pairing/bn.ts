@@ -6,6 +6,8 @@ import GfP6 from './gfp6';
 import { optimalAte } from './opt-ate';
 import BN from 'bn.js';
 import { toBigIntBE } from 'bigint-buffer';
+import {oneBI} from '../constants'
+
 
 export type BNType = number | string | number[] | Buffer | BN;
 
@@ -140,7 +142,7 @@ export class G1 {
             throw new Error('wrong buffer size for a G1 point');
         }
 
-        this.p = new CurvePoint(toBigIntBE(bytes.slice(0, G1.ELEM_SIZE)), toBigIntBE(bytes.slice(G1.ELEM_SIZE)), 1n, 1n);
+        this.p = new CurvePoint(toBigIntBE(bytes.slice(0, G1.ELEM_SIZE)), toBigIntBE(bytes.slice(G1.ELEM_SIZE)), oneBI, oneBI);  //seems to have a compilation problem here
 
         if (this.p.getX().isZero() && this.p.getY().isZero()) {
             this.p.setInfinity();

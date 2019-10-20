@@ -4,6 +4,7 @@ import { p } from './constants';
 import { int } from '../random';
 import BN from 'bn.js'
 import { egcd } from './util-bigint'
+import { oneBI, zeroBI } from '../constants';
 
 export type BNType = number | string | number[] | Buffer | BN;
 
@@ -35,13 +36,13 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     one(): BN256Scalar {
-        this.v = 1n;
+        this.v = oneBI;
         return this;
     }
 
     /** @inheritdoc */
     zero(): BN256Scalar {
-        this.v = 0n;
+        this.v = zeroBI;
         return this;
     }
 
@@ -60,7 +61,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     neg(a: BN256Scalar): BN256Scalar {//thisv = -av
-        if(a.v > 0) a.v *= (-1n); 
+        if(a.v > 0) a.v *= (-oneBI); 
         this.v = a.v % p;
         while(this.v < 0) this.v += p
         return this;
