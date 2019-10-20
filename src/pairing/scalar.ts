@@ -3,6 +3,7 @@ import { Scalar } from '../index';
 import { p } from './constants';
 import { int } from '../random';
 import BN from 'bn.js'
+import { egcd } from './util-bigint'
 
 export type BNType = number | string | number[] | Buffer | BN;
 
@@ -81,7 +82,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     inv(a: BN256Scalar): BN256Scalar {
-        this.v = this.egcd(a.v, p).a % p;
+        this.v = egcd(a.v, p).a % p;
         //this.v = a.v.invm(p);
         return this;
     }
