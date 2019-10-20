@@ -3,9 +3,9 @@ import GfP2 from '../../src/pairing/gfp2';
 
 describe('GfP6', () => {
     const a = new GfP6(
-        new GfP2("239487238491", "2356249827341"),
-        new GfP2("082659782", "182703523765"),
-        new GfP2("978236549263", "64893242"),
+        new GfP2(BigInt("239487238491"), BigInt("2356249827341")),
+        new GfP2(BigInt("082659782"), BigInt("182703523765")),
+        new GfP2(BigInt("978236549263"), BigInt("64893242")),
     );
 
     it('should invert', () => {

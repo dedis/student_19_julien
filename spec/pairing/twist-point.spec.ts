@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import TwistPoint from '../../src/pairing/twist-point';
 import { order } from '../../src/pairing/constants';
 
@@ -9,7 +8,7 @@ describe('Twist Point', () => {
         expect(g.isInfinity()).toBeTruthy();
 
         const one = new TwistPoint();
-        one.mul(TwistPoint.generator, new BN(1));
+        one.mul(TwistPoint.generator, BigInt(1));
         
         g.add(g, one);
         g.makeAffine();
@@ -20,7 +19,7 @@ describe('Twist Point', () => {
 
     it('should negate the point', () => {
         const p = new TwistPoint();
-        p.mul(TwistPoint.generator, new BN(3));
+        p.mul(TwistPoint.generator, BigInt(3));
 
         const n = new TwistPoint();
         n.neg(p);
@@ -37,14 +36,14 @@ describe('Twist Point', () => {
 
     it('should add and multiply', () => {
         const p = new TwistPoint();
-        p.mul(TwistPoint.generator, new BN(123456789));
+        p.mul(TwistPoint.generator, BigInt(123456789));
 
         const d = new TwistPoint();
         d.add(p, p);
         d.makeAffine();
 
         const m = new TwistPoint();
-        m.mul(p, new BN(2));
+        m.mul(p, BigInt(2));
         m.makeAffine();
 
         expect(d.getX().equals(m.getX())).toBeTruthy();
@@ -53,7 +52,7 @@ describe('Twist Point', () => {
 
     it('should add the infinity', () => {
         const p = new TwistPoint();
-        p.mul(TwistPoint.generator, new BN(123));
+        p.mul(TwistPoint.generator, BigInt(123));
 
         const inf = new TwistPoint();
         inf.setInfinity();
@@ -71,13 +70,13 @@ describe('Twist Point', () => {
 
     it('should test the equality', () => {
         const p = new TwistPoint();
-        p.mul(TwistPoint.generator, new BN(123));
+        p.mul(TwistPoint.generator, BigInt(123));
 
         const p2 = new TwistPoint();
-        p2.mul(TwistPoint.generator, new BN(123));
+        p2.mul(TwistPoint.generator, BigInt(123));
 
         const p3 = new TwistPoint();
-        p3.mul(TwistPoint.generator, new BN(12));
+        p3.mul(TwistPoint.generator, BigInt(12));
 
         expect(p.equals(p)).toBeTruthy();
         expect(p.equals(p2)).toBeTruthy();

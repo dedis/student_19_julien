@@ -2,6 +2,7 @@ import jsc from 'jsverify';
 import { BN256G1Point, BN256G2Point } from '../../src/pairing/point';
 import BN256Scalar from '../../src/pairing/scalar';
 import { order } from '../../src/pairing/constants';
+import {toBigIntBE} from 'bigint-buffer';
 
 describe('BN256 Point Tests', () => {
     it('should get the order of g1', () => {
@@ -13,8 +14,8 @@ describe('BN256 Point Tests', () => {
 
     it('should add and subtract g1 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), jsc.array(jsc.uint8), (a, b) => {
-            const p1 = new BN256G1Point(a);
-            const p2 = new BN256G1Point(b);
+            const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
+            const p2 = new BN256G1Point(toBigIntBE(Buffer.from(b)));
 
             const aa = new BN256G1Point().add(p1, p2)
             const bb = new BN256G1Point().sub(p1, p2.clone().neg(p2));
@@ -28,9 +29,9 @@ describe('BN256 Point Tests', () => {
 
     it('should add and multiply g1 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
-            const p1 = new BN256G1Point(a);
+            const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
 
-            const aa = new BN256G1Point().mul(new BN256Scalar(3), p1);
+            const aa = new BN256G1Point().mul(new BN256Scalar(BigInt(3)), p1);
             const bb = new BN256G1Point().add(p1, p1);
             bb.add(bb, p1);
 
@@ -43,7 +44,7 @@ describe('BN256 Point Tests', () => {
 
     it('should marshal and unmarshal g1 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
-            const p1 = new BN256G1Point(a);
+            const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
 
             const buf = p1.marshalBinary();
             const p2 = new BN256G1Point();
@@ -59,7 +60,7 @@ describe('BN256 Point Tests', () => {
     // Test written because of the edge case found by the property-based
     // test
     it('should marshal and unmarshal g1 point generated with k=1', () => {
-        const p1 = new BN256G1Point([1]);
+        const p1 = new BN256G1Point(toBigIntBE(Buffer.from([1])));
 
         const buf = p1.marshalBinary();
         const p2 = new BN256G1Point();
@@ -96,8 +97,8 @@ describe('BN256 Point Tests', () => {
 
     it('should add and subtract g2 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), jsc.array(jsc.uint8), (a, b) => {
-            const p1 = new BN256G2Point(a);
-            const p2 = new BN256G2Point(b);
+            const p1 = new BN256G2Point(toBigIntBE(Buffer.from(a)));
+            const p2 = new BN256G2Point(toBigIntBE(Buffer.from(b)));
 
             const aa = new BN256G2Point().add(p1, p2)
             const bb = new BN256G2Point().sub(p1, p2.clone().neg(p2));
@@ -110,8 +111,8 @@ describe('BN256 Point Tests', () => {
     });
 
     it('should add and subtract 0 and 1', () => {
-        const p1 = new BN256G2Point([]);
-        const p2 = new BN256G2Point([1]);
+        const p1 = new BN256G2Point(toBigIntBE(Buffer.from([])));
+        const p2 = new BN256G2Point(toBigIntBE(Buffer.from([1])));
 
         expect(p1.getElement().isInfinity());
 
@@ -123,9 +124,9 @@ describe('BN256 Point Tests', () => {
 
     it('should add and multiply g2 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
-            const p1 = new BN256G2Point(a);
+            const p1 = new BN256G2Point(toBigIntBE(Buffer.from(a)));
 
-            const aa = new BN256G2Point().mul(new BN256Scalar(3), p1);
+            const aa = new BN256G2Point().mul(new BN256Scalar(BigInt(3)), p1);
             const bb = new BN256G2Point().add(p1, p1);
             bb.add(bb, p1);
 
@@ -138,7 +139,7 @@ describe('BN256 Point Tests', () => {
 
     it('should marshal and unmarshal g2 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
-            const p1 = new BN256G2Point(a);
+            const p1 = new BN256G2Point(toBigIntBE(Buffer.from(a)));
 
             const buf = p1.marshalBinary();
             const p2 = new BN256G2Point();
@@ -168,8 +169,8 @@ describe('BN256 Point Tests', () => {
 
     it('should pair g1 and g2 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), jsc.array(jsc.uint8), (a, b) => {
-            const p1 = new BN256G1Point(a);
-            const p2 = new BN256G2Point(b);
+            const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
+            const p2 = new BN256G2Point(toBigIntBE(Buffer.from(b)));
 
             const k1 = p1.pair(p2);
             const k2 = p2.pair(p1);

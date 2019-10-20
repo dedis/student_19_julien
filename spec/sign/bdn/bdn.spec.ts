@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import jsc from 'jsverify';
 import { BN256G2Point } from "../../../src/pairing/point";
 import BN256Scalar from "../../../src/pairing/scalar";
@@ -9,8 +8,8 @@ describe('BDN signatures Test', () => {
     it('should hash to R', () => {
         // reference test from Kyber Go
         const p1 = new BN256G2Point().base();
-        const p2 = new BN256G2Point().mul(new BN256Scalar(2), p1);
-        const p3 = new BN256G2Point().mul(new BN256Scalar(3), p1);
+        const p2 = new BN256G2Point().mul(new BN256Scalar(BigInt(2)), p1);
+        const p3 = new BN256G2Point().mul(new BN256Scalar(BigInt(3)), p1);
 
         const coefs = hashPointToR([p1, p2, p3]);
 
@@ -72,9 +71,9 @@ describe('BDN signatures Test', () => {
     it('should pass the property-based check', () => {
         const prop = jsc.forall(jsc.string, jsc.array(jsc.nat), jsc.array(jsc.nat), (msg, k, l) => {
             const message = Buffer.from(msg);
-            const sk1 = new BN256Scalar(new BN(k));
+            const sk1 = new BN256Scalar(BigInt(k));
             const pk1 = new BN256G2Point(sk1.getValue());
-            const sk2 = new BN256Scalar(new BN(l));
+            const sk2 = new BN256Scalar(BigInt(l));
             const pk2 = new BN256G2Point(sk2.getValue());
             const mask = new Mask([pk1, pk2], Buffer.from([3]))
 

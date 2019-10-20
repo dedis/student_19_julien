@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import jsc from 'jsverify';
 import BN256Scalar from '../../src/pairing/scalar';
 import { p } from '../../src/pairing/constants';
@@ -6,13 +5,13 @@ import { p } from '../../src/pairing/constants';
 describe('BN256 Scalar Tests', () => {
     it('should add', () => {
         const prop = jsc.forall(jsc.integer, jsc.integer, (a, b) => {
-            const sA = new BN256Scalar(a);
-            const sB = new BN256Scalar(b);
+            const sA = new BN256Scalar(BigInt(a));
+            const sB = new BN256Scalar(BigInt(b));
             const sum = new BN256Scalar();
             sum.add(sA, sB);
             sum.add(sum, new BN256Scalar().zero());
 
-            return sum.getValue().eq(new BN(a + b).umod(p));
+            return sum.getValue() === BigInt(a + b).umod(p);
         });
 
         // @ts-ignore
@@ -21,12 +20,12 @@ describe('BN256 Scalar Tests', () => {
 
     it('should subtract', () => {
         const prop = jsc.forall(jsc.integer, jsc.integer, (a, b) => {
-            const sA = new BN256Scalar(a);
-            const sB = new BN256Scalar(b);
+            const sA = new BN256Scalar(BigInt(a));
+            const sB = new BN256Scalar(BigInt(b));
             const res = new BN256Scalar();
             res.sub(sA, sB);
 
-            return res.getValue().eq(new BN(a - b).umod(p));
+            return res.getValue() === BigInt(a - b).umod(p);
         });
 
         // @ts-ignore
@@ -35,12 +34,12 @@ describe('BN256 Scalar Tests', () => {
 
     it('should multiply', () => {
         const prop = jsc.forall(jsc.integer, jsc.integer, (a, b) => {
-            const sA = new BN256Scalar(a);
-            const sB = new BN256Scalar(b);
+            const sA = new BN256Scalar(BigInt(a));
+            const sB = new BN256Scalar(BigInt(b));
             const res = new BN256Scalar();
             res.mul(sA, sB);
 
-            return res.getValue().eq(new BN(a * b).umod(p));
+            return res.getValue() === BigInt(a * b).umod(p);
         });
 
         // @ts-ignore
@@ -49,12 +48,12 @@ describe('BN256 Scalar Tests', () => {
 
     it('should divide', () => {
         const prop = jsc.forall(jsc.nat, jsc.nat, (a, b) => {
-            const sA = new BN256Scalar(a*(b+1));
-            const sB = new BN256Scalar(b+1);
+            const sA = new BN256Scalar(BigInt(a*(b+1)));
+            const sB = new BN256Scalar(BigInt(b+1));
             const res = new BN256Scalar();
             res.div(sA, sB);
 
-            return res.getValue().eq(new BN(a).umod(p));
+            return res.getValue() === BigInt(a).umod(p);
         });
 
         // @ts-ignore
@@ -62,14 +61,14 @@ describe('BN256 Scalar Tests', () => {
     });
 
     it('should get the negative', () => {
-        const a = new BN256Scalar(-1);
+        const a = new BN256Scalar(BigInt(-1));
         const n = new BN256Scalar().neg(a);
 
         expect(n.equals(new BN256Scalar().one()))
     });
 
     it('should get the inverse', () => {
-        const a = new BN256Scalar(123);
+        const a = new BN256Scalar(BigInt(123));
         const inv = new BN256Scalar().inv(a);
 
         const one = new BN256Scalar().mul(a, inv);
@@ -78,7 +77,7 @@ describe('BN256 Scalar Tests', () => {
 
     it('should marshal and unmarshal', () => {
         const prop = jsc.forall(jsc.integer, (num) => {
-            const a = new BN256Scalar(num);
+            const a = new BN256Scalar(BigInt(num));
             const buf = a.marshalBinary();
 
             const b = new BN256Scalar();
@@ -101,7 +100,7 @@ describe('BN256 Scalar Tests', () => {
     });
 
     it('should clone', () => {
-        const a = new BN256Scalar(123);
+        const a = new BN256Scalar(BigInt(123));
         const b = new BN256Scalar().set(a);
 
         expect(a.clone().equals(a)).toBeTruthy();

@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import jsc from 'jsverify';
 import { sign, verify } from '../../../src/sign/bls';
 import BN256Scalar from '../../../src/pairing/scalar';
@@ -33,7 +32,7 @@ describe('BLS Signature Tests', () => {
     it('should pass the property-based check', () => {
         const prop = jsc.forall(jsc.string, jsc.array(jsc.nat), (msg, k) => {
             const message = Buffer.from(msg);
-            const secret = new BN256Scalar(new BN(k));
+            const secret = new BN256Scalar(BigInt(k));
             const pub = new BN256G2Point(secret.getValue());
 
             const sig = sign(message, secret);

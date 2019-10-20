@@ -1,4 +1,3 @@
-import BN = require('bn.js');
 import GfP12 from '../../src/pairing/gfp12';
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
@@ -6,14 +5,14 @@ import GfP2 from '../../src/pairing/gfp2';
 describe('GfP12', () => {
     const a = new GfP12(
         new GfP6(
-            new GfP2("239846234862342323958623", "2359862352529835623"),
-            new GfP2("928836523", "9856234"),
-            new GfP2("235635286", "5628392833"),
+            new GfP2(BigInt("239846234862342323958623"), BigInt("2359862352529835623")),
+            new GfP2(BigInt("928836523"), BigInt("9856234")),
+            new GfP2(BigInt("235635286"), BigInt("5628392833")),
         ),
         new GfP6(
-            new GfP2("252936598265329856238956532167968", "23596239865236954178968"),
-            new GfP2("95421692834", "236548"),
-            new GfP2("924523", "12954623"),
+            new GfP2(BigInt("252936598265329856238956532167968"), BigInt("23596239865236954178968")),
+            new GfP2(BigInt("95421692834"), BigInt("236548")),
+            new GfP2(BigInt("924523"), BigInt("12954623")),
         ),
     );
 
@@ -39,7 +38,7 @@ describe('GfP12', () => {
     it('should square and multiply', () => {
         const s = a.square().square();
         const m = a.mul(a).mul(a).mul(a);
-        const e = a.exp(new BN(4));
+        const e = a.exp(BigInt(4));
 
         expect(s.equals(m)).toBeTruthy();
         expect(s.equals(e)).toBeTruthy();

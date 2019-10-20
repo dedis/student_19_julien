@@ -1,22 +1,21 @@
-import BN from 'bn.js';
 import { G1, G2, GT } from '../../src/pairing/bn';
 
 describe('BN curve', () => {
     it('should add and multiply', () => {
-        const p = new G1(123);
+        const p = new G1(BigInt(123));
 
         const pp = new G1();
         pp.add(p, p);
         pp.add(pp, p);
 
         const pm = new G1();
-        pm.scalarMul(p, new BN(3));
+        pm.scalarMul(p, BigInt(3));
 
         expect(pp.equals(pm)).toBeTruthy();
     });
 
     it('should get the negative', () => {
-        const p = new G1(123);
+        const p = new G1(BigInt(123));
 
         const n = new G1();
         n.neg(p);
@@ -31,7 +30,7 @@ describe('BN curve', () => {
     it('should marshal a G1 point', () => {
         const v = '431168851f012abb1585d1f705a4988906211b6f19e30d22407ae5f6066f4dad8ad428edbf30349e340e5cf59deb08666b0c9280be656451c8a40aafb3223507';
 
-        const p = new G1(111);
+        const p = new G1(BigInt(111));
         const buf = p.marshal();
 
         expect(buf.toString('hex')).toBe(v);
@@ -63,9 +62,9 @@ describe('BN curve', () => {
     });
 
     it('should test the equality of a G1 element', () => {
-        const p = new G1(123);
-        const p2 = new G1(123);
-        const p3 = new G1(12);
+        const p = new G1(BigInt(123));
+        const p2 = new G1(BigInt(123));
+        const p3 = new G1(BigInt(12));
 
         expect(p.equals(p)).toBeTruthy();
         expect(p.equals(p2)).toBeTruthy();
@@ -81,20 +80,20 @@ describe('BN curve', () => {
     });
 
     it('should add and multiply a G2 element', () => {
-        const p = new G2(123);
+        const p = new G2(BigInt(123));
 
         const pp = new G2();
         pp.add(p, p);
         pp.add(pp, p)
 
         const pm = new G2();
-        pm.scalarMul(p, new BN(3));
+        pm.scalarMul(p, BigInt(3));
 
         expect(pm.equals(pp)).toBeTruthy();
     });
 
     it('should get the negative of a G2 element', () => {
-        const p = new G2(123);
+        const p = new G2(BigInt(123));
         const n = new G2();
         n.neg(p);
 
@@ -108,7 +107,7 @@ describe('BN curve', () => {
     it('should marshal a G2 element', () => {
         const v = '21894d547009b7abecedfde89fd4fa82fe9d212d2b9f94a532e2ebfd360569fc4c65fa8eefac21f07c84d54407ec589281f36ba8c96d3114f3f3749d14f8ec0b6bca94f389776dde4597e402942cc184d82d37e81ed38046292c0f3522cf544a20a005ff2de92cf815fa5daa8defd6b064fda2adb1af2f10ee707aa996be98fa';
 
-        const p = new G2(111);
+        const p = new G2(BigInt(111));
         const buf = p.marshal();
 
         expect(buf.toString('hex')).toBe(v);
@@ -140,9 +139,9 @@ describe('BN curve', () => {
     });
 
     it('should test the equality of a G2 element', () => {
-        const p = new G2(123);
+        const p = new G2(BigInt(123));
         const p2 = p.clone();
-        const p3 = new BN(new BN(12));
+        const p3 = BigInt(12);
 
         expect(p.equals(p)).toBeTruthy();
         expect(p.equals(p2)).toBeTruthy();
@@ -159,7 +158,7 @@ describe('BN curve', () => {
 
     it('should marshal a GT element', () => {
         const p = GT.one();
-        p.scalarMul(p, new BN(123456789));
+        p.scalarMul(p, BigInt(123456789));
 
         const buf = p.marshal();
         const pp = new GT();
@@ -176,8 +175,8 @@ describe('BN curve', () => {
     });
 
     it('should test the equality of a GT element', () => {
-        const g1 = new G1(new BN(12345));
-        const g2 = new G2(new BN(67890));
+        const g1 = new G1(BigInt(12345));
+        const g2 = new G2(BigInt(67890));
 
         const p = GT.pair(g1, g2);
         const p2 = GT.pair(g1, g2);
@@ -197,9 +196,9 @@ describe('BN curve', () => {
     });
 
     it('should go through a tripartite DH protocol', () => {
-        const a = new BN(123);
-        const b = new BN(456);
-        const c = new BN(789);
+        const a = BigInt(123);
+        const b = BigInt(456);
+        const c = BigInt(789);
 
         const pa = new G1();
         pa.scalarBaseMul(a);

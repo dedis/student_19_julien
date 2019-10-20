@@ -1,11 +1,10 @@
-import BN from 'bn.js';
 import CurvePoint from '../../src/pairing/curve-point';
 import { order } from '../../src/pairing/constants';
 
 describe('BN256 Curve Point', () => {
     it('should add one', () => {
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator, new BN(1));
+        one.mul(CurvePoint.generator, BigInt(1));
 
         const g = new CurvePoint();
         g.mul(CurvePoint.generator, order);
@@ -21,7 +20,7 @@ describe('BN256 Curve Point', () => {
 
     it('should add and double', () => {
         const a = new CurvePoint();
-        a.mul(CurvePoint.generator, new BN(123456789));
+        a.mul(CurvePoint.generator, BigInt(123456789));
 
         const aa = new CurvePoint();
         aa.add(a, a);
@@ -39,7 +38,7 @@ describe('BN256 Curve Point', () => {
         expect(inf.isInfinity()).toBeTruthy();
 
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator, new BN(1));
+        one.mul(CurvePoint.generator, BigInt(1));
 
         const t = new CurvePoint();
         t.add(inf, one);
@@ -55,11 +54,11 @@ describe('BN256 Curve Point', () => {
         const g = new CurvePoint();
         g.copy(CurvePoint.generator);
 
-        const x = new BN('32498273234');
+        const x = BigInt('32498273234');
         const X = new CurvePoint()
         X.mul(g, x);
 
-        const y = new BN('98732423523');
+        const y = BigInt('98732423523');
         const Y = new CurvePoint()
         Y.mul(g, y);
 
@@ -77,7 +76,7 @@ describe('BN256 Curve Point', () => {
 
     it('should negate the point', () => {
         const p = new CurvePoint();
-        p.mul(CurvePoint.generator, new BN(12345));
+        p.mul(CurvePoint.generator, BigInt(12345));
 
         const np = new CurvePoint();
         np.negative(p);
@@ -98,13 +97,13 @@ describe('BN256 Curve Point', () => {
 
     it('should test the equality', () => {
         const p = new CurvePoint();
-        p.mul(CurvePoint.generator, new BN(123));
+        p.mul(CurvePoint.generator, BigInt(123));
 
         const p2 = new CurvePoint();
-        p2.mul(CurvePoint.generator, new BN(123));
+        p2.mul(CurvePoint.generator, BigInt(123));
 
         const p3 = new CurvePoint();
-        p3.mul(CurvePoint.generator, new BN(12));
+        p3.mul(CurvePoint.generator, BigInt(12));
 
         expect(p.equals(p)).toBeTruthy();
         expect(p.equals(p2)).toBeTruthy();
