@@ -32,9 +32,11 @@ export function bits(bitlen: number, exact: boolean, callback: (length: number) 
  * @param callback  buffer generator function
  * @returns         randomly filled buffer
  */
-export function int(mod: bigint, callback: (length: number) => Buffer): Buffer {
-    let mod_BN = new BN(mod.toString());
-    let bitlength = mod_BN.bitLength();
+export function int(mod: bigint | BN, callback: (length: number) => Buffer): Buffer {
+    if(typeof mod === 'bigint'){
+        mod = new BN(mod.toString());
+    }
+    let bitlength = mod.bitLength();
     let i;
     while (true) {
         const bytes = bits(bitlength, false, callback);

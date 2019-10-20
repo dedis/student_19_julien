@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 import GfP from './gfp';
 import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
-import { oneBN } from '../constants';
+import { oneBI } from '../constants';
 
 const curveB = new GfP(3n);
 
@@ -33,7 +33,7 @@ export default class CurvePoint {
                 return new CurvePoint(x, y, 1n, 1n);
             }
 
-            x += oneBN;
+            x += oneBI;
         }
     }
     

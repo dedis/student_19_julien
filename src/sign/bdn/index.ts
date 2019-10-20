@@ -51,7 +51,7 @@ function aggregatePoints(mask: Mask, points: Point[]) {
     let agg: Point = null;
     for (let i = 0; i < coefs.length; i++) {
         if (mask.isIndexEnabled(i)) {
-            const c = new BN256Scalar(coefs[i]);
+            const c = new BN256Scalar(BigInt(coefs[i].toString())); //convert BN to BigInt
             const p = points[i].clone();
 
             p.mul(c, p);

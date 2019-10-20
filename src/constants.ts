@@ -2,5 +2,8 @@ import BN from "bn.js";
 
 export type BNType = number | string | number[] | Buffer | BN;
 
-export const zeroBN = 0n;
-export const oneBN = 1n;
+export const zeroBI = 0n;
+export const oneBI = 1n;
+
+export const zeroBN = new BN(0);
+export const oneBN = new BN(1);
