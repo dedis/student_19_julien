@@ -127,8 +127,7 @@ export default class GfP {
      * @returns the new value
      */
     shiftLeft(k: number): GfP {
-        let b: bigint = BigInt(k)
-        return new GfP(this.v << b);
+        return new GfP(this.v << BigInt(k));
     }
 
     /**
@@ -137,8 +136,8 @@ export default class GfP {
      * @returns -1 when o is greater, 1 when smaller and 0 when equal
      */
     compareTo(o: any): 0 | -1 | 1 {
-        if(this.v > o.v)return -1;
-        else if(this.v < o.v) return 1;
+        if(this.v < o.v)return -1;
+        else if(this.v > o.v) return 1;
         else return 0;
     }
 
@@ -148,7 +147,7 @@ export default class GfP {
      * @returns true when equal, false otherwise
      */
     equals(o: any): o is GfP {
-        return this.v === o.v;
+        return this.v == o.v;
     }
 
     /**
@@ -158,7 +157,6 @@ export default class GfP {
      */
     toBytes(): Buffer {
         return toBufferBE(this.v, GfP.ELEM_SIZE);
-        //return this.v.toArrayLike(Buffer, 'be', GfP.ELEM_SIZE);
     }
 
     /**

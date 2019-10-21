@@ -3,7 +3,7 @@ import GfP from './gfp';
 import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
 import { oneBI, zeroBI } from '../constants';
-
+import {toBigIntBE} from 'bigint-buffer'
 const curveB = new GfP(BigInt(3));
 
 /**
@@ -20,12 +20,11 @@ export default class CurvePoint {
     static hashToPoint(msg: Buffer): CurvePoint {
         const h = createHash('sha256');
         h.update(msg);
-        let stringH : String = h.digest().toString();
 
-        let x = BigInt(stringH) % p;
+        let x = toBigIntBE(h.digest()) % p;
 
         for (;;) {
-            const xxx = x * x * x % p;
+            const xxx = (x * x * x) % p;
             const t = xxx + curveB.getValue();
 
             const y = modSqrt(t, p);
@@ -204,13 +203,11 @@ export default class CurvePoint {
         const sum = new CurvePoint();
         sum.setInfinity();
         const t = new CurvePoint();
-        let s :string = scalar.toString();
-        //Get the string of the BigInt, convert to byte, then get number of bits
-        for (let i = (Buffer.byteLength(s) * 8); i >= 0; i--) {
+        let s :string = scalar.toString(2); //convert bigint to binary string to get length
+        for (let i = s.length; i >= 0; i--) {
             t.dbl(sum);
 
-            let mask = oneBI;
-            let maskn = mask << BigInt(i);
+            let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & scalar;
             if(maskAndNumber != zeroBI) sum.add(t,a);
             else sum.copy(t);

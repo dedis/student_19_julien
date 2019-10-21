@@ -157,13 +157,12 @@ export default class GfP12 {
     exp(k: bigint): GfP12 {
         let sum = GfP12.one();
         let t : GfP12;
-        let s :string = k.toString();
+        let s :string = k.toString(2);
         //Get the string of the BigInt, convert to byte, then get number of bits
 
-        for (let i = (Buffer.byteLength(s) * 8) - 1; i >= 0; i--) {
+        for (let i = s.length - 1; i >= 0; i--) {
             t = sum.square();
-            let mask = oneBI;
-            let maskn = mask << BigInt(i);
+            let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
             if(maskAndNumber != zeroBI) sum = t.mul(this);
             else sum = t;

@@ -29,9 +29,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     set(a: BN256Scalar): BN256Scalar { //une ligne
-        let s : String = this.v.toString(16);
-        var string_copy = (' ' + s).slice(1);
-        this.v = BigInt(string_copy);
+        this.v = BigInt(a.v);
         return this;
     }
 
@@ -50,42 +48,41 @@ export default class BN256Scalar implements Scalar {
     /** @inheritdoc */
     add(a: BN256Scalar, b: BN256Scalar): BN256Scalar {
         this.v = (a.v + b.v) % p;
+        while(this.v < 0) this.v +=p;
         return this;
     }
 
     /** @inheritdoc */
     sub(a: BN256Scalar, b: BN256Scalar): BN256Scalar { //a-b
         this.v = a.v - b.v % p;
-        while(this.v < 0) this.v += p 
+        while(this.v < 0) this.v += p;
         return this;
     }
 
     /** @inheritdoc */
     neg(a: BN256Scalar): BN256Scalar {//thisv = -av
-        if(a.v > 0) a.v *= (-oneBI); 
-        this.v = a.v % p;
-        while(this.v < 0) this.v += p
+        this.v = (-a.v) % p;
+        while(this.v < 0) this.v += p;
         return this;
     }
 
     /** @inheritdoc */
     div(a: BN256Scalar, b: BN256Scalar): BN256Scalar {
         this.v = a.v / b.v % p;
-        while(this.v < 0) this.v += p
+        while(this.v < 0) this.v += p;
         return this;
     }
 
     /** @inheritdoc */
     mul(s1: BN256Scalar, b: BN256Scalar): BN256Scalar {
         this.v = s1.v * b.v % p;
-        while(this.v < 0) this.v+=p
+        while(this.v < 0) this.v+=p;
         return this;
     }
 
     /** @inheritdoc */
     inv(a: BN256Scalar): BN256Scalar {
         this.v = egcd(a.v, p).a % p;
-        //this.v = a.v.invm(p);
         return this;
     }
 
@@ -100,20 +97,19 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     setBytes(bytes: Buffer): BN256Scalar {
-        this.v = BigInt(bytes.toString());
+        this.v = toBigIntBE(bytes)
         return this;
     }
 
     /** @inheritdoc */
     marshalBinary(): Buffer {
         return toBufferBE(this.v, 32)
-        //return this.v.toArrayLike(Buffer, 'be', 32);
     }
 
     /** @inheritdoc */
     unmarshalBinary(buf: Buffer | string): void {
-        if(typeof buf === 'string') buf = Buffer.from(buf)
-        this.v = toBigIntBE(buf);
+        if(typeof buf === 'string') buf = Buffer.from(buf, 'hex')
+        this.v = toBigIntBE(buf); //est-ce bien en hexa?
     }
 
     /** @inheritdoc */
@@ -123,10 +119,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     clone(): BN256Scalar {
-        //from: https://stackoverflow.com/questions/31712808/how-to-force-javascript-to-deep-copy-a-string
-        let str : String = this.v.toString(16);
-        var string_copy = (' ' + str).slice(1);
-        const s = new BN256Scalar(BigInt(string_copy));
+        const s = new BN256Scalar(BigInt(this.v));
         return s;
     }
 
