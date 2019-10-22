@@ -25,7 +25,7 @@ describe('BN256 Scalar Tests', () => {
             const res = new BN256Scalar();
             res.sub(sA, sB);
 
-            return res.getValue() === BigInt(a - b) % (p);
+            return res.getValue() === (BigInt(a - b) % (p));
         });
 
         // @ts-ignore
