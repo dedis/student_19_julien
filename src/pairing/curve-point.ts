@@ -45,10 +45,10 @@ export default class CurvePoint {
         // the coefficient are modulo p to insure we have same
         // values when it comes to comparison
         // Other arithmetic operations are already modulo.
-        this.x = new GfP(x || zeroBI).mod(p);
-        this.y = new GfP(y || oneBI).mod(p);
-        this.z = new GfP(z || zeroBI).mod(p);
-        this.t = new GfP(t || zeroBI).mod(p);
+        this.x = new GfP(typeof x !== 'undefined' ? x : zeroBI).mod(p);
+        this.y = new GfP(typeof y !== 'undefined' ? y : oneBI).mod(p);
+        this.z = new GfP(typeof z !== 'undefined' ? z : zeroBI).mod(p);
+        this.t = new GfP(typeof t !== 'undefined' ? t : zeroBI).mod(p);
     }
 
     /**

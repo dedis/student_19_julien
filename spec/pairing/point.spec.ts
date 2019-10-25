@@ -44,9 +44,11 @@ describe('BN256 Point Tests', () => {
 
     it('should marshal and unmarshal g1 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
+            console.log(toBigIntBE(Buffer.from(a)))
             const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
 
             const buf = p1.marshalBinary();
+            console.log(buf)
             const p2 = new BN256G1Point();
             p2.unmarshalBinary(buf);
 
@@ -60,6 +62,7 @@ describe('BN256 Point Tests', () => {
     // Test written because of the edge case found by the property-based
     // test
     it('should marshal and unmarshal g1 point generated with k=1', () => {
+        //regarder valeur buf, sur master aussi et voir la difference si c'est vrm different ou pas
         const p1 = new BN256G1Point(toBigIntBE(Buffer.from([1])));
 
         const buf = p1.marshalBinary();

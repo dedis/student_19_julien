@@ -36,7 +36,7 @@ export class G1 {
     constructor(k?: bigint) {
         this.p = new CurvePoint();
 
-        if (k) {
+        if (typeof k !== 'undefined') {
             this.scalarBaseMul(BigInt(k));
         }
     }
@@ -141,7 +141,6 @@ export class G1 {
         if (bytes.length != G1.MARSHAL_SIZE) {
             throw new Error('wrong buffer size for a G1 point');
         }
-
         this.p = new CurvePoint(toBigIntBE(bytes.slice(0, G1.ELEM_SIZE)), toBigIntBE(bytes.slice(G1.ELEM_SIZE)), oneBI, oneBI); 
 
         if (this.p.getX().isZero() && this.p.getY().isZero()) {
@@ -199,7 +198,7 @@ export class G2 {
     constructor(k?: bigint) {
         this.p = new TwistPoint();
 
-        if (k) {
+        if (typeof k !== 'undefined') {
             this.scalarBaseMul(BigInt(k));
         }
     }

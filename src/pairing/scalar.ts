@@ -28,7 +28,7 @@ export default class BN256Scalar implements Scalar {
     }
 
     /** @inheritdoc */
-    set(a: BN256Scalar): BN256Scalar { //une ligne
+    set(a: BN256Scalar): BN256Scalar {
         this.v = BigInt(a.v);
         return this;
     }
@@ -53,14 +53,14 @@ export default class BN256Scalar implements Scalar {
     }
 
     /** @inheritdoc */
-    sub(a: BN256Scalar, b: BN256Scalar): BN256Scalar { //a-b
+    sub(a: BN256Scalar, b: BN256Scalar): BN256Scalar { 
         this.v = a.v - b.v % p;
         while(this.v < 0) this.v += p;
         return this;
     }
 
     /** @inheritdoc */
-    neg(a: BN256Scalar): BN256Scalar {//thisv = -av
+    neg(a: BN256Scalar): BN256Scalar {
         this.v = (-a.v) % p;
         while(this.v < 0) this.v += p;
         return this;
@@ -109,7 +109,7 @@ export default class BN256Scalar implements Scalar {
     /** @inheritdoc */
     unmarshalBinary(buf: Buffer | string): void {
         if(typeof buf === 'string') buf = Buffer.from(buf, 'hex')
-        this.v = toBigIntBE(buf); //est-ce bien en hexa?
+        this.v = toBigIntBE(buf); 
     }
 
     /** @inheritdoc */
