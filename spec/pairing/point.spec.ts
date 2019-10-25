@@ -44,11 +44,9 @@ describe('BN256 Point Tests', () => {
 
     it('should marshal and unmarshal g1 points', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
-            console.log(toBigIntBE(Buffer.from(a)))
             const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
-
+            
             const buf = p1.marshalBinary();
-            console.log(buf)
             const p2 = new BN256G1Point();
             p2.unmarshalBinary(buf);
 
