@@ -109,7 +109,7 @@ describe('BN curve', () => {
 
         const p = new G2(BigInt(111));
         const buf = p.marshal();
-
+        console.log("Buff: " + buf.toString("hex"))
         expect(buf.toString('hex')).toBe(v);
 
         const pp = new G2();

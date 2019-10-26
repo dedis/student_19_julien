@@ -156,6 +156,7 @@ export default class GfP {
      * @returns the buffer
      */
     toBytes(): Buffer {
+        console.log(toBufferBE(this.v, GfP.ELEM_SIZE))
         return toBufferBE(this.v, GfP.ELEM_SIZE);
     }
 

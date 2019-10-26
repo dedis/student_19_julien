@@ -199,6 +199,7 @@ export class G2 {
         this.p = new TwistPoint();
 
         if (typeof k !== 'undefined') {
+            console.log("if")
             this.scalarBaseMul(BigInt(k));
         }
     }
@@ -287,6 +288,7 @@ export class G2 {
         const t = this.clone();
         t.p.makeAffine();
 
+        console.log(t.p.getX().getX().toBytes())
         const xxBytes = t.p.getX().getX().toBytes();
         const xyBytes = t.p.getX().getY().toBytes();
         const yxBytes = t.p.getY().getX().toBytes();
