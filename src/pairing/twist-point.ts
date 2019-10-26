@@ -207,15 +207,19 @@ export default class TwistPoint {
         console.log("k :  "+k)
         console.log("s :  "+s)
 
-        for (let i = s.length; i > 0; i--) {
+        for (let i = s.length; i >= 0; i--) {
+            console.log("SUMD1 : "+sum)
             t.double(sum);
-            let maskn = oneBI << BigInt(i-1);
+            console.log("SUMD2 : "+sum)
+
+            let maskn = oneBI << BigInt(i);
             console.log("MASKN: " + maskn)
             let maskAndNumber = maskn & k;
             console.log("maskAndNumber: " + maskAndNumber)
 
             if(maskAndNumber != zeroBI){
                 sum.add(t,a);
+                console.log("SUM : "+sum)
             }
             else sum.copy(t)
         }
