@@ -200,30 +200,19 @@ export default class TwistPoint {
      */
     mul(a: TwistPoint, k: bigint): void {
         const sum = new TwistPoint();
-        console.log("SUM: "+sum)
-
         const t = new TwistPoint();
         let s = k.toString(2);
-        console.log("k :  "+k)
-        console.log("s :  "+s)
 
         for (let i = s.length; i >= 0; i--) {
-            console.log("SUMD1 : "+sum)
             t.double(sum);
-            console.log("SUMD2 : "+sum)
-
             let maskn = oneBI << BigInt(i);
-            console.log("MASKN: " + maskn)
             let maskAndNumber = maskn & k;
-            console.log("maskAndNumber: " + maskAndNumber)
 
             if(maskAndNumber != zeroBI){
                 sum.add(t,a);
-                console.log("SUM : "+sum)
             }
             else sum.copy(t)
         }
-        console.log("SUM2: "+sum)
         this.copy(sum);
     }
 
