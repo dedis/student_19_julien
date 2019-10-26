@@ -199,7 +199,6 @@ export class G2 {
         this.p = new TwistPoint();
 
         if (typeof k !== 'undefined') {
-            console.log("if")
             this.scalarBaseMul(BigInt(k));
         }
     }
@@ -239,6 +238,7 @@ export class G2 {
      * @param k the scalar
      */
     scalarBaseMul(k?: bigint): void {
+        console.log("generator: " + TwistPoint.generator)
         this.p.mul(TwistPoint.generator, k);
     }
 
