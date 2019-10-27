@@ -237,7 +237,6 @@ export class G2 {
      * @param k the scalar
      */
     scalarBaseMul(k?: bigint): void {
-        console.log("generator: " + TwistPoint.generator)
         this.p.mul(TwistPoint.generator, k);
     }
 
