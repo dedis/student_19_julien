@@ -197,9 +197,7 @@ export class G2 {
 
     constructor(k?: bigint) {
         this.p = new TwistPoint();
-        console.log("K before if : "+k)
         if (typeof k !== 'undefined') {
-            console.log("k after if :"+k)
             this.scalarBaseMul(k);
         }
     }

@@ -12,12 +12,12 @@ const twistB = new GfP2(
 export default class TwistPoint {
     static generator = new TwistPoint(
         new GfP2(
-            BigInt(21167961636542580255011770066570541300993051739349375019639421053990175267184),
-            BigInt(64746500191241794695844075326670126197795977525365406531717464316923369116492),
+            BigInt(90071992547409921),
+            BigInt(64746500191241794695844075326670126197795977525365406531717464316923369),
         ),
         new GfP2(
-            BigInt(20666913350058776956210519119118544732556678129809273996262322366050359951122),
-            BigInt(17778617556404439934652658462602675281523610326338642107814333856843981424549),
+            BigInt(20666913350058776956210519119118544732556678129809273996262322366050359),
+            BigInt(17778617556404439934652658462602675281523610326338642107814333856843981),
         ),
         new GfP2(zeroBI, oneBI),
         new GfP2(zeroBI, oneBI),
@@ -29,10 +29,24 @@ export default class TwistPoint {
     private t: GfP2;
 
     constructor(x?: GfP2, y?: GfP2, z?: GfP2, t?: GfP2) {
-        this.x = x || GfP2.zero();
-        this.y = y || GfP2.zero();
-        this.z = z || GfP2.zero();
-        this.t = t || GfP2.zero();
+        if(x.getX().getValue() == BigInt(90071992547409921)){
+            this.x = x || GfP2.zero();
+            this.y = y || GfP2.zero();
+            this.z = z || GfP2.zero();
+            this.t = t || GfP2.zero();
+
+            console.log("This.x : "+this.x)
+            console.log("x : "+x)
+            console.log("This.y : "+this.y)
+            console.log("y : "+y)
+
+        }
+        else{
+            this.x = x || GfP2.zero();
+            this.y = y || GfP2.zero();
+            this.z = z || GfP2.zero();
+            this.t = t || GfP2.zero();
+        }
     }
 
     /**
