@@ -108,7 +108,6 @@ describe('BN curve', () => {
         const v = '21894d547009b7abecedfde89fd4fa82fe9d212d2b9f94a532e2ebfd360569fc4c65fa8eefac21f07c84d54407ec589281f36ba8c96d3114f3f3749d14f8ec0b6bca94f389776dde4597e402942cc184d82d37e81ed38046292c0f3522cf544a20a005ff2de92cf815fa5daa8defd6b064fda2adb1af2f10ee707aa996be98fa';
 
         const p = new G2(BigInt(111));
-        console.log("p : " + p)
         const buf = p.marshal();
         expect(buf.toString('hex')).toBe(v);
 

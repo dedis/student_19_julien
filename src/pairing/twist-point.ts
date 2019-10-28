@@ -2,8 +2,8 @@ import GfP2 from './gfp2';
 import { zeroBI, oneBI } from '../constants';
 
 const twistB = new GfP2(
-    BigInt(6500054969564660373279643874235990574282535810762300357187714502686418407178),
-        BigInt(45500384786952622612957507119651934019977750675336102500314001518804928850249)
+    BigInt("6500054969564660373279643874235990574282535810762300357187714502686418407178"),
+        BigInt("45500384786952622612957507119651934019977750675336102500314001518804928850249")
 );
 
 /**
@@ -12,12 +12,12 @@ const twistB = new GfP2(
 export default class TwistPoint {
     static generator = new TwistPoint(
         new GfP2(
-            BigInt(21167961636542580255011770066570541300993051739349375019639421053990175267184),
-            BigInt(64746500191241794695844075326670126197795977525365406531717464316923369116492),
+            BigInt("21167961636542580255011770066570541300993051739349375019639421053990175267184"),
+            BigInt("64746500191241794695844075326670126197795977525365406531717464316923369116492"),
         ),
         new GfP2(
-            BigInt(20666913350058776956210519119118544732556678129809273996262322366050359951122),
-            BigInt(17778617556404439934652658462602675281523610326338642107814333856843981424549),
+            BigInt("20666913350058776956210519119118544732556678129809273996262322366050359951122"),
+            BigInt("17778617556404439934652658462602675281523610326338642107814333856843981424549"),
         ),
         new GfP2(zeroBI, oneBI),
         new GfP2(zeroBI, oneBI),
@@ -200,52 +200,21 @@ export default class TwistPoint {
      */
     mul(a: TwistPoint, k: bigint): void {    
         const sum = new TwistPoint();
-        console.log("Start sum: "+ sum)
         const t = new TwistPoint();
-        console.log("Start t: "+ t)
         let s = k.toString(2);
-        console.log("i is : "+s.length)
 
         for (let i = s.length; i >= 0; i--) {
-            console.log("I in for: "+i)
-            console.log("DOUBLE avant : sum "+sum)
-            console.log("DOUBLE avant : t "+t)
-
             t.double(sum);
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
-            console.log("T.doublesum: sum " + sum)
-            console.log("T.doublesum: t " + t)
-            console.log("boolean : "+ (maskAndNumber != zeroBI))
-
             if(maskAndNumber != zeroBI){
-                console.log("SUM add avant: "+ sum)
-                console.log("t add avant: "+ t)
-                console.log("a add avant: "+ a)
-
                 sum.add(t,a);
-                console.log("SUM add aprs: "+ sum)
-                console.log("t add aprs: "+ t)
-                console.log("a add aprs: "+ a)
             }
-            
             else{
-                console.log("SUM COPY T: sum avant "+ sum)
-                console.log("SUM COPY T: t avant "+ t)
-
                 sum.copy(t);
-                console.log("SUM COPY T: sum aprs "+ sum)
-                console.log("SUM COPY T: t aprs "+ t)
             }
-            console.log("END OF ONE BOUCLE: i : "+i)
-            console.log("END OF ONE BOUCLE: sum : "+sum)
         }
-        console.log("SUM END: "+sum)
-        console.log("t END: "+t)
-
-        this.copy(sum);
-        console.log("SUM ENDaprs: "+sum)
-        console.log("t ENDaprs: "+t)   
+        this.copy(sum);   
     }
 
 

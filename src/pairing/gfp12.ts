@@ -166,12 +166,6 @@ export default class GfP12 {
             let maskAndNumber = maskn & k;
             if(maskAndNumber != zeroBI) sum = t.mul(this);
             else sum = t;
-            /*
-            if (k.testn(i)) {
-                sum = t.mul(this);
-            } else {
-                sum = t;
-            }*/
         }
 
         return sum;

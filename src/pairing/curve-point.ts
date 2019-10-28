@@ -211,12 +211,6 @@ export default class CurvePoint {
             let maskAndNumber = maskn & scalar;
             if(maskAndNumber != zeroBI) sum.add(t,a);
             else sum.copy(t);
-/*
-            if (scalar.testn(i)) {
-                sum.add(t, a);
-            } else {
-                sum.copy(t);
-            }*/
         }
 
         this.copy(sum);
