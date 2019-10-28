@@ -232,4 +232,15 @@ button2.onclick = function() {
 //for 1000 keys, verify is 5.42 x longer
 //for 100 keys, verify is 5.00 x longer
 
+/*Timing master:
+650keys: signing: 23426ms
+          aggregate: 1446ms
+          verify: 115722ms
+*/
+/*Timing BigInt:
+650keys: singing: 8330ms
+          Aggregate: 484ms
+          verify: 38728ms
+          */
+
 //BIGINT: for 650keys, verify is 4.47 x longer
