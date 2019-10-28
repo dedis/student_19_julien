@@ -16,7 +16,11 @@ export default class BN256Scalar implements Scalar {
     private v: bigint;
 
     constructor(value?: bigint) {
-        this.v = BigInt(value || 0) % p;
+        if(value < 0){
+            this.v = BigInt(value || 0) % p + p;
+        }else{
+            this.v = BigInt(value || 0) % p;
+        }
     }
 
     /**

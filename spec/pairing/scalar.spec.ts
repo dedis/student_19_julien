@@ -10,8 +10,12 @@ describe('BN256 Scalar Tests', () => {
             const sum = new BN256Scalar();
             sum.add(sA, sB);
             sum.add(sum, new BN256Scalar().zero());
+            let answer = BigInt(a + b) % (p);
+            if(answer < 0){ 
+                answer = answer + p
+            }
 
-            return sum.getValue() === BigInt(a + b) % (p);
+            return sum.getValue() == answer;
         });
 
         // @ts-ignore
