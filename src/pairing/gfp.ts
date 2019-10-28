@@ -172,6 +172,27 @@ export default class GfP {
      * @returns the hex shape in a string
      */
     toHex(): string {
-        return this.v.toString(16);
+        if(this.v == BigInt(21167961636542581378520319118588614398963258090954337263528932366924017303552)){
+            console.log("Tohex : "+this.v.toString(16))
+            let string_v : string = "" 
+            let mask_50 = BigInt(1073741823) //50 first bit set to 1
+            console.log("Mask en binaire: "+mask_50.toString(2))
+            let copy_v = BigInt(this.v)
+            let tmp = BigInt(1)
+            while(tmp != BigInt(0)){
+                tmp = mask_50 & copy_v
+                string_v = tmp.toString(16).concat(string_v)
+                copy_v = copy_v >> BigInt(30)
+                tmp = copy_v
+            }
+            console.log("String en hexa: "+string_v)
+
+
+            return string_v
+            //
+        }
+        else{
+            return this.v.toString(16);
+        }
     }
 }

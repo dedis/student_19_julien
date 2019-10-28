@@ -198,23 +198,56 @@ export default class TwistPoint {
      * @param a the point
      * @param k the scalar
      */
-    mul(a: TwistPoint, k: bigint): void {
+    mul(a: TwistPoint, k: bigint): void {    
         const sum = new TwistPoint();
+        console.log("Start sum: "+ sum)
         const t = new TwistPoint();
+        console.log("Start t: "+ t)
         let s = k.toString(2);
+        console.log("i is : "+s.length)
 
         for (let i = s.length; i >= 0; i--) {
+            console.log("I in for: "+i)
+            console.log("DOUBLE avant : sum "+sum)
+            console.log("DOUBLE avant : t "+t)
+
             t.double(sum);
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
+            console.log("T.doublesum: sum " + sum)
+            console.log("T.doublesum: t " + t)
+            console.log("boolean : "+ (maskAndNumber != zeroBI))
 
             if(maskAndNumber != zeroBI){
+                console.log("SUM add avant: "+ sum)
+                console.log("t add avant: "+ t)
+                console.log("a add avant: "+ a)
+
                 sum.add(t,a);
+                console.log("SUM add aprs: "+ sum)
+                console.log("t add aprs: "+ t)
+                console.log("a add aprs: "+ a)
             }
-            else sum.copy(t)
+            
+            else{
+                console.log("SUM COPY T: sum avant "+ sum)
+                console.log("SUM COPY T: t avant "+ t)
+
+                sum.copy(t);
+                console.log("SUM COPY T: sum aprs "+ sum)
+                console.log("SUM COPY T: t aprs "+ t)
+            }
+            console.log("END OF ONE BOUCLE: i : "+i)
+            console.log("END OF ONE BOUCLE: sum : "+sum)
         }
+        console.log("SUM END: "+sum)
+        console.log("t END: "+t)
+
         this.copy(sum);
+        console.log("SUM ENDaprs: "+sum)
+        console.log("t ENDaprs: "+t)   
     }
+
 
     /**
      * Normalize the point coordinates
