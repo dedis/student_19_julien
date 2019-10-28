@@ -28,8 +28,11 @@ describe('BN256 Scalar Tests', () => {
             const sB = new BN256Scalar(BigInt(b));
             const res = new BN256Scalar();
             res.sub(sA, sB);
-
-            return res.getValue() === (BigInt(a - b) % (p));
+            let answer = BigInt(a - b) % (p)
+            if(answer <0){
+                answer = answer+p
+            }
+            return res.getValue() === answer;
         });
 
         // @ts-ignore
@@ -43,7 +46,12 @@ describe('BN256 Scalar Tests', () => {
             const res = new BN256Scalar();
             res.mul(sA, sB);
 
-            return res.getValue() === BigInt(a * b) % (p);
+            let answer = BigInt(a * b) % (p)
+            while(answer<0){
+                answer = answer+p
+            }
+
+            return res.getValue() === answer;
         });
 
         // @ts-ignore

@@ -5,6 +5,7 @@ import { BN256G1Point, BN256G2Point } from "../../pairing/point";
 import BN256Scalar from "../../pairing/scalar";
 import * as BLS from "../bls";
 import Mask from "../mask";
+import { toBigIntBE } from 'bigint-buffer';
 
 const COEF_SIZE = 128 / 8;
 
@@ -42,6 +43,8 @@ export function hashPointToR(pubkeys: Point[]): BN[] {
  * @param points    The list of points to aggregate
  */
 function aggregatePoints(mask: Mask, points: Point[]) {
+    console.log("Affichage2")
+
     if (mask.getCountTotal() !== points.length) {
         throw new Error("Length of mask and points does not match")
     }
@@ -51,7 +54,10 @@ function aggregatePoints(mask: Mask, points: Point[]) {
     let agg: Point = null;
     for (let i = 0; i < coefs.length; i++) {
         if (mask.isIndexEnabled(i)) {
-            const c = new BN256Scalar(BigInt(coefs[i].toString())); //convert BN to BigInt
+            let buff = coefs[i].toArrayLike(Buffer, 'be', coefs[i].byteLength());
+
+            const c = new BN256Scalar(toBigIntBE(buff));
+            console.log("Affichage3")
             const p = points[i].clone();
 
             p.mul(c, p);
@@ -86,15 +92,24 @@ export function aggregatePublicKeys(mask: Mask): Point {
  * @return The new point representing the aggregation
  */
 export function aggregateSignatures(mask: Mask, sigs: Buffer[]) {
+    console.log("Affichage1")
     const points = sigs.map((s) => {
+        console.log("Affichage11")
+
         if (!s) {
             return null;
         }
+        console.log("Affichage12")
 
         const p = new BN256G1Point();
+        console.log("Affichage13")
+
         p.unmarshalBinary(s);
+        console.log("Affichage14")
+
         return p;
     });
+    console.log("Affichage11")
 
     return aggregatePoints(mask, points);
 }
