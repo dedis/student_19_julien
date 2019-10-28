@@ -3,6 +3,8 @@ import { BN256G2Point } from "../../../src/pairing/point";
 import BN256Scalar from "../../../src/pairing/scalar";
 import { Mask } from '../../../src/sign';
 import { aggregateSignatures, hashPointToR, sign, verify, aggregatePublicKeys } from "../../../src/sign/bdn";
+import { toBigIntBE } from 'bigint-buffer';
+
 
 describe('BDN signatures Test', () => {
     it('should hash to R', () => {
@@ -71,9 +73,9 @@ describe('BDN signatures Test', () => {
     it('should pass the property-based check', () => {
         const prop = jsc.forall(jsc.string, jsc.array(jsc.nat), jsc.array(jsc.nat), (msg, k, l) => {
             const message = Buffer.from(msg);
-            const sk1 = new BN256Scalar(BigInt(k));
+            const sk1 = new BN256Scalar(toBigIntBE(Buffer.from(k)));
             const pk1 = new BN256G2Point(sk1.getValue());
-            const sk2 = new BN256Scalar(BigInt(l));
+            const sk2 = new BN256Scalar(toBigIntBE(Buffer.from(l)));
             const pk2 = new BN256G2Point(sk2.getValue());
             const mask = new Mask([pk1, pk2], Buffer.from([3]))
 
