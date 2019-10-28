@@ -143,20 +143,12 @@ export class G1 {
         }
 
         this.p = new CurvePoint(toBigIntBE(bytes.slice(0, G1.ELEM_SIZE)), toBigIntBE(bytes.slice(G1.ELEM_SIZE)), oneBI, oneBI); 
-        console.log("Affichage131")
-        console.log("typeof : "+  typeof this.p.getX())
         if (this.p.getX().isZero() && this.p.getY().isZero()) {
-            console.log("Affichage132")
-
             this.p.setInfinity();
-            console.log("Affichage133")
-
             return;
         }
 
         if (!this.p.isOnCurve()) {
-            console.log("Affichage134")
-
             throw new Error('malformed G1 point');
         }
     }

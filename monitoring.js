@@ -231,3 +231,5 @@ button2.onclick = function() {
 //for 650 keys, verify is 5.17 x longer
 //for 1000 keys, verify is 5.42 x longer
 //for 100 keys, verify is 5.00 x longer
+
+//BIGINT: for 650keys, verify is 4.47 x longer

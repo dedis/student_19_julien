@@ -91,7 +91,12 @@ export default class GfP {
      * @returns the new value
      */
     pow(k: bigint) {
-        return new GfP(this.v ** k);
+        let tmp = BigInt("1")
+        for(let i = BigInt(1); i <= k; i++){
+            tmp = tmp * this.v;
+
+        }
+        return new GfP(tmp);
     }
 
     /**

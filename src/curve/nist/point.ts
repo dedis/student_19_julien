@@ -89,7 +89,6 @@ export default class NistPoint implements Point {
                 buff[l - 1] = dl; // encode length in lower 8 bits
                 data.copy(buff, l - dl -1);
             }
-            //console.log(bytes);
             
             let x = new BN(buff, 16, "be");
             if (x.cmp(this.ref.curve.curve.p) > 0) {

@@ -73,14 +73,15 @@ export default class CurvePoint {
      */
     isOnCurve(): boolean {
         let yy = this.y.sqr();
-        const xxx = this.x.pow(BigInt(3));
+        const xxx = this.x.pow(BigInt("3"));
 
         yy = yy.sub(xxx);
+
         yy = yy.sub(curveB);
+
         if (yy.signum() < 0 || yy.compareTo(new GfP(p)) >= 0) {
             yy = yy.mod(p);
         }
-
         return yy.signum() == 0;
     }
 
