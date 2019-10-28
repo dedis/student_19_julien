@@ -20,7 +20,7 @@ function ls(a: BN, p: BN): BN {
  * to reflect the Java library.
  */
 export function modSqrt(n_1: bigint, p_1: bigint): bigint {
-
+ 
     let n : BN = new BN(n_1.toString());
     let p : BN = new BN(p_1.toString());
 
