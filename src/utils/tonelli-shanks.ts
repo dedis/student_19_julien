@@ -35,16 +35,18 @@ function cmp(a: bigint, b: bigint): -1|0|1{
  * to reflect the Java library.
  */
 export function modSqrt(n: bigint, p: bigint): bigint {
+
     if (!(ls(n, p)===ONE)) {
         return null;
     }
     let q = p - ONE;
     let ss = ZERO;
 
-    while ((q && ONE) === ZERO) {
+    while ((q & ONE) === ZERO) {
         ss = ss +ONE;
         q = q >> BigInt(1);
     }
+
     if (ss === ONE) {
         return powMod(n, (p + ONE) / FOUR, p);
     }
@@ -83,5 +85,6 @@ export function modSqrt(n: bigint, p: bigint): bigint {
         c = b*b % p;
         t = t*c % p;
         m = i;
+
     }
 }
