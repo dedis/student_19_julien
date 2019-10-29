@@ -5,15 +5,20 @@ const TWO = BigInt("2");
 const FOUR = BigInt("4");
 
 function powMod(a: bigint, e: bigint, p: bigint): bigint {
-    console.log("LOCKICI2")
-    console.log("A^e mod p : a: "+a+", e:"+e+", p: "+p)
-    return (a**e)%p
+    let r = BigInt(1);
+    while(e > 0){
+        if((e & BigInt(1))=== BigInt(1)){
+            r = (r * a) % p
+        }
+        e /= BigInt(2);
+        a = (a*a) %p;
+    }
+    return r
     
     //return a.toRed(BN.red(p)).redPow(e).fromRed(); => a^e mod p?
 }
 
 function ls(a: bigint, p: bigint): bigint {
-    console.log("LOCKICI1")
     return powMod(a, (p - ONE)/TWO, p);
 }
 
@@ -30,42 +35,31 @@ function cmp(a: bigint, b: bigint): -1|0|1{
  * to reflect the Java library.
  */
 export function modSqrt(n: bigint, p: bigint): bigint {
-    console.log("Lock1")
     if (!(ls(n, p)===ONE)) {
-        console.log("NULLLLL")
         return null;
     }
-    console.log("Lock2")
-
     let q = p - ONE;
     let ss = ZERO;
-    console.log("Lock3")
 
     while ((q && ONE) === ZERO) {
         ss = ss +ONE;
         q = q >> BigInt(1);
     }
-    console.log("Lock4")
-
     if (ss === ONE) {
         return powMod(n, (p + ONE) / FOUR, p);
     }
-    console.log("Lock5")
 
     let z = TWO;
     while (!(ls(z, p)===(p-ONE))) {
         z = z + ONE;
     }
-    console.log("Lock6")
 
     let c = powMod(z, q, p);
     let r = powMod(n, (q + ONE) / TWO, p);
     let t = powMod(n, q, p);
     let m = ss;
-    console.log("Lock7")
 
     for (;;) {    
-        console.log("Lock8")
 
         if (t === ONE) {
             return r;
