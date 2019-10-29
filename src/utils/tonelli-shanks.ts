@@ -4,22 +4,54 @@ const ONE = oneBI;
 const TWO = BigInt("2");
 const FOUR = BigInt("4");
 
-function powMod(a: bigint, e: bigint, p: bigint): bigint {
-    let r = BigInt(1);
+// FROM: method 3https://helloacm.com/compute-powermod-abn/
+//Note: method 1 and 2 does not work with big numbers
+function powMod0(a: bigint, e: bigint, p: bigint): bigint {
+    let r = ONE;
     while(e > 0){
-        if((e & BigInt(1))=== BigInt(1)){
+        if((e & ONE)=== ONE){
             r = (r * a) % p
         }
-        e /= BigInt(2);
+        e /= TWO;
         a = (a*a) %p;
     }
-    return r
-    
-    //return a.toRed(BN.red(p)).redPow(e).fromRed(); => a^e mod p?
+    return r    
 }
-
+// FROM: method 4https://helloacm.com/compute-powermod-abn/
+function powMod1(a: bigint, e:bigint, p:bigint): bigint{
+    if(e === ONE){
+        return a % p
+    }
+    let r = powMod1(a, e/TWO, p)
+    r = r*r % p
+    if((e & ONE)=== ONE){
+        r = r*a%p
+    }
+    return r
+}
+//from https://en.wikibooks.org/wiki/Algorithm_Implementation/Mathematics/Modular_Exponentiation with java BIGINTEGER
+function powMod2(a: bigint, e:bigint, p:bigint): bigint{
+    let acc = a
+    if(e === ZERO){
+        return ONE
+    }
+    let lenE = e.toString(2).length -1
+    for(lenE--; lenE>=0; lenE--){
+        acc = acc * acc % p
+        let maskn = oneBI << BigInt(lenE);
+        let maskAndNumber = maskn & e;
+        if(maskAndNumber != zeroBI){
+            acc = acc * a % p
+        }
+    }
+    return acc
+}
 function ls(a: bigint, p: bigint): bigint {
     return powMod(a, (p - ONE)/TWO, p);
+}
+//this method is just used to call once the different powmod to test the speed
+function powMod(a: bigint, e:bigint, p:bigint): bigint{
+    return powMod2(a,e,p)
 }
 
 function cmp(a: bigint, b: bigint): -1|0|1{
@@ -44,7 +76,7 @@ export function modSqrt(n: bigint, p: bigint): bigint {
 
     while ((q & ONE) === ZERO) {
         ss = ss +ONE;
-        q = q >> BigInt(1);
+        q = q >> ONE;
     }
 
     if (ss === ONE) {
