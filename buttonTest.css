@@ -29,3 +29,17 @@ body{
     cursor: pointer;
 
 }
+
+#monitoring3{
+    background: #1594e5;
+    color: #fff;
+    display: block;
+    width: 140px;
+    font-size: 24px;
+    text-transform: uppercase;
+    padding: 10px;
+    text-align: center;
+    margin: 20px auto;
+    cursor: pointer;
+
+}

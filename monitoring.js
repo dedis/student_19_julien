@@ -1,5 +1,7 @@
 var button1 = document.getElementById("monitoring");
 var button2 = document.getElementById("monitoring2");
+var button3 = document.getElementById("monitoring3");
+
 const msg = new Uint8Array("abc");
 var maskBuffer = [
   new Uint16Array([0b1]),
@@ -226,6 +228,14 @@ button2.onclick = function() {
   console.log(
     "Verifying is : " + verifyingTotal / signingTotal + " longer than signing"
   );
+};
+
+button3.onclick = function() {
+  var maxj = 2;
+  var values = sign(maxj);
+  var signatures = values[0];
+  var publics = values[1];
+  verify(signatures, publics, maxj);
 };
 
 //for 650 keys, verify is 5.17 x longer
