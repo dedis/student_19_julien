@@ -119,22 +119,22 @@ export default class CurvePoint {
             return;
         }
 
-        const z1z1 = a.z.sqr().mod(p);
-        const z2z2 = b.z.sqr().mod(p);
-        const u1 = a.x.mul(z2z2).mod(p);
-        const u2 = b.x.mul(z1z1).mod(p);
+        const z1z1 = a.z.sqr();
+        const z2z2 = b.z.sqr();
+        const u1 = a.x.mul(z2z2);
+        const u2 = b.x.mul(z1z1);
 
-        let t = b.z.mul(z2z2).mod(p);
-        const s1 = a.y.mul(t).mod(p);
+        let t = b.z.mul(z2z2);
+        const s1 = a.y.mul(t);
 
-        t = a.z.mul(z1z1).mod(p);
-        const s2 = b.y.mul(t).mod(p);
+        t = a.z.mul(z1z1);
+        const s2 = b.y.mul(t);
 
         const h = u2.sub(u1);
 
         t = h.add(h);
-        const i = t.sqr().mod(p);
-        const j = h.mul(i).mod(p);
+        const i = t.sqr();
+        const j = h.mul(i);
 
         t = s2.sub(s1);
         if (h.signum() === 0 && t.signum() === 0) {
@@ -143,21 +143,21 @@ export default class CurvePoint {
         }
 
         const r = t.add(t);
-        const v = u1.mul(i).mod(p);
+        const v = u1.mul(i);
 
-        let t4 = r.sqr().mod(p);
+        let t4 = r.sqr();
         t = v.add(v);
         let t6 = t4.sub(j);
         this.x = t6.sub(t).mod(p);
 
         t = v.sub(this.x);
-        t4 = s1.mul(j).mod(p);
+        t4 = s1.mul(j);
         t6 = t4.add(t4);
-        t4 = r.mul(t).mod(p);
+        t4 = r.mul(t);
         this.y = t4.sub(t6).mod(p);
 
         t = a.z.add(b.z);
-        t4 = t.sqr().mod(p);
+        t4 = t.sqr();
         t = t4.sub(z1z1);
         t4 = t.sub(z2z2);
         this.z = t4.mul(h).mod(p);
@@ -168,18 +168,18 @@ export default class CurvePoint {
      * @param a the point to double
      */
     dbl(a: CurvePoint): void {
-        const A = a.x.sqr().mod(p);
-        const B = a.y.sqr().mod(p);
-        const C = B.sqr().mod(p);
+        const A = a.x.sqr();
+        const B = a.y.sqr();
+        const C = B.sqr();
 
         let t = a.x.add(B);
-        let t2 = t.sqr().mod(p);
+        let t2 = t.sqr();
         t = t2.sub(A);
         t2 = t.sub(C);
         const d = t2.add(t2);
         t = A.add(A);
         const e = t.add(A);
-        const f = e.sqr().mod(p);
+        const f = e.sqr();
 
         t = d.add(d);
         this.x = f.sub(t).mod(p);
@@ -188,10 +188,10 @@ export default class CurvePoint {
         t2 = t.add(t);
         t = t2.add(t2);
         this.y = d.sub(this.x);
-        t2 = e.mul(this.y).mod(p);
+        t2 = e.mul(this.y);
         this.y = t2.sub(t).mod(p);
 
-        t = a.y.mul(a.z).mod(p);
+        t = a.y.mul(a.z);
         this.z = t.add(t).mod(p);
     }
 
@@ -229,11 +229,10 @@ export default class CurvePoint {
         }
 
         const zInv = this.z.invmod(p);
-        let t = this.y.mul(zInv).mod(p);
-        const zInv2 = zInv.sqr().mod(p);
+        let t = this.y.mul(zInv);
+        const zInv2 = zInv.sqr();
         this.y = t.mul(zInv2).mod(p);
-        t = this.x.mul(zInv2).mod(p);
-        this.x = t;
+        this.x = this.x.mul(zInv2).mod(p);
         this.z = new GfP(oneBI);
         this.t = new GfP(oneBI);
     }

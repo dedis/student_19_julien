@@ -84,8 +84,8 @@ export default class GfP2 {
      * @returns the new element
      */
     add(a: GfP2): GfP2 {
-        const x = this.x.add(a.x).mod(p);
-        const y = this.y.add(a.y).mod(p);
+        const x = this.x.add(a.x).mod(p)
+        const y = this.y.add(a.y).mod(p)
         return new GfP2(x, y);
     }
 
@@ -95,8 +95,8 @@ export default class GfP2 {
      * @returns the new element
      */
     sub(a: GfP2): GfP2 {
-        const x = this.x.sub(a.x).mod(p);
-        const y = this.y.sub(a.y).mod(p);
+        const x = this.x.sub(a.x).mod(p)
+        const y = this.y.sub(a.y).mod(p)
         return new GfP2(x, y);
     }
 
@@ -110,8 +110,8 @@ export default class GfP2 {
         let t = a.x.mul(this.y);
         tx = tx.add(t).mod(p);
 
-        let ty = this.y.mul(a.y).mod(p);
-        t = this.x.mul(a.x).mod(p);
+        let ty = this.y.mul(a.y)
+        t = this.x.mul(a.x)
         ty = ty.sub(t).mod(p);
 
         return new GfP2(tx, ty);
@@ -157,7 +157,7 @@ export default class GfP2 {
         // intermediate modulo is due to a missing implementation
         // in the library that is actually using the unsigned left
         // shift any time
-        const tx = this.x.mul(this.y).mod(p).shiftLeft(1).mod(p);
+        const tx = this.x.mul(this.y).shiftLeft(1).mod(p);
 
         return new GfP2(tx, ty);
     }

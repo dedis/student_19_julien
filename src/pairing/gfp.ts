@@ -9,7 +9,7 @@ import { oneBI, zeroBI } from '../constants';
  */
 export default class GfP {
     private static ELEM_SIZE = 256 / 8;
-
+    private i = 0
     private v: bigint;
 
     constructor(value: bigint) {
