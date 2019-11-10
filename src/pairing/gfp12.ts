@@ -1,6 +1,6 @@
 import GfP6 from './gfp6';
 import GfP from './gfp';
-import { xiToPMinus1Over6, xiToPSquaredMinus1Over6 } from './constants';
+import { xiToPMinus1Over6, xiToPSquaredMinus1Over6, p } from './constants';
 import {toBigIntBE, toBufferBE} from 'bigint-buffer';
 import { oneBI, zeroBI } from '../constants';
 /**
@@ -135,10 +135,10 @@ export default class GfP12 {
      */
     mul(b: GfP12): GfP12 {
         const x = this.x.mul(b.y)
-            .add(b.x.mul(this.y));
+            .add(b.x.mul(this.y)).mod(p);
 
         const y = this.y.mul(b.y)
-            .add(this.x.mul(b.x).mulTau());
+            .add(this.x.mul(b.x).mulTau()).mod(p);
 
         return new GfP12(x, y);
     }
