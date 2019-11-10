@@ -145,7 +145,6 @@ describe('BN256 Point Tests', () => {
             const buf = p1.marshalBinary();
             const p2 = new BN256G2Point();
             p2.unmarshalBinary(buf);
-
             return p1.equals(p2) && p2.marshalSize() === buf.length;
         });
 

@@ -1,5 +1,6 @@
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
+import {p} from '../../src/pairing/constants'
 
 describe('GfP6', () => {
     const a = new GfP6(
@@ -10,7 +11,7 @@ describe('GfP6', () => {
 
     it('should invert', () => {
         const inv = a.invert();
-        const b = inv.mul(a);
+        const b = inv.mul(a).mod(p);
 
         expect(a.equals(a.invert().invert())).toBeTruthy();
         expect(b.isOne()).toBeTruthy();
@@ -28,8 +29,8 @@ describe('GfP6', () => {
     });
 
     it('should square and mul', () => {
-        const s = a.square().square();
-        const m = a.mul(a).mul(a).mul(a);
+        const s = a.square().square().mod(p);
+        const m = a.mul(a).mul(a).mul(a).mod(p);
 
         expect(s.equals(a)).toBeFalsy();
         expect(s.equals(m)).toBeTruthy();

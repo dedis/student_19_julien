@@ -1,6 +1,8 @@
 import GfP12 from '../../src/pairing/gfp12';
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
+import {p} from '../../src/pairing/constants'
+
 
 describe('GfP12', () => {
     const a = new GfP12(
@@ -28,17 +30,17 @@ describe('GfP12', () => {
     });
 
     it('should invert', () => {
-        const inv = a.invert();
-        const b = inv.mul(a);
+        const inv = a.invert().mod(p);
+        const b = inv.mul(a).mod(p);
 
         expect(b.equals(GfP12.one())).toBeTruthy();
-        expect(inv.invert().equals(a)).toBeTruthy();
+        expect(inv.invert().mod(p).equals(a)).toBeTruthy();
     });
 
     it('should square and multiply', () => {
-        const s = a.square().square();
-        const m = a.mul(a).mul(a).mul(a);
-        const e = a.exp(BigInt(4));
+        const s = a.square().square().mod(p);
+        const m = a.mul(a).mul(a).mul(a).mod(p);
+        const e = a.exp(BigInt(4)).mod(p);
 
         expect(s.equals(m)).toBeTruthy();
         expect(s.equals(e)).toBeTruthy();

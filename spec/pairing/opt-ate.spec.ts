@@ -1,14 +1,17 @@
 import { G1, G2, GT } from '../../src/pairing/bn';
+import {p} from '../../src/pairing/constants'
+
 
 describe('Optimal Ate Tests', () => {
     it('should get one', () => {
-        const p = GT.pair(new G1(BigInt(123)), new G2(BigInt(456)));
+        const b = GT.pair(new G1(BigInt(123)), new G2(BigInt(456)));
 
         const a = new GT();
-        a.neg(p);
+        a.neg(b);
 
         const one = new GT();
-        one.add(a, p);
+
+        one.add(a, b);
         expect(one.isOne()).toBeTruthy();
     });
 
