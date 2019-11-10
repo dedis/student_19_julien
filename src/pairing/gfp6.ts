@@ -4,8 +4,10 @@ import {
     xiToPMinus1Over3,
     xiTo2PSquaredMinus2Over3,
     xiToPSquaredMinus1Over3,
+    p,
 } from './constants';
 import GfP from './gfp';
+
 
 /**
  * Group field of size p^6
@@ -128,6 +130,10 @@ export default class GfP6 {
         const y = this.y.sub(b.y);
         const z = this.z.sub(b.z);
         return new GfP6(x, y, z);
+    }
+
+    mod(k: bigint): GfP6 {
+        return new GfP6(this.x.mod(k), this.y.mod(k), this.z.mod(k))
     }
 
     /**

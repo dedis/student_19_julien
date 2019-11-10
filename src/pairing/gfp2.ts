@@ -84,8 +84,8 @@ export default class GfP2 {
      * @returns the new element
      */
     add(a: GfP2): GfP2 {
-        const x = this.x.add(a.x).mod(p)
-        const y = this.y.add(a.y).mod(p)
+        const x = this.x.add(a.x)
+        const y = this.y.add(a.y)
         return new GfP2(x, y);
     }
 
@@ -95,8 +95,8 @@ export default class GfP2 {
      * @returns the new element
      */
     sub(a: GfP2): GfP2 {
-        const x = this.x.sub(a.x).mod(p)
-        const y = this.y.sub(a.y).mod(p)
+        const x = this.x.sub(a.x)
+        const y = this.y.sub(a.y)
         return new GfP2(x, y);
     }
 
@@ -176,6 +176,10 @@ export default class GfP2 {
         const ty = this.y.mul(inv).mod(p);
 
         return new GfP2(tx, ty);
+    }
+
+    mod(k: bigint): GfP2 {
+        return new GfP2(this.x.mod(k), this.y.mod(k))
     }
 
     /**

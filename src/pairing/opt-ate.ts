@@ -4,7 +4,7 @@ import TwistPoint from "./twist-point";
 import CurvePoint from "./curve-point";
 import GfP2 from "./gfp2";
 import GfP6 from "./gfp6";
-import { u, xiToPMinus1Over3, xiToPMinus1Over2, xiToPSquaredMinus1Over3 } from "./constants";
+import { u, xiToPMinus1Over3, xiToPMinus1Over2, xiToPSquaredMinus1Over3, p } from "./constants";
 import GfP from "./gfp";
 
 const sixuPlus2NAF = [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 1];
@@ -23,9 +23,9 @@ interface Result {
  * See the mixed addition algorithm from "Faster Computation of the
  * Tate Pairing", http://arxiv.org/pdf/0904.0854v3.pdf
  */
-function lineFunctionAdd(r: TwistPoint, p: TwistPoint, q: CurvePoint, r2: GfP2): Result {
-    const B = p.getX().mul(r.getT());
-    const D = p.getY().add(r.getZ()).square().sub(r2).sub(r.getT()).mul(r.getT());
+function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2): Result {
+    const B = p_1.getX().mul(r.getT());
+    const D = p_1.getY().add(r.getZ()).square().sub(r2).sub(r.getT()).mul(r.getT());
 
     const H = B.sub(r.getX());
     const I = H.square();
@@ -35,25 +35,25 @@ function lineFunctionAdd(r: TwistPoint, p: TwistPoint, q: CurvePoint, r2: GfP2):
     const L1 = D.sub(r.getY()).sub(r.getY());
     const V = r.getX().mul(E);
 
-    let rx = L1.square().sub(J).sub(V).sub(V);
-    let rz = r.getZ().add(H).square().sub(r.getT()).sub(I);
+    let rx = L1.square().sub(J).sub(V).sub(V).mod(p);
+    let rz = r.getZ().add(H).square().sub(r.getT()).sub(I).mod(p);
     
     let t = V.sub(rx).mul(L1);
     let t2 = r.getY().mul(J)
     t2 = t2.add(t2);
-    let ry = t.sub(t2);
-    let rt = rz.square();
+    let ry = t.sub(t2).mod(p);
+    let rt = rz.square().mod(p);
 
-    t = p.getY().add(rz).square().sub(r2).sub(rt);
-    t2 = L1.mul(p.getX());
+    t = p_1.getY().add(rz).square().sub(r2).sub(rt);
+    t2 = L1.mul(p_1.getX());
     t2 = t2.add(t2);
 
-    const a = t2.sub(t);
+    const a = t2.sub(t).mod(p);
     let c = rz.mulScalar(q.getY());
-    c = c.add(c);
+    c = c.add(c).mod(p);
 
     let b = GfP2.zero().sub(L1).mulScalar(q.getX());
-    b = b.add(b);
+    b = b.add(b).mod(p);
     
     return {
         a,
@@ -112,8 +112,8 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
     const t = res.b.add(res.c);
     const t2 = new GfP6(GfP2.zero(), res.a, t);
     
-    let tx = ret.getX().add(ret.getY()).mul(t2).sub(a2).sub(t3);
-    let ty = t3.add(a2.mulTau());
+    let tx = ret.getX().add(ret.getY()).mul(t2).sub(a2).sub(t3).mod(p);
+    let ty = t3.add(a2.mulTau()).mod(p);
 
     return new GfP12(tx, ty);
 }
@@ -190,36 +190,36 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
 function finalExponentiation(a: GfP12): GfP12 {
     let t1 = a.conjugate();
 
-    t1 = t1.mul(a.invert());
+    t1 = t1.mul(a.invert()).mod(p);
     const t2 = t1.frobeniusP2();
-    t1 = t1.mul(t2);
+    t1 = t1.mul(t2).mod(p);
 
     const fp = t1.frobenius();
     const fp2 = t1.frobeniusP2();
     const fp3 = fp2.frobenius();
 
-    const fu = t1.exp(u);
-    const fu2 = fu.exp(u);
-    const fu3 = fu2.exp(u);
+    const fu = t1.exp(u).mod(p);
+    const fu2 = fu.exp(u).mod(p);
+    const fu3 = fu2.exp(u).mod(p);
     const fu2p = fu2.frobenius();
     const fu3p = fu3.frobenius();
 
-    const y0 = fp.mul(fp2).mul(fp3);
+    const y0 = fp.mul(fp2).mul(fp3).mod(p);
     const y1 = t1.conjugate();
     const y2 = fu2.frobeniusP2();
     const y3 = fu.frobenius().conjugate();
-    const y4 = fu.mul(fu2p).conjugate();
+    const y4 = fu.mul(fu2p).conjugate().mod(p);
     const y5 = fu2.conjugate();
-    const y6 = fu3.mul(fu3p).conjugate();
+    const y6 = fu3.mul(fu3p).conjugate().mod(p);
 
-    let t0 = y6.square().mul(y4).mul(y5);
-    t1 = y3.mul(y5).mul(t0).square();
-    t0 = t0.mul(y2);
-    t1 = t1.mul(t0).square();
-    t0 = t1.mul(y1);
-    t1 = t1.mul(y0);
+    let t0 = y6.square().mul(y4).mul(y5).mod(p);
+    t1 = y3.mul(y5).mul(t0).square().mod(p);
+    t0 = t0.mul(y2).mod(p);
+    t1 = t1.mul(t0).square().mod(p);
+    t0 = t1.mul(y1).mod(p);
+    t1 = t1.mul(y0).mod(p);
 
-    return t0.square().mul(t1);
+    return t0.square().mul(t1).mod(p);
 }
 
 /**

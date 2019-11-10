@@ -123,6 +123,11 @@ export default class GfP12 {
         return new GfP12(x, y);
     }
 
+    mod(k: bigint): GfP12 {
+        return new GfP12(this.x.mod(k), this.y.mod(k))
+    }
+
+
     /**
      * Multiply b by the current element
      * @param b the element to multiply with
