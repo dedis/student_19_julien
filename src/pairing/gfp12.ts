@@ -166,7 +166,7 @@ export default class GfP12 {
         //Get the string of the BigInt, convert to byte, then get number of bits
 
         for (let i = s.length - 1; i >= 0; i--) {
-            t = sum.square();
+            t = sum.square().mod(p);
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
             if(maskAndNumber != zeroBI) sum = t.mul(this);

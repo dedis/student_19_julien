@@ -211,12 +211,6 @@ describe('BN curve', () => {
         pc.scalarBaseMul(c);
         const qc = new G2();
         qc.scalarBaseMul(c);
-        console.log("PA : "+pa)
-        console.log("QA : "+qa)
-        console.log("PB : "+pb)
-        console.log("QB : "+qb)
-        console.log("PC : "+pc)
-        console.log("QC : "+qc)
 
         const k1 = GT.pair(pb, qc);
         k1.scalarMul(k1, a);
