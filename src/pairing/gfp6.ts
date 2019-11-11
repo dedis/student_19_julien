@@ -141,7 +141,7 @@ export default class GfP6 {
      * @param b the element to multiply with
      * @returns the new element
      */
-    mul(b: GfP6): GfP6 {
+    mul(b: GfP6, bool?: boolean): GfP6 {
         const v0 = this.z.mul(b.z, true);
         const v1 = this.y.mul(b.y, true);
         const v2 = this.x.mul(b.x, true);
@@ -149,18 +149,30 @@ export default class GfP6 {
         let t0 = this.x.add(this.y);
         let t1 = b.x.add(b.y);
         let tz = t0.mul(t1, true);
-        tz = tz.sub(v1).sub(v2).mulXi().add(v0).mod(p);
-
+        if(!bool){
+            tz = tz.sub(v1).sub(v2).mulXi().add(v0).mod(p);
+        }else{
+            tz = tz.sub(v1).sub(v2).mulXi().add(v0)
+        }
         t0 = this.y.add(this.z);
         t1 = b.y.add(b.z);
         let ty = t0.mul(t1, true);
         t0 = v2.mulXi();
-        ty = ty.sub(v0).sub(v1).add(t0).mod(p);
+        if(!bool){
+            ty = ty.sub(v0).sub(v1).add(t0).mod(p);
+        }else{
+            ty = ty.sub(v0).sub(v1).add(t0)
+        }
+        
 
         t0 = this.x.add(this.z);
         t1 = b.x.add(b.z);
         let tx = t0.mul(t1, true);
-        tx = tx.sub(v0).add(v1).sub(v2).mod(p);
+        if(!bool){
+            tx = tx.sub(v0).add(v1).sub(v2).mod(p);
+        }else{
+            tx = tx.sub(v0).add(v1).sub(v2)
+        }
 
         return new GfP6(tx, ty, tz);
     }

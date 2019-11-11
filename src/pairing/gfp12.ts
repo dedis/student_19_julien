@@ -181,12 +181,12 @@ export default class GfP12 {
      * @returns the new element
      */
     square(): GfP12 {
-        const v0 = this.x.mul(this.y);
+        const v0 = this.x.mul(this.y, true);
 
         let t = this.x.mulTau();
         t = this.y.add(t);
         let ty = this.x.add(this.y);
-        ty = ty.mul(t).sub(v0);
+        ty = ty.mul(t, true).sub(v0);
         t = v0.mulTau();
         ty = ty.sub(t);
 
