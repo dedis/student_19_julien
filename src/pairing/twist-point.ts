@@ -1,5 +1,6 @@
 import GfP2 from './gfp2';
 import { zeroBI, oneBI } from '../constants';
+import {p} from './constants'
 
 const twistB = new GfP2(
     BigInt("6500054969564660373279643874235990574282535810762300357187714502686418407178"),
@@ -78,8 +79,8 @@ export default class TwistPoint {
             return true;
         }
 
-        const yy = cpy.y.square();
-        const xxx = cpy.x.square().mul(cpy.x).add(twistB);
+        const yy = cpy.y.square().mod(p);
+        const xxx = cpy.x.square().mul(cpy.x).add(twistB).mod(p);
 
         return yy.equals(xxx);
     }
