@@ -105,14 +105,22 @@ export default class GfP2 {
      * @param a the other element to multiply
      * @returns the new element
      */
-    mul(a: GfP2): GfP2 {
+    mul(a: GfP2, b?: boolean): GfP2 {
         let tx = this.x.mul(a.y);
         let t = a.x.mul(this.y);
-        tx = tx.add(t).mod(p);
+        if(!b){
+            tx = tx.add(t).mod(p);
+        }else{
+            tx = tx.add(t)
+        }
 
         let ty = this.y.mul(a.y)
         t = this.x.mul(a.x)
-        ty = ty.sub(t).mod(p);
+        if(!b){
+            ty = ty.sub(t).mod(p);
+        }else{
+            ty = ty.sub(t)
+        }
 
         return new GfP2(tx, ty);
     }

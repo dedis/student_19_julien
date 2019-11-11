@@ -142,25 +142,25 @@ export default class GfP6 {
      * @returns the new element
      */
     mul(b: GfP6): GfP6 {
-        const v0 = this.z.mul(b.z);
-        const v1 = this.y.mul(b.y);
-        const v2 = this.x.mul(b.x);
+        const v0 = this.z.mul(b.z, true);
+        const v1 = this.y.mul(b.y, true);
+        const v2 = this.x.mul(b.x, true);
 
         let t0 = this.x.add(this.y);
         let t1 = b.x.add(b.y);
-        let tz = t0.mul(t1);
-        tz = tz.sub(v1).sub(v2).mulXi().add(v0);
+        let tz = t0.mul(t1, true);
+        tz = tz.sub(v1).sub(v2).mulXi().add(v0).mod(p);
 
         t0 = this.y.add(this.z);
         t1 = b.y.add(b.z);
-        let ty = t0.mul(t1);
+        let ty = t0.mul(t1, true);
         t0 = v2.mulXi();
-        ty = ty.sub(v0).sub(v1).add(t0);
+        ty = ty.sub(v0).sub(v1).add(t0).mod(p);
 
         t0 = this.x.add(this.z);
         t1 = b.x.add(b.z);
         let tx = t0.mul(t1);
-        tx = tx.sub(v0).add(v1).sub(v2);
+        tx = tx.sub(v0).add(v1).sub(v2).mod(p);
 
         return new GfP6(tx, ty, tz);
     }
