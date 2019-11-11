@@ -159,7 +159,7 @@ export default class GfP6 {
 
         t0 = this.x.add(this.z);
         t1 = b.x.add(b.z);
-        let tx = t0.mul(t1);
+        let tx = t0.mul(t1, true);
         tx = tx.sub(v0).add(v1).sub(v2).mod(p);
 
         return new GfP6(tx, ty, tz);
