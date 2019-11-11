@@ -134,11 +134,11 @@ export default class GfP12 {
      * @returns the new element
      */
     mul(b: GfP12): GfP12 {
-        const x = this.x.mul(b.y)
-            .add(b.x.mul(this.y)).mod(p);
+        const x = this.x.mul(b.y, true)
+            .add(b.x.mul(this.y, true)).mod(p);
 
-        const y = this.y.mul(b.y)
-            .add(this.x.mul(b.x).mulTau()).mod(p);
+        const y = this.y.mul(b.y, true)
+            .add(this.x.mul(b.x, true).mulTau()).mod(p);
 
         return new GfP12(x, y);
     }
