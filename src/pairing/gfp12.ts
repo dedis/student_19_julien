@@ -3,12 +3,14 @@ import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6, p } from './constants';
 import {toBigIntBE, toBufferBE} from 'bigint-buffer';
 import { oneBI, zeroBI } from '../constants';
+import {GFpPool12} from './gfpPool'
 /**
  * Group field element of size p^12
  * This object acts as an immutable and then any modification will instantiate
  * a new object.
  */
-export default class GfP12 {
+
+ export default class GfP12 {
     private static ZERO = new GfP12(GfP6.zero(), GfP6.zero());
     private static ONE = new GfP12(GfP6.zero(), GfP6.one());
 
@@ -73,6 +75,7 @@ export default class GfP12 {
      * @returns the new element
      */
     conjugate(): GfP12 {
+        //12 calls of this function for one verify
         const x = this.x.neg();
 
         return new GfP12(x, this.y);
@@ -83,6 +86,7 @@ export default class GfP12 {
      * @returns the new element
      */
     neg(): GfP12 {
+        //0 calls of this function for one verify
         const x = this.x.neg();
         const y = this.y.neg();
 
@@ -90,12 +94,14 @@ export default class GfP12 {
     }
 
     frobenius(): GfP12 {
+        //10 calls of this function for one verify
         const x = this.x.frobenius().mulScalar(xiToPMinus1Over6);
         const y = this.y.frobenius();
         return new GfP12(x, y);
     }
 
     frobeniusP2(): GfP12 {
+        //6 calls of this function for one verify
         const x = this.x.frobeniusP2().mulGfP(new GfP(xiToPSquaredMinus1Over6));
         const y = this.y.frobeniusP2();
         return new GfP12(x, y);
@@ -107,6 +113,7 @@ export default class GfP12 {
      * @returns the new element
      */
     add(b: GfP12): GfP12 {
+        //0 calls of this function for one verify
         const x = this.x.add(b.x);
         const y = this.y.add(b.y);
         return new GfP12(x, y);
@@ -118,12 +125,14 @@ export default class GfP12 {
      * @returns the new element
      */
     sub(b: GfP12): GfP12 {
+        //0 calls of this function for one verify
         const x = this.x.sub(b.x);
         const y = this.y.sub(b.y);
         return new GfP12(x, y);
     }
 
     mod(k: bigint): GfP12 {
+        //408 calls of this function for one verify
         return new GfP12(this.x.mod(k), this.y.mod(k))
     }
 
@@ -134,6 +143,7 @@ export default class GfP12 {
      * @returns the new element
      */
     mul(b: GfP12): GfP12 {
+        //210 calls of this function for one verify
         const x = this.x.mul(b.y, true)
             .add(b.x.mul(this.y, true)).mod(p);
 
@@ -149,6 +159,7 @@ export default class GfP12 {
      * @returns the new element
      */
     mulScalar(k: GfP6): GfP12 {
+        //4 calls of this function for one verify
         const x = this.x.mul(k);
         const y = this.y.mul(k);
         return new GfP12(x, y);
@@ -160,6 +171,7 @@ export default class GfP12 {
      * @returns the new element
      */
     exp(k: bigint): GfP12 {
+        //12 calls of this function for one verify
         let sum = GfP12.one();
         let t : GfP12;
         let s :string = k.toString(2);
@@ -181,6 +193,7 @@ export default class GfP12 {
      * @returns the new element
      */
     square(): GfP12 {
+        //512 calls of this function for one verify
         const v0 = this.x.mul(this.y, true);
 
         let t = this.x.mulTau();
@@ -189,7 +202,7 @@ export default class GfP12 {
         ty = ty.mul(t, true).sub(v0);
         t = v0.mulTau();
         ty = ty.sub(t);
-
+            
         return new GfP12(v0.add(v0), ty);
     }
 
@@ -198,6 +211,7 @@ export default class GfP12 {
      * @returns the new element
      */
     invert(): GfP12 {
+        //2 calls of this function for one verify
         let t1 = this.x.square();
         let t2 = this.y.square();
         t1 = t2.sub(t1.mulTau());
