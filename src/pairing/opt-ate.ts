@@ -6,6 +6,7 @@ import GfP2 from "./gfp2";
 import GfP6 from "./gfp6";
 import { u, xiToPMinus1Over3, xiToPMinus1Over2, xiToPSquaredMinus1Over3, p } from "./constants";
 import GfP from "./gfp";
+import { GFpPool12 } from "./gfpPool";
 
 const sixuPlus2NAF = [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 1];
 
@@ -188,38 +189,70 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
  * http://cryptojedi.org/papers/dclxvi-20100714.pdf)
  */
 function finalExponentiation(a: GfP12): GfP12 {
-    let t1 = a.conjugate();
 
-    t1 = t1.mul(a.invert()).mod(p);
-    const t2 = t1.frobeniusP2();
-    t1 = t1.mul(t2).mod(p);
+    let tp : GfP12 = GFpPool12.use()
+    
+    tp.mul(a.conjugate(), a.invert())
+    tp =  tp.mod(p)
+    
+    const t2 = tp.frobeniusP2();
 
-    const fp = t1.frobenius();
-    const fp2 = t1.frobeniusP2();
+    tp.mul(tp, t2)
+    tp = tp.mod(p)
+
+    const fp = tp.frobenius();
+    const fp2 = tp.frobeniusP2();
     const fp3 = fp2.frobenius();
 
-    const fu = t1.exp(u).mod(p);
+    const fu = tp.exp(u).mod(p);
     const fu2 = fu.exp(u).mod(p);
     const fu3 = fu2.exp(u).mod(p);
     const fu2p = fu2.frobenius();
     const fu3p = fu3.frobenius();
 
-    const y0 = fp.mul(fp2).mul(fp3).mod(p);
-    const y1 = t1.conjugate();
+    let y0 : GfP12 = GFpPool12.use()
+
+    y0.mul(fp,fp2)
+    y0.mul(y0, fp3)
+    y0 = y0.mod(p)
+
+    const y1 = tp.conjugate();
     const y2 = fu2.frobeniusP2();
     const y3 = fu.frobenius().conjugate();
-    const y4 = fu.mul(fu2p).conjugate().mod(p);
+
+    let y4 :  GfP12 = GFpPool12.use()
+    y4.mul(fu, fu2p)
+    y4 = y4.conjugate().mod(p)    
     const y5 = fu2.conjugate();
-    const y6 = fu3.mul(fu3p).conjugate().mod(p);
+    let y6 : GfP12 = GFpPool12.use()
+    y6.mul(fu3, fu3p)
+    y6 = y6.conjugate().mod(p);
 
-    let t0 = y6.square().mul(y4).mul(y5).mod(p);
-    t1 = y3.mul(y5).mul(t0).square().mod(p);
-    t0 = t0.mul(y2).mod(p);
-    t1 = t1.mul(t0).square().mod(p);
-    t0 = t1.mul(y1).mod(p);
-    t1 = t1.mul(y0).mod(p);
+    let t0 : GfP12 = GFpPool12.use()
+    t0 = y6.square()
+    t0.mul(t0, y4)
+    t0.mul(t0, y5)
+    t0 = t0.mod(p)
 
-    return t0.square().mul(t1).mod(p);
+    tp.mul(y3, y5)
+    tp.mul(tp, t0)
+    tp = tp.square().mod(p);
+
+    t0.mul(t0, y2)
+    t0 = t0.mod(p) 
+
+    tp.mul(tp, t0)
+    tp = tp.square().mod(p);
+
+    t0.mul(tp, y1)
+    t0 = t0.mod(p)
+    tp.mul(tp, y0)
+    tp.mod(p)
+
+    t0 = t0.square()
+    t0.mul(t0, tp)
+    
+    return t0.mod(p);
 }
 
 /**

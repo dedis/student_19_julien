@@ -142,15 +142,14 @@ import {GFpPool12} from './gfpPool'
      * @param b the element to multiply with
      * @returns the new element
      */
-    mul(b: GfP12): GfP12 {
+    mul(a: GfP12, b: GfP12): void {
         //210 calls of this function for one verify
-        const x = this.x.mul(b.y, true)
-            .add(b.x.mul(this.y, true)).mod(p);
+        this.x = a.x.mul(b.y, true)
+            .add(b.x.mul(a.y, true)).mod(p);
 
-        const y = this.y.mul(b.y, true)
-            .add(this.x.mul(b.x, true).mulTau()).mod(p);
+        this.y = a.y.mul(b.y, true)
+            .add(a.x.mul(b.x, true).mulTau()).mod(p);
 
-        return new GfP12(x, y);
     }
 
     /**
@@ -181,7 +180,7 @@ import {GFpPool12} from './gfpPool'
             t = sum.square().mod(p);
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
-            if(maskAndNumber != zeroBI) sum = t.mul(this);
+            if(maskAndNumber != zeroBI) sum.mul(t, this)
             else sum = t;
         }
 

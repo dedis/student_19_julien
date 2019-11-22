@@ -31,7 +31,9 @@ describe('GfP12', () => {
 
     it('should invert', () => {
         const inv = a.invert().mod(p);
-        const b = inv.mul(a).mod(p);
+        let b : GfP12 = new GfP12()
+        b.mul(inv, a)
+        b = b.mod(p);
 
         expect(b.equals(GfP12.one())).toBeTruthy();
         expect(inv.invert().mod(p).equals(a)).toBeTruthy();
@@ -39,7 +41,12 @@ describe('GfP12', () => {
 
     it('should square and multiply', () => {
         const s = a.square().square().mod(p);
-        const m = a.mul(a).mul(a).mul(a).mod(p);
+        let m : GfP12 = new GfP12()
+        m.mul(a,a)
+        m.mul(m,a)
+        m.mul(m,a)
+        m = m.mod(p)
+
         const e = a.exp(BigInt(4)).mod(p);
 
         expect(s.equals(m)).toBeTruthy();

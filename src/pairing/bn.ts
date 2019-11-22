@@ -403,7 +403,7 @@ export class GT {
      * @param b the second point
      */
     add(a: GT, b: GT): void {
-        this.g = a.g.mul(b.g);
+        this.g.mul(a.g, b.g)
     }
 
     /**
