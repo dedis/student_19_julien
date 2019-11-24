@@ -2,6 +2,7 @@ import GfP12 from '../../src/pairing/gfp12';
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
 import {p} from '../../src/pairing/constants'
+import { GFpPool12 } from '../../src/pairing/gfpPool';
 
 
 describe('GfP12', () => {
@@ -41,10 +42,12 @@ describe('GfP12', () => {
 
     it('should square and multiply', () => {
         const s = a.square().square().mod(p);
-        let m : GfP12 = new GfP12()
+        let m : GfP12 = GFpPool12.use()
+        let n : GfP12 = GFpPool12.use()
+        
         m.mul(a,a)
-        m.mul(m,a)
-        m.mul(m,a)
+        n.mul(m,a)
+        m.mul(n,a)
         m = m.mod(p)
 
         const e = a.exp(BigInt(4)).mod(p);
@@ -70,7 +73,6 @@ describe('GfP12', () => {
 
     it('should stringify', () => {
         const one = GfP12.one();
-
         expect(one.toString()).toBe('(((0,0), (0,0), (0,0)), ((0,0), (0,0), (0,1)))');
     });
 });

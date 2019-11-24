@@ -9,7 +9,7 @@ import {GFpPool12} from './gfpPool'
  * This object acts as an immutable and then any modification will instantiate
  * a new object.
  */
-
+var ert = 0
  export default class GfP12 {
     private static ZERO = new GfP12(GfP6.zero(), GfP6.zero());
     private static ONE = new GfP12(GfP6.zero(), GfP6.one());
@@ -171,7 +171,9 @@ import {GFpPool12} from './gfpPool'
      */
     exp(k: bigint): GfP12 {
         //12 calls of this function for one verify
-        let sum = GfP12.one();
+
+        let sum : GfP12 = GFpPool12.use()
+        sum = sum.add(GfP12.one())
         let t : GfP12;
         let s :string = k.toString(2);
         //Get the string of the BigInt, convert to byte, then get number of bits

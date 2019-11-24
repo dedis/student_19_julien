@@ -1,6 +1,4 @@
 import { G1, G2, GT } from '../../src/pairing/bn';
-import {p} from '../../src/pairing/constants'
-
 
 describe('Optimal Ate Tests', () => {
     it('should get one', () => {

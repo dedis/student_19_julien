@@ -191,14 +191,17 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
 function finalExponentiation(a: GfP12): GfP12 {
 
     let tp : GfP12 = GFpPool12.use()
+    let tp1 : GfP12 = GFpPool12.use()
+
     
-    tp.mul(a.conjugate(), a.invert())
-    tp =  tp.mod(p)
+    tp1.mul(a.conjugate(), a.invert())
+    tp =  tp1.mod(p)
     
     const t2 = tp.frobeniusP2();
 
-    tp.mul(tp, t2)
-    tp = tp.mod(p)
+    tp1.mul(tp, t2)
+
+    tp = tp1.mod(p)
 
     const fp = tp.frobenius();
     const fp2 = tp.frobeniusP2();
@@ -212,8 +215,10 @@ function finalExponentiation(a: GfP12): GfP12 {
 
     let y0 : GfP12 = GFpPool12.use()
 
-    y0.mul(fp,fp2)
-    y0.mul(y0, fp3)
+    tp1.mul(fp,fp2)
+
+    y0.mul(tp1, fp3)
+
     y0 = y0.mod(p)
 
     const y1 = tp.conjugate();
@@ -230,29 +235,31 @@ function finalExponentiation(a: GfP12): GfP12 {
 
     let t0 : GfP12 = GFpPool12.use()
     t0 = y6.square()
-    t0.mul(t0, y4)
-    t0.mul(t0, y5)
+
+    tp1.mul(t0, y4)
+    t0.mul(tp1, y5)
+
     t0 = t0.mod(p)
 
     tp.mul(y3, y5)
-    tp.mul(tp, t0)
-    tp = tp.square().mod(p);
+    tp1.mul(tp, t0)
+    tp = tp1.square().mod(p);
 
-    t0.mul(t0, y2)
-    t0 = t0.mod(p) 
+    tp1.mul(t0, y2)
+    t0 = tp1.mod(p) 
 
-    tp.mul(tp, t0)
-    tp = tp.square().mod(p);
+    tp1.mul(tp, t0)
+    tp = tp1.square().mod(p);
 
     t0.mul(tp, y1)
     t0 = t0.mod(p)
-    tp.mul(tp, y0)
-    tp.mod(p)
+    tp1.mul(tp, y0)
+    tp = tp1.mod(p)
 
     t0 = t0.square()
-    t0.mul(t0, tp)
+    tp1.mul(t0, tp)
     
-    return t0.mod(p);
+    return tp1.mod(p);
 }
 
 /**
