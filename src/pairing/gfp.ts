@@ -7,12 +7,14 @@ import { oneBI, zeroBI } from '../constants';
  * This object acts as an immutable and then any modification will instantiate
  * a new object.
  */
+var ert = 0
 export default class GfP {
     private static ELEM_SIZE = 256 / 8;
     private i = 0
     private v: bigint;
 
     constructor(value: bigint) {
+        ert = ert + 1
         this.v = value;
     }
 

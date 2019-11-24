@@ -142,14 +142,14 @@ var ert = 0
      * @param b the element to multiply with
      * @returns the new element
      */
-    mul(a: GfP12, b: GfP12): void {
+    mul(a: GfP12, b: GfP12): GfP12 {
         //210 calls of this function for one verify
         this.x = a.x.mul(b.y, true)
             .add(b.x.mul(a.y, true)).mod(p);
 
         this.y = a.y.mul(b.y, true)
             .add(a.x.mul(b.x, true).mulTau()).mod(p);
-
+        return this
     }
 
     /**

@@ -192,16 +192,17 @@ function finalExponentiation(a: GfP12): GfP12 {
 
     let tp : GfP12 = GFpPool12.use()
     let tp1 : GfP12 = GFpPool12.use()
+    let y0 : GfP12 = GFpPool12.use()
+    let y4 : GfP12 = GFpPool12.use()
+    let y6 : GfP12 = GFpPool12.use()
+    let t0 : GfP12 = GFpPool12.use()
 
     
-    tp1.mul(a.conjugate(), a.invert())
-    tp =  tp1.mod(p)
+    tp.mul(a.conjugate(), a.invert()).mod(p)
     
     const t2 = tp.frobeniusP2();
 
-    tp1.mul(tp, t2)
-
-    tp = tp1.mod(p)
+    tp = tp1.mul(tp, t2).mod(p)
 
     const fp = tp.frobenius();
     const fp2 = tp.frobeniusP2();
@@ -213,53 +214,28 @@ function finalExponentiation(a: GfP12): GfP12 {
     const fu2p = fu2.frobenius();
     const fu3p = fu3.frobenius();
 
-    let y0 : GfP12 = GFpPool12.use()
-
-    tp1.mul(fp,fp2)
-
-    y0.mul(tp1, fp3)
-
-    y0 = y0.mod(p)
+    y0 = y0.mul(tp1.mul(fp,fp2), fp3).mod(p)
 
     const y1 = tp.conjugate();
     const y2 = fu2.frobeniusP2();
     const y3 = fu.frobenius().conjugate();
 
-    let y4 :  GfP12 = GFpPool12.use()
-    y4.mul(fu, fu2p)
-    y4 = y4.conjugate().mod(p)    
+    y4 = y4.mul(fu, fu2p).conjugate().mod(p)
     const y5 = fu2.conjugate();
-    let y6 : GfP12 = GFpPool12.use()
-    y6.mul(fu3, fu3p)
-    y6 = y6.conjugate().mod(p);
+    t0 = y6.mul(fu3, fu3p).conjugate().square().mod(p);
 
-    let t0 : GfP12 = GFpPool12.use()
-    t0 = y6.square()
+    t0 = t0.mul(tp1.mul(t0, y4), y5).mod(p)
+    tp = tp1.mul(tp.mul(y3, y5), t0).square();
 
-    tp1.mul(t0, y4)
-    t0.mul(tp1, y5)
-
-    t0 = t0.mod(p)
-
-    tp.mul(y3, y5)
-    tp1.mul(tp, t0)
-    tp = tp1.square().mod(p);
-
-    tp1.mul(t0, y2)
-    t0 = tp1.mod(p) 
-
-    tp1.mul(tp, t0)
-    tp = tp1.square().mod(p);
-
-    t0.mul(tp, y1)
-    t0 = t0.mod(p)
-    tp1.mul(tp, y0)
-    tp = tp1.mod(p)
-
-    t0 = t0.square()
-    tp1.mul(t0, tp)
+    tp = tp1.mul(tp, tp1.mul(t0, y2).mod(p)).square().mod(p)
     
-    return tp1.mod(p);
+    t0 = t0.mul(tp, y1).mod(p).square()
+    tp = tp1.mul(tp, y0).mod(p)
+    tp1.mul(t0, tp).mod(p)
+
+    let retGFP12: GfP12 = new GfP12(tp1.getX(), tp1.getY())
+
+    return retGFP12;
 }
 
 /**

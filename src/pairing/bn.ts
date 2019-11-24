@@ -405,8 +405,7 @@ export class GT {
      */
     add(a: GT, b: GT): void {
         let tmp : GfP12 = GFpPool12.use()
-        tmp.mul(a.g, b.g)
-        this.g = tmp
+        this.g = tmp.mul(a.g, b.g)
     }
 
     /**
