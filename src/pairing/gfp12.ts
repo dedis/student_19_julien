@@ -142,6 +142,7 @@ var ert = 0
      * @param b the element to multiply with
      * @returns the new element
      */
+    //SEE JAVA
     mul(a: GfP12, b: GfP12): GfP12 {
         //210 calls of this function for one verify
         this.x = a.x.mul(b.y, true)

@@ -233,8 +233,9 @@ function finalExponentiation(a: GfP12): GfP12 {
     tp = tp1.mul(tp, y0).mod(p)
     tp1.mul(t0, tp).mod(p)
 
-    let retGFP12: GfP12 = new GfP12(tp1.getX(), tp1.getY())
 
+    let retGFP12: GfP12 = new GfP12(tp1.getX(), tp1.getY())
+    GFpPool12.recycle(tp)
     return retGFP12;
 }
 
