@@ -10,7 +10,7 @@ export const GfPPool1 = deePool.create(function makeGFP12(){
 })
 
 export const GfPPool2 = deePool.create(function makeGFP12(){
-        return new GfP2(new GfP(), new GfP())
+        return new GfP2()
 })
 
 export const GfPPool6 = deePool.create(function makeGFP12(){
