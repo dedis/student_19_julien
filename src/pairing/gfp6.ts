@@ -1,4 +1,6 @@
 import GfP2 from './gfp2';
+import GfP from './gfp';
+
 import {
     xiTo2PMinus2Over3,
     xiToPMinus1Over3,
@@ -6,7 +8,7 @@ import {
     xiToPSquaredMinus1Over3,
     p,
 } from './constants';
-import GfP from './gfp';
+import { GfPPool2, GfPPool6 } from './gfpPool';
 
 
 /**
@@ -68,6 +70,28 @@ export default class GfP6 {
         return this.z;
     }
 
+    setX(a: GfP2): GfP6{
+        this.x.copy(a)
+        return this
+    }
+
+    setY(a: GfP2): GfP6{
+        this.y.copy(a)
+        return this
+    }
+
+    setZ(a: GfP2): GfP6{
+        this.z.copy(a)
+        return this
+    }
+
+    setXYZ(a: GfP2, b: GfP2, c: GfP2): GfP6{
+        this.setX(a)
+        this.setY(b)
+        this.setZ(c)
+        return this
+    }
+
     /**
      * Check if the element is zero
      * @returns true when zero, false otherwise
@@ -88,24 +112,24 @@ export default class GfP6 {
      * Get the negative of the element
      * @returns the new element
      */
-    neg(): GfP6 {
-        const x = this.x.negative();
-        const y = this.y.negative();
-        const z = this.z.negative();
-        return new GfP6(x, y, z);
+    neg(a: GfP6): GfP6 {
+        this.x.negative(a.x);
+        this.y.negative(a.y);
+        this.z.negative(a.z);
+        return this
     }
 
-    frobenius(): GfP6 {
-        const x = this.x.conjugate().mul(xiTo2PMinus2Over3);
-        const y = this.y.conjugate().mul(xiToPMinus1Over3);
-        const z = this.z.conjugate();
-        return new GfP6(x, y, z);
+    frobenius(a: GfP6): GfP6 {
+        this.x.conjugate(a.x).mul(this.x, xiTo2PMinus2Over3);
+        this.y.conjugate(a.y).mul(this.y, xiToPMinus1Over3);
+        this.z.conjugate(a.z);
+        return this
     }
 
-    frobeniusP2(): GfP6 {
-        const x = this.x.mulScalar(new GfP(xiTo2PSquaredMinus2Over3));
-        const y = this.y.mulScalar(new GfP(xiToPSquaredMinus1Over3));
-        return new GfP6(x, y, this.z);
+    frobeniusP2(a: GfP6): GfP6 {
+        this.x.mulScalar(a.x, new GfP(xiTo2PSquaredMinus2Over3));
+        this.y.mulScalar(a.y, new GfP(xiToPSquaredMinus1Over3));
+        return this
     }
 
     /**
@@ -113,11 +137,11 @@ export default class GfP6 {
      * @param b the element to add
      * @returns the new element
      */
-    add(b: GfP6): GfP6 {
-        const x = this.x.add(b.x);
-        const y = this.y.add(b.y);
-        const z = this.z.add(b.z);
-        return new GfP6(x, y, z);
+    add(a: GfP6, b: GfP6): GfP6 {
+        this.x.add(a.x, b.x);
+        this.y.add(a.y, b.y);
+        this.z.add(a.z, b.z);
+        return this
     }
 
     /**
@@ -125,15 +149,18 @@ export default class GfP6 {
      * @param b the element to subtract
      * @returns the new element
      */
-    sub(b: GfP6): GfP6 {
-        const x = this.x.sub(b.x);
-        const y = this.y.sub(b.y);
-        const z = this.z.sub(b.z);
-        return new GfP6(x, y, z);
+    sub(a: GfP6, b: GfP6): GfP6 {
+        this.x.sub(a.x, b.x);
+        this.y.sub(a.y, b.y);
+        this.z.sub(a.z, b.z);
+        return this
     }
 
-    mod(k: bigint): GfP6 {
-        return new GfP6(this.x.mod(k), this.y.mod(k), this.z.mod(k))
+    mod(a: GfP6, k: bigint): GfP6 {
+        this.x.mod(a.x, k)
+        this.y.mod(a.y, k)
+        this.z.mod(a.z, k)
+        return this
     }
 
     /**
@@ -141,7 +168,7 @@ export default class GfP6 {
      * @param b the element to multiply with
      * @returns the new element
      */
-    mul(b: GfP6, bool?: boolean): GfP6 {
+    mul(a: GfP6, b: GfP6, bool?: boolean): GfP6 {
         const v0 = this.z.mul(b.z, true);
         const v1 = this.y.mul(b.y, true);
         const v2 = this.x.mul(b.x, true);
@@ -182,11 +209,11 @@ export default class GfP6 {
      * @param b the scalar
      * @returns the new element
      */
-    mulScalar(b: GfP2): GfP6 {
-        const x = this.x.mul(b);
-        const y = this.y.mul(b);
-        const z = this.z.mul(b);
-        return new GfP6(x, y, z);
+    mulScalar(a: GfP6, b: GfP2): GfP6 {
+        this.x.mul(a.x, b);
+        this.y.mul(a.y, b);
+        this.z.mul(a.z, b);
+        return this
     }
 
     /**
@@ -194,46 +221,67 @@ export default class GfP6 {
      * @param b the GFp element
      * @returns the new element
      */
-    mulGfP(b: GfP): GfP6 {
-        const x = this.x.mulScalar(b);
-        const y = this.y.mulScalar(b);
-        const z = this.z.mulScalar(b);
-        return new GfP6(x, y, z);
+    mulGfP(a: GfP6, b: GfP): GfP6 {
+        this.x.mulScalar(a.x, b);
+        this.y.mulScalar(a.y, b);
+        this.z.mulScalar(a.z, b);
+        return this
     }
 
-    mulTau(): GfP6 {
-        const tz = this.x.mulXi();
-        
-        return new GfP6(this.y, this.z, tz);
+    mulTau(a: GfP6): GfP6 {
+        this.z.mulXi(a.x)
+        this.setX(a.y)
+        this.setY(a.z)
+
+        return this
     }
 
     /**
      * Get the square of the current element
      * @returns the new element
      */
-    square(): GfP6 {
-        const v0 = this.z.square();
-        const v1 = this.y.square();
-        const v2 = this.x.square();
+    square(a: GfP6): GfP6 {
+        let v0: GfP2 = GfPPool2.use()
+        let v1: GfP2 = GfPPool2.use()
+        let v2: GfP2 = GfPPool2.use()
+        let c0: GfP2 = GfPPool2.use()
+        let c1: GfP2 = GfPPool2.use()
+        let c2: GfP2 = GfPPool2.use()
 
-        const c0 = this.x.add(this.y).square().sub(v1).sub(v2).mulXi().add(v0);
-        const c1 = this.y.add(this.z).square().sub(v0).sub(v1).add(v2.mulXi());
-        const c2 = this.x.add(this.z).square().sub(v0).add(v1).sub(v2);
+        v0.square(a.z)
+        v1.square(a.y)
+        v2.square(a.x)
 
-        return new GfP6(c2, c1, c0);
+        this.z.copy(c0.add(a.x, a.y).square(c0).sub(c0, v1).sub(c0, v2).mulXi(c0).add(c0, v0))
+        this.y.copy(c1.add(a.y, a.z).square(c1).sub(c1, v0).sub(c1, v1).add(c1, c2.mulXi(v2)))
+        this.x.copy(c2.add(a.x, a.z).square(c2).sub(c2, v0).add(c2, v1).sub(c2, v2))
+
+        GfP2.release(v0,v1,v2,c0,c1,c2)
+
+        return this
     }
 
     /**
      * Get the inverse of the element
      * @returns the new element
      */
-    invert(): GfP6 {
-        const A = this.z.square().sub(this.x.mul(this.y).mulXi());
-        const B = this.x.square().mulXi().sub(this.y.mul(this.z));
-        const C = this.y.square().sub(this.x.mul(this.z));
-        const F = C.mul(this.y).mulXi().add(A.mul(this.z)).add(B.mul(this.x).mulXi()).invert();
+    invert(a: GfP6): GfP6 {
+        let A: GfP2 = GfPPool2.use()
+        let B: GfP2 = GfPPool2.use()
+        let C: GfP2 = GfPPool2.use()
+        let F: GfP2 = GfPPool2.use()
+        let t1: GfP2 = GfPPool2.use()
 
-        return new GfP6(C.mul(F), B.mul(F), A.mul(F));
+
+        A.square(a.z).sub(A, t1.mul(a.x, a.y).mulXi(t1))
+        B.square(a.x).mulXi(B).sub(B, t1.mul(a.y, a.z))
+        C.square(a.y).sub(C, t1.mul(a.x, a.z))
+        F.mul(C, a.y).mulXi(F).add(F, t1.mul(A, a.z)).add(F, t1.mul(B, a.x).mulXi(t1)).invert(F)
+        this.x.mul(C, F)
+        this.y.mul(B, F)
+        this.z.mul(A, F)
+        GfP2.release(A,B,C,F,t1)
+        return this
     }
 
     /**
@@ -251,5 +299,16 @@ export default class GfP6 {
      */
     toString(): string {
         return `(${this.x.toString()}, ${this.y.toString()}, ${this.z.toString()})`;
+    }
+
+    copy(a: GfP6): GfP6{
+        this.setXYZ(a.x, a.y, a.z)
+        return this
+    }
+
+    static release(...a:GfP6[]): void{
+        for(let i = 0; i<a.length; i++){
+            GfPPool6.recycle(a[i])
+        }
     }
 }
