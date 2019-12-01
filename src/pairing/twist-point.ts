@@ -1,6 +1,7 @@
 import GfP2 from './gfp2';
 import { zeroBI, oneBI } from '../constants';
 import {p} from './constants'
+import { GfPPool2 } from './gfpPool';
 
 const twistB = new GfP2(
     BigInt("6500054969564660373279643874235990574282535810762300357187714502686418407178"),
@@ -79,10 +80,14 @@ export default class TwistPoint {
             return true;
         }
 
-        const yy = cpy.y.square().mod(p);
-        const xxx = cpy.x.square().mul(cpy.x).add(twistB).mod(p);
+        let yy : GfP2 = GfPPool2.use()
+        let xxx : GfP2 = GfPPool2.use()
 
-        return yy.equals(xxx);
+        yy.square(cpy.y).mod(yy, p);
+        xxx.square(cpy.x).mul(xxx, cpy.x).add(xxx, twistB).mod(xxx, p);
+        let result : boolean = yy.equals(xxx)
+        GfP2.release(yy, xxx)
+        return result
     }
 
     /**
@@ -118,80 +123,112 @@ export default class TwistPoint {
             return;
         }
 
-        const z12 = a.z.square();
-        const z22 = b.z.square();
-        const u1 = a.x.mul(z22);
-        const u2 = b.x.mul(z12);
+        let z12 : GfP2 = GfPPool2.use()
+        let z22 : GfP2 = GfPPool2.use()
+        let u1 : GfP2 = GfPPool2.use()
+        let u2 : GfP2 = GfPPool2.use()
+        let t : GfP2 = GfPPool2.use()
+        let s1 : GfP2 = GfPPool2.use()
+        let s2 : GfP2 = GfPPool2.use()
+        let h : GfP2 = GfPPool2.use()
+        let i : GfP2 = GfPPool2.use()
+        let j : GfP2 = GfPPool2.use()
 
-        let t = b.z.mul(z22);
-        const s1 = a.y.mul(t);
 
-        t = a.z.mul(z12);
-        const s2 = b.y.mul(t);
+        z12.square(a.z);
+        z22.square(b.z);
+        u1.mul(a.x, z22);
+        u2.mul(b.x, z12);
 
-        const h = u2.sub(u1);
+        t.mul(b.z, z22);
+        s1.mul(a.y, t);
+
+        t.mul(a.z, z12);
+        s2.mul(b.y, t);
+
+        h.sub(u2, u1);
         
-        t = h.add(h);
-        const i = t.square();
-        const j = h.mul(i);
+        t.add(h, h);
+        i.square(t);
+        j.mul(h, i);
 
-        t = s2.sub(s1);
+        t.sub(s2, s1);
         if (h.isZero() && t.isZero()) {
             this.double(a);
+            GfP2.release(z12, z22, u1, u2, t, s1, s2, h, i, j)
             return;
         }
 
-        const r = t.add(t);
-        const v = u1.mul(i);
+        let r : GfP2 = GfPPool2.use()
+        let v : GfP2 = GfPPool2.use()
+        let t4 : GfP2 = GfPPool2.use()
+        let t6 : GfP2 = GfPPool2.use()
 
-        let t4 = r.square();
-        t = v.add(v);
-        let t6 = t4.sub(j);
-        this.x = t6.sub(t);
+        r.add(t, t);
+        v.mul(u1, i);
 
-        t = v.sub(this.x);
-        t4 = s1.mul(j);
-        t6 = t4.add(t4);
-        t4 = r.mul(t);
-        this.y = t4.sub(t6);
+        t4.square(r);
+        t.add(v, v);
+        t6.sub(t4, j);
+        this.x.copy(t6.sub(t6, t));
 
-        t = a.z.add(b.z);
-        t4 = t.square();
-        t = t4.sub(z12);
-        t4 = t.sub(z22);
-        this.z = t4.mul(h);
-    }
+        t.sub(v, this.x);
+        t4.mul(s1, j);
+        t6.add(t4, t4);
+        t4.mul(r, t);
+        this.y.copy(t4.sub(t4, t6));
+
+        t.add(a.z, b.z);
+        t4.square(t);
+        t.sub(t4, z12);
+        t4.sub(t, z22);
+        this.z.copy(t4.mul(t4, h));
+
+        GfP2.release(z12, z22, u1, u2, t, s1, s2, h, i, j, r, v, t4, t6)
+        }
 
     /**
      * Compute the double of the given point and set the value
      * @param a the point
      */
     double(a: TwistPoint): void {
-        const A = a.x.square();
-        const B = a.y.square();
-        const C = B.square();
+        let A : GfP2 = GfPPool2.use()
+        let B : GfP2 = GfPPool2.use()
+        let C : GfP2 = GfPPool2.use()
+        let t : GfP2 = GfPPool2.use()
+        let t2 : GfP2 = GfPPool2.use()
+        let d : GfP2 = GfPPool2.use()
+        let e : GfP2 = GfPPool2.use()
+        let f : GfP2 = GfPPool2.use()
 
-        let t = a.x.add(B);
-        let t2 = t.square();
-        t = t2.sub(A);
-        t2 = t.sub(C);
-        const d = t2.add(t2);
-        t = A.add(A);
-        const e = t.add(A);
-        const f = e.square();
+        A.square(a.x);
+        B.square(a.y);
+        C.square(B);
 
-        t = d.add(d);
-        this.x = f.sub(t);
+        t.add(a.x, B);
+        t2.square(t);
+        t.sub(t2, A);
+        t2.sub(t, C);
+        d.add(t2, t2);
+        t.add(A, A);
+        e.add(t, A);
+        f.square(e);
 
-        t = C.add(C);
-        t2 = t.add(t);
-        t = t2.add(t2);
-        this.y = d.sub(this.x);
-        t2 = e.mul(this.y);
-        this.y = t2.sub(t);
+        t.add(d, d);
 
-        t = a.y.mul(a.z);
-        this.z = t.add(t);
+        this.x.copy(f.sub(f, t));
+
+        t.add(C, C);
+        t2.add(t, t);
+        t.add(t2, t2);
+        this.y.copy(d.sub(d, this.x));
+        t2.mul(e, this.y);
+        this.y.copy(t2.sub(t2, t));
+
+        t.mul(a.y, a.z);
+        this.z.copy(t.add(t, t));
+
+        GfP2.release(A,B,C,t,t2,d,e,f)
     }
 
     /**
@@ -229,14 +266,19 @@ export default class TwistPoint {
             this.setInfinity();
             return;
         }
+        let zInv : GfP2 = GfPPool2.use()
+        let t : GfP2 = GfPPool2.use()
+        let zInv2 : GfP2 = GfPPool2.use()
 
-        const zInv = this.z.invert();
-        let t = this.y.mul(zInv);
-        const zInv2 = zInv.square();
-        this.y = t.mul(zInv2);
-        this.x = this.x.mul(zInv2);
+        zInv.invert(this.z);
+        t.mul(this.y, zInv);
+        zInv2.square(zInv);
+        this.y.copy(t.mul(t, zInv2));
+        this.x.copy(t.mul(this.x, zInv2));
         this.z = GfP2.one();
         this.t = GfP2.one();
+
+        GfP2.release(zInv, zInv2, t)
     }
 
     /**
@@ -245,7 +287,9 @@ export default class TwistPoint {
      */
     neg(a: TwistPoint): void {
         this.x = a.x;
-        this.y = a.y.negative();
+        let tmp : GfP2 = GfPPool2.use()
+        this.y.copy(tmp.negative(a.y));
+        GfP2.release(tmp)
         this.z = a.z;
     }
 
