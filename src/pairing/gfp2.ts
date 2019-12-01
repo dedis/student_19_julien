@@ -1,9 +1,7 @@
 import GfP from './gfp';
 import { p } from './constants';
-import BN from 'bn.js'
 import { zeroBI, oneBI } from '../constants';
-import { GfPPool1 } from './gfpPool';
-import GfP12 from './gfp12';
+import { GfPPool1, GfPPool2 } from './gfpPool';
 
 /**
  * Group field of size p^2
@@ -259,7 +257,7 @@ export default class GfP2 {
 
     static release(...a:GfP2[]): void{
         for(let i = 0; i<a.length; i++){
-            GfPPool1.recycle(a[i])
+            GfPPool2.recycle(a[i])
         }
     }
 

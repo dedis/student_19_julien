@@ -169,39 +169,53 @@ export default class GfP6 {
      * @returns the new element
      */
     mul(a: GfP6, b: GfP6, bool?: boolean): GfP6 {
-        const v0 = this.z.mul(b.z, true);
-        const v1 = this.y.mul(b.y, true);
-        const v2 = this.x.mul(b.x, true);
+        let v0: GfP2 = GfPPool2.use()
+        let v1: GfP2 = GfPPool2.use()
+        let v2: GfP2 = GfPPool2.use()
+        let t0: GfP2 = GfPPool2.use()
+        let t1: GfP2 = GfPPool2.use()
+        let tz: GfP2 = GfPPool2.use()
+        let ty: GfP2 = GfPPool2.use()
+        let tx: GfP2 = GfPPool2.use()
 
-        let t0 = this.x.add(this.y);
-        let t1 = b.x.add(b.y);
-        let tz = t0.mul(t1, true);
-        if(!bool){
-            tz = tz.sub(v1).sub(v2).mulXi().add(v0).mod(p);
-        }else{
-            tz = tz.sub(v1).sub(v2).mulXi().add(v0)
-        }
-        t0 = this.y.add(this.z);
-        t1 = b.y.add(b.z);
-        let ty = t0.mul(t1, true);
-        t0 = v2.mulXi();
-        if(!bool){
-            ty = ty.sub(v0).sub(v1).add(t0).mod(p);
-        }else{
-            ty = ty.sub(v0).sub(v1).add(t0)
-        }
-        
+        v0.mul(a.z, b.z, true)
+        v1.mul(a.x, b.x, true)
+        v2.mul(a.y, b.y, true)
 
-        t0 = this.x.add(this.z);
-        t1 = b.x.add(b.z);
-        let tx = t0.mul(t1, true);
-        if(!bool){
-            tx = tx.sub(v0).add(v1).sub(v2).mod(p);
-        }else{
-            tx = tx.sub(v0).add(v1).sub(v2)
-        }
+        t0.add(a.x, a.y)
+        t1.add(b.x, b.y)
+        tz.mul(t0, t1, true)
 
-        return new GfP6(tx, ty, tz);
+        if(!bool){
+            tz.sub(tz, v1).sub(tz, v2).mulXi(tz).add(tz, v0).mod(tz, p)
+        }else{
+            tz.sub(tz, v1).sub(tz, v2).mulXi(tz).add(tz, v0)
+        }
+        t0.add(a.y, a.z)
+        t1.add(b.y, b.z)
+        ty.mul(t0, t1, true)
+        t0.mulXi(v2)
+
+        if(!bool){
+            ty.sub(ty, v0).sub(ty, v1).add(ty, t0).mod(ty, p)
+        }else{
+            ty.sub(ty, v0).sub(ty, v1).add(ty, t0)
+        }
+        t0.add(a.x, a.z)
+        t1.add(b.x, b.z)
+
+        tx.mul(t0, t1, true)
+
+        if(!bool){
+            tx.sub(tx, v0).add(tx, v1).sub(tx, v2).mod(tx, p)
+        }else{
+            tx.sub(tx, v0).add(tx, v1).sub(tx, v2)
+        }
+        this.x.copy(tx)
+        this.y.copy(ty)
+        this.z.copy(tz)
+        GfP2.release(v0,v1,v2,t0,t1,tx,ty,tz)
+        return this
     }
 
     /**
