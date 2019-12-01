@@ -7,15 +7,14 @@ import { oneBI, zeroBI } from '../constants';
  * This object acts as an immutable and then any modification will instantiate
  * a new object.
  */
-var ert = 0
-export default class GfP {
+
+ export default class GfP {
     private static ELEM_SIZE = 256 / 8;
     private i = 0
     private v: bigint;
 
-    constructor(value: bigint) {
-        ert = ert + 1
-        this.v = value;
+    constructor(value?: bigint) {
+        this.v = value || zeroBI;
     }
 
     /**
@@ -24,6 +23,11 @@ export default class GfP {
      */
     getValue(): bigint {
         return this.v;
+    }
+
+    setValue(a: bigint): GfP{
+        this.v = a
+        return this
     }
 
     /**
@@ -57,17 +61,19 @@ export default class GfP {
      * @param a the value to add
      * @returns the new value
      */
-    add(a: GfP): GfP {
-        return new GfP(this.v + a.v);
+    add(a: GfP, b: GfP): GfP {
+        this.v = a.v + b.v
+        return this
     }
 
-    /**
+    /**this.mul(this)
      * Subtract the value of a to the current value
      * @param a the value to subtract
      * @return the new value
      */
-    sub(a: GfP): GfP {
-        return new GfP(this.v - a.v)
+    sub(a: GfP, b: GfP): GfP {
+        this.v = a.v - b.v
+        return this
     }
 
     /**
@@ -75,16 +81,18 @@ export default class GfP {
      * @param a the value to multiply
      * @returns the new value
      */
-    mul(a: GfP): GfP {
-        return new GfP(this.v * a.v);
+    mul(a: GfP, b: GfP): GfP {
+        this.v = a.v * b.v
+        return this
     }
 
     /**
      * Get the square of the current value
      * @returns the new value
      */
-    sqr(): GfP {
-        return this.mul(this)
+    sqr(a: GfP): GfP {
+        this.v = this.mul(a,a).v
+        return this
 	}
 
     /**
@@ -92,13 +100,14 @@ export default class GfP {
      * @param k the coefficient
      * @returns the new value
      */
-    pow(k: bigint) {
+    pow(a: GfP, k: bigint) {
         let tmp = BigInt("1")
         for(let i = BigInt(1); i <= k; i++){
-            tmp = tmp * this.v;
+            tmp = tmp * a.v;
 
         }
-        return new GfP(tmp);
+        this.v = tmp
+        return this;
     }
 
     /**
@@ -106,9 +115,11 @@ export default class GfP {
      * @param p the modulus
      * @returns the new value
      */
-    mod(p: bigint): GfP {
-        if(this.v < 0) this.v = p + (this.v % p);
-        return new GfP(this.v % p)
+    mod(a: GfP, p: bigint): GfP {
+        let tmp: bigint = a.v % p
+        if(tmp < 0) tmp += p
+        this.v = tmp
+        return this
         }
 
     /**
@@ -116,16 +127,18 @@ export default class GfP {
      * @param p the modulus
      * @returns the new value
      */
-    invmod(p: bigint): GfP {
-        return new GfP(egcd(this.v, p).a % p);
+    invmod(a: GfP, p: bigint): GfP {
+        this.v = egcd(a.v, p).a % p
+        return this
     }
 
     /**
      * Get the negative of the current value
      * @returns the new value
      */
-    negate(): GfP {
-        return new GfP(-this.v);
+    negate(a: GfP): GfP {
+        this.v = -a.v
+        return this
     }
 
     /**
@@ -133,8 +146,9 @@ export default class GfP {
      * @param k number of positions to switch
      * @returns the new value
      */
-    shiftLeft(k: number): GfP {
-        return new GfP(this.v << BigInt(k));
+    shiftLeft(a: GfP, k: number): GfP {
+        this.v = a.v << BigInt(k)
+        return this
     }
 
     /**
