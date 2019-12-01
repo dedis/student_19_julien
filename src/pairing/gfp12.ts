@@ -1,15 +1,14 @@
 import GfP6 from './gfp6';
 import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6, p } from './constants';
-import {toBigIntBE, toBufferBE} from 'bigint-buffer';
 import { oneBI, zeroBI } from '../constants';
-import {GFpPool12} from './gfpPool'
+import {GfPPool6, GfPPool12} from './gfpPool'
 /**
  * Group field element of size p^12
  * This object acts as an immutable and then any modification will instantiate
  * a new object.
  */
-var ert = 0
+
  export default class GfP12 {
     private static ZERO = new GfP12(GfP6.zero(), GfP6.zero());
     private static ONE = new GfP12(GfP6.zero(), GfP6.one());
@@ -54,6 +53,23 @@ var ert = 0
         return this.y;
     }
 
+    setX(a: GfP6): GfP12{
+        this.x.copy(a)
+        return this
+    }
+
+    setY(a: GfP6): GfP12{
+        this.y.copy(a)
+        return this
+    }
+    
+
+    setXY(a: GfP6, b: GfP6): GfP12{
+        this.setX(a)
+        this.setY(b)
+        return this
+    }
+
     /**
      * Check if the element is zero
      * @returns true when zero, false otherwise
@@ -74,37 +90,34 @@ var ert = 0
      * Get the conjugate of the element
      * @returns the new element
      */
-    conjugate(): GfP12 {
-        //12 calls of this function for one verify
-        const x = this.x.neg();
+    conjugate(a: GfP12): GfP12 {
+        this.x.neg(a.x)
+        this.y.copy(a.y)
 
-        return new GfP12(x, this.y);
+        return this
     }
 
     /**
      * Get the negative of the element
      * @returns the new element
      */
-    neg(): GfP12 {
-        //0 calls of this function for one verify
-        const x = this.x.neg();
-        const y = this.y.neg();
+    neg(a: GfP12): GfP12 {
+        this.x.neg(a.x);
+        this.y.neg(a.y);
 
-        return new GfP12(x, y);
+        return this
     }
 
-    frobenius(): GfP12 {
-        //10 calls of this function for one verify
-        const x = this.x.frobenius().mulScalar(xiToPMinus1Over6);
-        const y = this.y.frobenius();
-        return new GfP12(x, y);
+    frobenius(a: GfP12): GfP12 {
+        this.x.frobenius(a.x).mulScalar(this.x, xiToPMinus1Over6);
+        this.y.frobenius(a.y);
+        return this
     }
 
-    frobeniusP2(): GfP12 {
-        //6 calls of this function for one verify
-        const x = this.x.frobeniusP2().mulGfP(new GfP(xiToPSquaredMinus1Over6));
-        const y = this.y.frobeniusP2();
-        return new GfP12(x, y);
+    frobeniusP2(a: GfP12): GfP12 {
+        this.x.frobeniusP2(a.x).mulGfP(this.x, new GfP(xiToPSquaredMinus1Over6));
+        this.y.frobeniusP2(a.y);
+        return this
     }
 
     /**
@@ -112,11 +125,10 @@ var ert = 0
      * @param b the element to add
      * @returns the new element
      */
-    add(b: GfP12): GfP12 {
-        //0 calls of this function for one verify
-        const x = this.x.add(b.x);
-        const y = this.y.add(b.y);
-        return new GfP12(x, y);
+    add(a: GfP12, b: GfP12): GfP12 {
+        this.x.add(a.x, b.x);
+        this.y.add(a.y, b.y);
+        return this
     }
 
     /**
@@ -124,17 +136,16 @@ var ert = 0
      * @param b the element to subtract
      * @returns the new element
      */
-    sub(b: GfP12): GfP12 {
-        //0 calls of this function for one verify
-        const x = this.x.sub(b.x);
-        const y = this.y.sub(b.y);
-        return new GfP12(x, y);
+    sub(a: GfP12, b: GfP12): GfP12 {
+        this.x.sub(a.x, b.x);
+        this.y.sub(a.y, b.y);
+        return this
     }
 
-    mod(k: bigint): GfP12 {
-        //408 calls of this function for one verify
-        return new GfP12(this.x.mod(k), this.y.mod(k))
-    }
+    mod(a: GfP12, k: bigint): GfP12 {
+        this.x.mod(a.x, k)
+        this.y.mod(a.y, k)
+        return this    }
 
 
     /**
@@ -142,14 +153,14 @@ var ert = 0
      * @param b the element to multiply with
      * @returns the new element
      */
-    //SEE JAVA
     mul(a: GfP12, b: GfP12): GfP12 {
-        //210 calls of this function for one verify
-        this.x = a.x.mul(b.y, true)
-            .add(b.x.mul(a.y, true)).mod(p);
+        let tx: GfP6 = GfPPool6.use()
+        let t: GfP6 = GfPPool6.use()
+        let ty: GfP6 = GfPPool6.use()
 
-        this.y = a.y.mul(b.y, true)
-            .add(a.x.mul(b.x, true).mulTau()).mod(p);
+        this.x.copy(tx.mul(a.x, b.y, true).add(tx, t.mul(b.x, a.y, true)).mod(tx, p))
+        this.y.copy(ty.mul(a.y, b.y, true).add(ty, t.mul(a.x, b.x, true).mulTau(t)).mod(ty, p))
+        GfP6.release(tx, t, ty)
         return this
     }
 
@@ -158,11 +169,10 @@ var ert = 0
      * @param k the scalar
      * @returns the new element
      */
-    mulScalar(k: GfP6): GfP12 {
-        //4 calls of this function for one verify
-        const x = this.x.mul(k);
-        const y = this.y.mul(k);
-        return new GfP12(x, y);
+    mulScalar(a: GfP12, k: GfP6): GfP12 {
+        this.x.mul(a.x, k);
+        this.y.mul(a.y, k);
+        return this;
     }
 
     /**
@@ -170,56 +180,73 @@ var ert = 0
      * @param k the coefficient
      * @returns the new element
      */
-    exp(k: bigint): GfP12 {
-        //12 calls of this function for one verify
+    exp(a: GfP12, k: bigint): GfP12 {
+        let sum : GfP12 = GfPPool12.use()
+        let t : GfP12 = GfPPool12.use()
 
-        let sum : GfP12 = GFpPool12.use()
-        sum = sum.add(GfP12.one())
-        let t : GfP12;
+        sum.copy(GfP12.one())
         let s :string = k.toString(2);
         //Get the string of the BigInt, convert to byte, then get number of bits
 
         for (let i = s.length - 1; i >= 0; i--) {
-            t = sum.square().mod(p);
+
+            t.square(sum).mod(t, p);
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
-            if(maskAndNumber != zeroBI) sum.mul(t, this)
-            else sum = t;
+            if(maskAndNumber != zeroBI) sum.mul(t, a)
+            else sum.copy(t);
         }
-
-        return sum;
+        this.copy(sum)
+        GfP12.release(sum, t)
+        return this
     }
 
     /**
      * Get the square of the current element
      * @returns the new element
      */
-    square(): GfP12 {
-        //512 calls of this function for one verify
-        const v0 = this.x.mul(this.y, true);
+    square(a: GfP12): GfP12 {
+        let v0: GfP6 = GfPPool6.use()
+        let t: GfP6 = GfPPool6.use()
+        let ty: GfP6 = GfPPool6.use()
+        
+        v0.mul(a.x, a.y, true);
 
-        let t = this.x.mulTau();
-        t = this.y.add(t);
-        let ty = this.x.add(this.y);
-        ty = ty.mul(t, true).sub(v0);
-        t = v0.mulTau();
-        ty = ty.sub(t);
-            
-        return new GfP12(v0.add(v0), ty);
+        t.mulTau(a.x);
+        t.add(a.y, t);
+        ty.add(a.x, a.y).mul(ty, t, true).sub(ty, v0);
+        t.mulTau(v0);
+        this.y.copy(ty.sub(ty, t));
+        this.x.copy(t.add(v0,v0))
+
+        GfP6.release(v0, t, ty)
+
+        return this
     }
 
     /**
      * Get the inverse of the current element
      * @returns the new element
      */
-    invert(): GfP12 {
-        //2 calls of this function for one verify
-        let t1 = this.x.square();
-        let t2 = this.y.square();
-        t1 = t2.sub(t1.mulTau());
-        t2 = t1.invert();
+    invert(a: GfP12): GfP12 {
+        let t1: GfP6 = GfPPool6.use()
+        let t2: GfP6 = GfPPool6.use()
+        let gfp12: GfP12 = GfPPool12.use()
 
-        return new GfP12(this.x.neg(), this.y).mulScalar(t2);
+
+        t1.square(a.x);
+        t2.square(a.y);
+        t1.sub(t2, t1.mulTau(t1));
+        t2.invert(t1);
+        
+        gfp12.x.neg(a.x)
+        gfp12.setY(a.y)
+
+        this.mulScalar(gfp12, t2)
+        GfP6.release(t1,t2)
+        GfP12.release(gfp12)
+
+        return this
     }
 
     /**
@@ -237,5 +264,16 @@ var ert = 0
      */
     toString(): string {
         return `(${this.x.toString()}, ${this.y.toString()})`;
+    }
+
+    copy(a: GfP12): GfP12{
+        this.setXY(a.x, a.y)
+        return this
+    }
+
+    static release(...a:GfP12[]): void{
+        for(let i = 0; i<a.length; i++){
+            GfPPool12.recycle(a[i])
+        }
     }
 }
