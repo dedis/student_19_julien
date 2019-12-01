@@ -23,7 +23,7 @@ export default class GfP2 {
     private x: GfP;
     private y: GfP;
 
-    constructor(x?: bigint | GfP, y?: bigint | GfP) {
+    constructor(x: bigint | GfP, y: bigint | GfP) {
         this.x = x instanceof GfP ? x : new GfP(x || zeroBI);
         this.y = y instanceof GfP ? y : new GfP(y || zeroBI);
     }
