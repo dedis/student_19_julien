@@ -195,4 +195,9 @@ import { oneBI, zeroBI } from '../constants';
     toHex(): string { 
         return this.v.toString(16);
     }
+
+    copy(a: GfP): GfP{
+        this.v = a.v
+        return this
+    }
 }
