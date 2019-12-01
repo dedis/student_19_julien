@@ -33,6 +33,7 @@
     "@types/bn.js": "^4.11.5",
     "bigint-buffer": "^1.1.5",
     "bn.js": "^4.11.8",
+    "deepool": "^2.2.0",
     "elliptic": "^6.4.1",
     "hash.js": "^1.1.3"
   },
