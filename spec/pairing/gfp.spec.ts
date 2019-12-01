@@ -24,7 +24,7 @@ describe('GfP', () => {
         let three = new GfP()
         three.add(one, two)
 
-        expect(three1.equals(new GfP(BigInt(3)))).toBeTruthy();
+        expect(three.equals(new GfP(BigInt(3)))).toBeTruthy();
 
         let oneS = new GfP()
         oneS.sub(new GfP(BigInt(3)), new GfP(BigInt(2)));

@@ -15,48 +15,56 @@ describe('GfP2', () => {
 
     it('should invert', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        
-        const inv = a.invert();
+        let inv = new GfP2()
+        inv.invert(a);
         expect(a.equals(inv)).toBeFalsy();
-        expect(inv.invert().equals(a)).toBeTruthy();
-        expect(inv.mul(a).equals(GfP2.one())).toBeTruthy();
+        expect(inv.invert(inv).equals(a)).toBeTruthy();
+        inv.invert(inv)
+        expect(inv.mul(inv, a).equals(GfP2.one())).toBeTruthy();
     });
 
     it('should get the conjugate', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-
-        const c = a.conjugate();
+        let c = new GfP2()
+        c.conjugate(a);
         expect(c.equals(a)).toBeFalsy();
-        expect(c.conjugate().equals(a)).toBeTruthy();
+        expect(c.conjugate(c).equals(a)).toBeTruthy();
     });
 
     it('should get the negative', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        const n = a.negative();
+        let n = new GfP2()
+        n.negative(a);
 
         expect(a.equals(n)).toBeFalsy();
-        expect(n.negative().equals(a)).toBeTruthy();
+        expect(n.negative(n).equals(a)).toBeTruthy();
     });
 
     it('should square', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        const s = a.square();
-        const m = a.mul(a);
+        let s = new GfP2()
+        s.square(a);
+        let m = new GfP2()
+        m.mul(a, a);
 
         expect(s.equals(m)).toBeTruthy();
     });
 
     it('should multiply by a scalar', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        const b = a.mulScalar(new GfP(BigInt(3)));
-        const c = a.add(a).add(a);
+        let b = new GfP2()
+        let c = new GfP2()
+
+        b.mulScalar(a, new GfP(BigInt(3)));
+        c.add(a, a).add(c, a);
 
         expect(b.equals(c)).toBeTruthy();
     });
 
     it('should subtract', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        const b = a.mulScalar(new GfP(BigInt(2))).sub(a);
+        let b = new GfP2()
+        b.mulScalar(a, new GfP(BigInt(2))).sub(b, a);
 
         expect(a.equals(b)).toBeTruthy();
     });
