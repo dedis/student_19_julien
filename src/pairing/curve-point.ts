@@ -4,6 +4,7 @@ import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
 import { oneBI, zeroBI } from '../constants';
 import {toBigIntBE} from 'bigint-buffer'
+import { GfPPool1 } from './gfpPool';
 const curveB = new GfP(BigInt(3));
 
 /**
@@ -45,10 +46,15 @@ export default class CurvePoint {
         // the coefficient are modulo p to insure we have same
         // values when it comes to comparison
         // Other arithmetic operations are already modulo.
-        this.x = new GfP(typeof x !== 'undefined' ? x : zeroBI).mod(p);
-        this.y = new GfP(typeof y !== 'undefined' ? y : oneBI).mod(p);
-        this.z = new GfP(typeof z !== 'undefined' ? z : zeroBI).mod(p);
-        this.t = new GfP(typeof t !== 'undefined' ? t : zeroBI).mod(p);
+        this.x = new GfP(typeof x !== 'undefined' ? x : zeroBI)
+        this.y = new GfP(typeof y !== 'undefined' ? y : oneBI)
+        this.z = new GfP(typeof z !== 'undefined' ? z : zeroBI)
+        this.t = new GfP(typeof t !== 'undefined' ? t : zeroBI)
+
+        this.x.mod(this.x, p)
+        this.y.mod(this.y, p)
+        this.z.mod(this.z, p)
+        this.t.mod(this.t, p)
     }
 
     /**
@@ -72,17 +78,22 @@ export default class CurvePoint {
      * @returns true when the point is valid, false otherwise
      */
     isOnCurve(): boolean {
-        let yy = this.y.sqr();
-        const xxx = this.x.pow(BigInt("3"));
+        let yy : GfP = GfPPool1.use()
+        let xxx : GfP = GfPPool1.use()
+        yy.sqr(this.y);
+        xxx.pow(this.x, BigInt("3"));
 
-        yy = yy.sub(xxx);
+        yy.sub(yy, xxx);
 
-        yy = yy.sub(curveB);
+        yy.sub(yy, curveB);
 
         if (yy.signum() < 0 || yy.compareTo(new GfP(p)) >= 0) {
-            yy = yy.mod(p);
+            yy.mod(yy, p);
         }
-        return yy.signum() == 0;
+        let r:boolean = yy.signum() == 0
+        GfP.release(yy, xxx)
+
+        return r;
     }
 
     /**
@@ -119,48 +130,68 @@ export default class CurvePoint {
             return;
         }
 
-        const z1z1 = a.z.sqr();
-        const z2z2 = b.z.sqr();
-        const u1 = a.x.mul(z2z2);
-        const u2 = b.x.mul(z1z1);
+        let z1z1 : GfP = GfPPool1.use()
+        let z2z2 : GfP = GfPPool1.use()
+        let u1 : GfP = GfPPool1.use()
+        let u2 : GfP = GfPPool1.use()
+        let t : GfP = GfPPool1.use()
+        let s1 : GfP = GfPPool1.use()
+        let s2 : GfP = GfPPool1.use()
+        let h : GfP = GfPPool1.use()
+        let i : GfP = GfPPool1.use()
+        let j : GfP = GfPPool1.use()
 
-        let t = b.z.mul(z2z2);
-        const s1 = a.y.mul(t);
 
-        t = a.z.mul(z1z1);
-        const s2 = b.y.mul(t);
+        z1z1.sqr(a.z);
+        z2z2.sqr(b.z);
+        u1.mul(a.x, z2z2);
+        u2.mul(b.x, z1z1);
 
-        const h = u2.sub(u1);
+        t.mul(b.z, z2z2);
+        s1.mul(a.y, t);
 
-        t = h.add(h);
-        const i = t.sqr();
-        const j = h.mul(i);
+        t.mul(a.z, z1z1);
+        s2.mul(b.y, t);
 
-        t = s2.sub(s1);
+        h.sub(u2, u1);
+
+        t.add(h, h);
+        i.sqr(t);
+        j.mul(h, i);
+
+        t.sub(s2, s1);
         if (h.signum() === 0 && t.signum() === 0) {
             this.dbl(a);
+            GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, i, j)
             return;
         }
 
-        const r = t.add(t);
-        const v = u1.mul(i);
+        let r : GfP = GfPPool1.use()
+        let v : GfP = GfPPool1.use()
+        let t4 : GfP = GfPPool1.use()
+        let t6 : GfP = GfPPool1.use()
 
-        let t4 = r.sqr();
-        t = v.add(v);
-        let t6 = t4.sub(j);
-        this.x = t6.sub(t).mod(p);
+        r.add(t, t);
+        v.mul(u1, i);
 
-        t = v.sub(this.x);
-        t4 = s1.mul(j);
-        t6 = t4.add(t4);
-        t4 = r.mul(t);
-        this.y = t4.sub(t6).mod(p);
+        t4.sqr(r);
+        t.add(v, v);
+        t6.sub(t4, j);
+        this.x.copy(t6.sub(t6, t).mod(t6, p));
 
-        t = a.z.add(b.z);
-        t4 = t.sqr();
-        t = t4.sub(z1z1);
-        t4 = t.sub(z2z2);
-        this.z = t4.mul(h).mod(p);
+        t.sub(v, this.x);
+        t4.mul(s1, j);
+        t6.add(t4, t4);
+        t4.mul(r, t);
+        this.y.copy(t4.sub(t4, t6).mod(t4, p))
+
+        t.add(a.z, b.z);
+        t4.sqr(t);
+        t.sub(t4, z1z1);
+        t4.sub(t, z2z2);
+        this.z.copy(t4.mul(t4, h).mod(t4, p))
+
+        GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, i, j, r, v, t4, t6)
     }
 
     /**
@@ -168,31 +199,46 @@ export default class CurvePoint {
      * @param a the point to double
      */
     dbl(a: CurvePoint): void {
-        const A = a.x.sqr();
-        const B = a.y.sqr();
-        const C = B.sqr();
 
-        let t = a.x.add(B);
-        let t2 = t.sqr();
-        t = t2.sub(A);
-        t2 = t.sub(C);
-        const d = t2.add(t2);
-        t = A.add(A);
-        const e = t.add(A);
-        const f = e.sqr();
+        let A : GfP = GfPPool1.use()
+        let B : GfP = GfPPool1.use()
+        let C : GfP = GfPPool1.use()
+        let t : GfP = GfPPool1.use()
+        let t2 : GfP = GfPPool1.use()
+        let d : GfP = GfPPool1.use()
+        let e : GfP = GfPPool1.use()
+        let f : GfP = GfPPool1.use()
 
-        t = d.add(d);
-        this.x = f.sub(t).mod(p);
 
-        t = C.add(C);
-        t2 = t.add(t);
-        t = t2.add(t2);
-        this.y = d.sub(this.x);
-        t2 = e.mul(this.y);
-        this.y = t2.sub(t).mod(p);
+        A.sqr(a.x);
+        B.sqr(a.y);
+        C.sqr(B);
 
-        t = a.y.mul(a.z);
-        this.z = t.add(t).mod(p);
+        t.add(a.x, B);
+        t2.sqr(t);
+        t = t2.sub(t2, A);
+        t2.sub(t, C);
+        d.add(t2, t2);
+        t.add(A, A);
+        e.add(t, A);
+        f.sqr(e);
+
+        t.add(d, d);
+        this.x.copy(f.sub(f, t).mod(f, p));
+
+        t.add(C, C);
+        t2.add(t,t);
+        t.add(t2, t2);
+
+        this.y.copy(d.sub(d, this.x));
+        
+        t2.mul(e, this.y);
+        this.y.copy(t2.sub(t2, t).mod(t2, p));
+
+        t.mul(a.y, a.z);
+        this.z.copy(t.add(t, t).mod(t, p));
+
+        GfP.release(A,B,C,t,t2,d,e,f)
     }
 
     /**
@@ -228,13 +274,21 @@ export default class CurvePoint {
             return;
         }
 
-        const zInv = this.z.invmod(p);
-        let t = this.y.mul(zInv);
-        const zInv2 = zInv.sqr();
-        this.y = t.mul(zInv2).mod(p);
-        this.x = this.x.mul(zInv2).mod(p);
-        this.z = new GfP(oneBI);
-        this.t = new GfP(oneBI);
+        let zInv : GfP = GfPPool1.use()
+        let zInv2 : GfP = GfPPool1.use()
+        let t : GfP = GfPPool1.use()
+
+
+
+        zInv.invmod(this.z, p);
+        t.mul(this.y, zInv);
+        zInv2.sqr(zInv);
+        this.y.copy(t.mul(t, zInv2).mod(t, p));
+        this.x.copy(this.x.mul(this.x, zInv2).mod(this.x, p));
+        this.z.copy(new GfP(oneBI));
+        this.t.copy(new GfP(oneBI));
+        
+        GfP.release(zInv, zInv2, t)
     }
 
     /**
@@ -242,9 +296,13 @@ export default class CurvePoint {
      * @param a the point to negate
      */
     negative(a: CurvePoint): void {
-        this.x = a.x;
-        this.y = a.y.negate();
-        this.z = a.z;
+        let t : GfP = GfPPool1.use()
+
+        this.x.copy(a.x);
+        this.y.copy(t.negate(a.y));
+        this.z.copy(a.z);
+        
+        GfP.release(t)
     }
 
     /**
