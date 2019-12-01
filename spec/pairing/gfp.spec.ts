@@ -19,23 +19,33 @@ describe('GfP', () => {
     });
 
     it('should add and subtract', () => {
-        const three = new GfP(BigInt(1)).add(new GfP(BigInt(2)));
-        expect(three.equals(new GfP(BigInt(3)))).toBeTruthy();
+        const one = new GfP(BigInt(1));
+        const two = new GfP(BigInt(2));
+        let three = new GfP()
+        three.add(one, two)
 
-        const one = new GfP(BigInt(3)).sub(new GfP(BigInt(2)));
-        expect(one.equals(new GfP(BigInt(1)))).toBeTruthy();
+        expect(three1.equals(new GfP(BigInt(3)))).toBeTruthy();
+
+        let oneS = new GfP()
+        oneS.sub(new GfP(BigInt(3)), new GfP(BigInt(2)));
+        expect(oneS.equals(new GfP(BigInt(1)))).toBeTruthy();
     });
 
     it('should multiply and square', () => {
         const a = new GfP(BigInt(123));
+        let result1 = new GfP()
+        result1.mul(a,a).mul(result1, a).mul(result1, a)
+        let result2 = new GfP()
+        result2.sqr(a).sqr(a)
+        expect(result1.equals(result2)).toBeTruthy();
 
-        expect(a.mul(a).mul(a).mul(a).equals(a.sqr().sqr())).toBeTruthy();
-        expect(a.pow(BigInt(3)).equals(a.sqr().mul(a))).toBeTruthy();
+        expect(result1.pow(a, BigInt(3)).equals(result2.sqr(a).mul(result2, a))).toBeTruthy();
     });
 
     it('should compute the modulo', () => {
-        const v = new GfP(BigInt(-3));
+        const three = new GfP(BigInt(-3));
+        let result = new GfP()
 
-        expect(v.mod(BigInt(5)).getValue()).toBe(BigInt(2));
+        expect(result.mod(three, BigInt(5)).getValue()).toBe(BigInt(2));
     });
 });
