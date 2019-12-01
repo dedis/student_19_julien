@@ -7,7 +7,6 @@ import { optimalAte } from './opt-ate';
 import BN from 'bn.js';
 import { toBigIntBE } from 'bigint-buffer';
 import {oneBI} from '../constants'
-import { GFpPool12 } from './gfpPool';
 
 
 export type BNType = number | string | number[] | Buffer | BN;
@@ -395,7 +394,7 @@ export class GT {
      * @param k the scalar
      */
     scalarMul(a: GT, k: bigint): void {
-        this.g = a.g.exp(k);
+        this.g.exp(a.g, k);
     }
 
     /**
@@ -404,8 +403,7 @@ export class GT {
      * @param b the second point
      */
     add(a: GT, b: GT): void {
-        let tmp : GfP12 = GFpPool12.use()
-        this.g = tmp.mul(a.g, b.g)
+        this.g.mul(a.g, b.g)
     }
 
     /**
@@ -413,7 +411,7 @@ export class GT {
      * @param a the point
      */
     neg(a: GT): void {
-        this.g = a.g.invert();
+        this.g.invert(a.g);
     }
 
     /**
