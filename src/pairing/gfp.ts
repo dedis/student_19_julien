@@ -1,6 +1,7 @@
 import { egcd } from './util-bigint';
 import { toBufferBE } from 'bigint-buffer';
 import { oneBI, zeroBI } from '../constants';
+import { GfPPool1 } from './gfpPool';
 
 /**
  * Field of size p
@@ -104,7 +105,6 @@ import { oneBI, zeroBI } from '../constants';
         let tmp = BigInt("1")
         for(let i = BigInt(1); i <= k; i++){
             tmp = tmp * a.v;
-
         }
         this.v = tmp
         return this;
@@ -197,7 +197,13 @@ import { oneBI, zeroBI } from '../constants';
     }
 
     copy(a: GfP): GfP{
-        this.v = a.v
+        this.setValue(a.v)
         return this
+    }
+
+    static release(...a: GfP[]): void{
+        for(let i = 0; i<a.length; i++){
+            GfPPool1.recycle(a[i])
+        }
     }
 }

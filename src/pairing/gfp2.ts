@@ -2,8 +2,8 @@ import GfP from './gfp';
 import { p } from './constants';
 import BN from 'bn.js'
 import { zeroBI, oneBI } from '../constants';
-
-type BNType = Buffer | string | number | BN ;
+import { GfPPool1 } from './gfpPool';
+import GfP12 from './gfp12';
 
 /**
  * Group field of size p^2
@@ -46,6 +46,22 @@ export default class GfP2 {
         return this.y;
     }
 
+    setX(a: GfP): GfP2{
+        this.x.copy(a)
+        return this
+    }
+
+    setY(a: GfP): GfP2{
+        this.y.copy(a)
+        return this
+    }
+
+    setXY(a: GfP, b: GfP): GfP2{
+        this.setX(a)
+        this.setY(b)
+        return this
+    }
+
     /**
      * Check if the value is zero
      * @returns true when zero, false otherwise
@@ -66,16 +82,20 @@ export default class GfP2 {
      * Get the conjugate of the element
      * @return the conjugate
      */
-    conjugate(): GfP2 {
-        return new GfP2(this.x.negate(), this.y);
+    conjugate(a: GfP2): GfP2 {
+        this.y = a.y
+        this.x.negate(a.x)
+        return this
     }
 
     /**
      * Get the negative of the element
      * @returns the negative
      */
-    negative(): GfP2 {
-        return new GfP2(this.x.negate(), this.y.negate());
+    negative(a: GfP2): GfP2 {
+        this.x.negate(a.x)
+        this.y.negate(a.y)
+        return this
     }
 
     /**
@@ -83,10 +103,10 @@ export default class GfP2 {
      * @param a the other element to add
      * @returns the new element
      */
-    add(a: GfP2): GfP2 {
-        const x = this.x.add(a.x)
-        const y = this.y.add(a.y)
-        return new GfP2(x, y);
+    add(a: GfP2, b: GfP2): GfP2 {
+        this.x.add(a.x, b.x)
+        this.y.add(a.y, b.y)
+        return this
     }
 
     /**
@@ -94,10 +114,10 @@ export default class GfP2 {
      * @param a the other element to subtract
      * @returns the new element
      */
-    sub(a: GfP2): GfP2 {
-        const x = this.x.sub(a.x)
-        const y = this.y.sub(a.y)
-        return new GfP2(x, y);
+    sub(a: GfP2, b: GfP2): GfP2 {
+        this.x.sub(a.x, b.y)
+        this.y.sub(a.y, b.y)
+        return this
     }
 
     /**
@@ -105,24 +125,32 @@ export default class GfP2 {
      * @param a the other element to multiply
      * @returns the new element
      */
-    mul(a: GfP2, b?: boolean): GfP2 {
-        let tx = this.x.mul(a.y);
-        let t = a.x.mul(this.y);
-        if(!b){
-            tx = tx.add(t).mod(p);
-        }else{
-            tx = tx.add(t)
-        }
 
-        let ty = this.y.mul(a.y)
-        t = this.x.mul(a.x)
-        if(!b){
-            ty = ty.sub(t).mod(p);
-        }else{
-            ty = ty.sub(t)
-        }
+    mul(a: GfP2, b: GfP2, bool?: boolean): GfP2 {
+        let tx : GfP = GfPPool1.use()
+        let ty : GfP = GfPPool1.use()
+        let t : GfP = GfPPool1.use()
 
-        return new GfP2(tx, ty);
+        tx.mul(a.x, b.y)
+        t.mul(b.x, a.y)
+
+        if(!bool){
+            tx.add(tx,t).mod(tx, p)
+        }else{
+            tx.add(tx,t)
+        }
+        ty.mul(a.y, b.y)
+        t.mul(a.x, b.x)
+        if(!bool){
+            ty.sub(ty,t).mod(ty, p)
+        }else{
+            ty.sub(ty,t)
+        }
+        this.x.copy(tx)
+        this.y.copy(ty)
+
+        GfP.release(tx, ty)
+        return this
     }
 
     /**
@@ -130,64 +158,81 @@ export default class GfP2 {
      * @param k the scalar to multiply with
      * @returns the new element
      */
-    mulScalar(k: GfP): GfP2 {
-        const x = this.x.mul(k);
-        const y = this.y.mul(k);
+    mulScalar(a: GfP2, k: GfP): GfP2 {
+        this.x.mul(a.x, k);
+        this.y.mul(a.y, k);
 
-        return new GfP2(x, y);
+        return this
     }
 
     /**
      * Set e=ξa where ξ=i+3 and return the new element
      * @returns the new element
      */
-    mulXi(): GfP2 {
-        let tx = this.x.add(this.x);
-        tx = tx.add(this.x);
-        tx = tx.add(this.y);
 
-        let ty = this.y.add(this.y);
-        ty = ty.add(this.y);
-        ty = ty.sub(this.x);
+    mulXi(a: GfP2): GfP2 {
+        let tx : GfP = GfPPool1.use()
+        let ty : GfP = GfPPool1.use()
 
-        return new GfP2(tx, ty);
+        tx.add(a.x, a.x).add(tx, a.x).add(tx, a.y)
+
+        ty.add(a.y, a.y).add(ty, a.y).add(ty, a.x);
+
+        this.x.copy(tx)
+        this.y.copy(ty)
+        GfP.release(tx, ty)
+        return this
     }
 
     /**
      * Get the square value of the element
      * @returns the new element
      */
-    square(): GfP2 {
-        const t1 = this.y.sub(this.x);
-        const t2 = this.x.add(this.y);
+    square(a: GfP2): GfP2 {
+        let t1 : GfP = GfPPool1.use()
+        let t2 : GfP = GfPPool1.use()
+        let ty : GfP = GfPPool1.use()
+        
+        t1.sub(a.y, a.x)
+        t2.add(a.x, a.y)
+        ty.mul(t1, t2).mod(ty, p)
 
-        const ty = t1.mul(t2).mod(p);
         // intermediate modulo is due to a missing implementation
         // in the library that is actually using the unsigned left
         // shift any time
-        const tx = this.x.mul(this.y).shiftLeft(1).mod(p);
-
-        return new GfP2(tx, ty);
+        t1.mul(a.x, a.y).shiftLeft(t1, 1).mod(t1, p)
+        this.x.copy(t1)
+        this.y.copy(ty)
+        GfP.release(t1, t2, ty)
+        return this
     }
 
     /**
      * Get the inverse of the element
      * @returns the new element
      */
-    invert(): GfP2 {
-        let t = this.y.mul(this.y);
-        let t2 = this.x.mul(this.x);
-        t = t.add(t2);
+    invert(a: GfP2): GfP2 {
+        let t : GfP = GfPPool1.use()
+        let t2 : GfP = GfPPool1.use()
+        let inv : GfP = GfPPool1.use()
 
-        const inv = t.invmod(p);
-        const tx = this.x.negate().mul(inv).mod(p);
-        const ty = this.y.mul(inv).mod(p);
+        t.sqr(a.y)
+        t2.sqr(a.x)
+        t.add(t,t2)
+        inv.invmod(t, p)
+        t.negate(a.x).mul(this.x, inv).mod(this.x, p)
+        t2.mul(a.y, inv).mod(this.y, p)
+        this.x.copy(t)
+        this.y.copy(t2)
+        GfP.release(t, t2, inv)
 
-        return new GfP2(tx, ty);
+        return this
     }
 
-    mod(k: bigint): GfP2 {
-        return new GfP2(this.x.mod(k), this.y.mod(k))
+    mod(a: GfP2, k: bigint): GfP2 {
+        this.x.mod(a.x, k)
+        this.y.mod(a.y, k)
+        return this
     }
 
     /**
@@ -206,4 +251,16 @@ export default class GfP2 {
     toString(): string {
         return `(${this.x.toHex()},${this.y.toHex()})`;
     }
+
+    copy(a: GfP2): GfP2{
+        this.setXY(a.x, a.y)
+        return this
+    }
+
+    static release(...a:GfP2[]): void{
+        for(let i = 0; i<a.length; i++){
+            GfPPool1.recycle(a[i])
+        }
+    }
+
 }
