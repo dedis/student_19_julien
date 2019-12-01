@@ -10,36 +10,48 @@ describe('GfP6', () => {
     );
 
     it('should invert', () => {
-        const inv = a.invert();
-        const b = inv.mul(a).mod(p);
+        let inv: GfP6 = new GfP6()
+        let b: GfP6 = new GfP6()
 
-        expect(a.equals(a.invert().invert())).toBeTruthy();
+        inv.invert(a);
+        b.mul(inv, a).mod(b, p);
+
+        expect(a.equals(a.invert(a).invert(a))).toBeTruthy();
         expect(b.isOne()).toBeTruthy();
 
         const one = GfP6.one();
-        expect(one.invert().equals(one)).toBeTruthy();
+        expect(inv.invert(one).equals(one)).toBeTruthy();
     });
 
     it('should add and subtract', () => {
-        const b = a.add(a);
-        const c = a.neg();
+        let c: GfP6 = new GfP6()
+        let b: GfP6 = new GfP6()        
+        let tmp: GfP6 = new GfP6()
 
-        expect(b.add(c).equals(a)).toBeTruthy();
-        expect(b.sub(a).equals(a)).toBeTruthy();
+        b.add(a, a);
+        c.neg(a);
+
+        expect(tmp.add(b, c).equals(a)).toBeTruthy();
+        expect(b.sub(b, a).equals(a)).toBeTruthy();
     });
 
     it('should square and mul', () => {
-        const s = a.square().square().mod(p);
-        const m = a.mul(a).mul(a).mul(a).mod(p);
+        let s: GfP6 = new GfP6()
+        let m: GfP6 = new GfP6()        
+        let tmp: GfP6 = new GfP6()
+
+        s.square(a).square(s).mod(s, p);
+        m.mul(a, a).mul(m, a).mul(m, a).mod(m, p);
 
         expect(s.equals(a)).toBeFalsy();
         expect(s.equals(m)).toBeTruthy();
     });
 
     it('should negate', () => {
-        const n = a.neg();
+        let n: GfP6 = new GfP6()
+        n.neg(a);
 
         expect(n.equals(a)).toBeFalsy();
-        expect(n.neg().equals(a)).toBeTruthy();
+        expect(n.neg(n).equals(a)).toBeTruthy();
     });
 });

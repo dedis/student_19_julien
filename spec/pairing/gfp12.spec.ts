@@ -31,44 +31,49 @@ describe('GfP12', () => {
     });
 
     it('should invert', () => {
-        const inv = a.invert().mod(p);
-        let b : GfP12 = new GfP12()
+        let inv: GfP12 = new GfP12()
+        let b: GfP12 = new GfP12()
+
+        inv.invert(a).mod(inv, p);
         b.mul(inv, a)
-        b = b.mod(p);
+        b.mod(b, p);
 
         expect(b.equals(GfP12.one())).toBeTruthy();
-        expect(inv.invert().mod(p).equals(a)).toBeTruthy();
+        expect(inv.invert(inv).mod(inv, p).equals(a)).toBeTruthy();
     });
 
     it('should square and multiply', () => {
-        const s = a.square().square().mod(p);
-        let m : GfP12 = GFpPool12.use()
-        let n : GfP12 = GFpPool12.use()
-        
-        m.mul(a,a)
-        n.mul(m,a)
-        m.mul(n,a)
-        m = m.mod(p)
+        let s: GfP12 = new GfP12()
+        let m: GfP12 = new GfP12()
+        let e: GfP12 = new GfP12()
 
-        const e = a.exp(BigInt(4)).mod(p);
+        s.square(a).square(s).mod(s, p);
+        m.mul(a,a).mul(m, a).mul(m, a).mod(m, p)
+
+        e.exp(a, BigInt(4)).mod(e, p);
 
         expect(s.equals(m)).toBeTruthy();
         expect(s.equals(e)).toBeTruthy();
     });
 
     it('should add and subtract', () => {
-        const aa = a.add(a);
+        let aa: GfP12 = new GfP12()
+
+        aa.add(a, a);
         
         expect(aa.equals(a)).toBeFalsy();
-        expect(aa.sub(a).equals(a)).toBeTruthy();
+        expect(aa.sub(aa, a).equals(a)).toBeTruthy();
     });
 
     it('should get the negative and conjugate', () => {
-        const n = a.neg();
-        const c = a.conjugate();
+        let n: GfP12 = new GfP12()
+        let c: GfP12 = new GfP12()
 
-        expect(n.neg().equals(a)).toBeTruthy();
-        expect(c.conjugate().equals(a)).toBeTruthy();
+        n.neg(a);
+        c. conjugate(a);
+
+        expect(n.neg(n).equals(a)).toBeTruthy();
+        expect(c.conjugate(c).equals(a)).toBeTruthy();
     });
 
     it('should stringify', () => {
