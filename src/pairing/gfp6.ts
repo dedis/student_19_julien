@@ -184,8 +184,8 @@ export default class GfP6 {
         let tx: GfP2 = GfPPool2.use()
 
         v0.mul(a.z, b.z, true)
-        v1.mul(a.x, b.x, true)
-        v2.mul(a.y, b.y, true)
+        v1.mul(a.y, b.y, true)
+        v2.mul(a.x, b.x, true)
 
         t0.add(a.x, a.y)
         t1.add(b.x, b.y)
@@ -196,6 +196,7 @@ export default class GfP6 {
         }else{
             tz.sub(tz, v1).sub(tz, v2).mulXi(tz).add(tz, v0)
         }
+
         t0.add(a.y, a.z)
         t1.add(b.y, b.z)
         ty.mul(t0, t1, true)
@@ -273,9 +274,16 @@ export default class GfP6 {
         v1.square(a.y)
         v2.square(a.x)
 
-        this.z.copy(c0.add(a.x, a.y).square(c0).sub(c0, v1).sub(c0, v2).mulXi(c0).add(c0, v0))
-        this.y.copy(c1.add(a.y, a.z).square(c1).sub(c1, v0).sub(c1, v1).add(c1, t.mulXi(v2)))
-        this.x.copy(c2.add(a.x, a.z).square(c2).sub(c2, v0).add(c2, v1).sub(c2, v2))
+        c0.add(a.x, a.y).square(c0).sub(c0, v1).sub(c0, v2).mulXi(c0).add(c0, v0)
+
+        c1.add(a.y, a.z).square(c1).sub(c1, v0).sub(c1, v1).add(c1, t.mulXi(v2))
+
+        c2.add(a.x, a.z).square(c2).sub(c2, v0).add(c2, v1).sub(c2, v2)
+
+        this.z.copy(c0)
+        this.y.copy(c1)
+        this.x.copy(c2)    
+
 
         GfP2.release(v0,v1,v2,c0,c1,c2,t)
 

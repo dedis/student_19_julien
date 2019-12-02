@@ -10,21 +10,14 @@ describe('GfP6', () => {
     );
 
     it('should invert', () => {
-        console.log("SHOULD INVERT : A: "+a)
         let inv: GfP6 = new GfP6()
         let b: GfP6 = new GfP6()
         let ainv : GfP6 = new GfP6()
 
         inv.invert(a);
-
-        console.log("Invert of A: "+inv)
-
         b.mul(inv, a)
-        console.log("B : no mod "+b)
         b.mod(b, p);
-        console.log("B :  mod "+b)
 
-        
         expect(a.equals(ainv.invert(a).invert(ainv))).toBeTruthy();
         expect(b.isOne()).toBeTruthy();
 
@@ -45,27 +38,19 @@ describe('GfP6', () => {
     });
 
     it('should square and mul', () => {
-        console.log("SQUARE AND MUL: A: "+a)
         let s: GfP6 = new GfP6()
         let m: GfP6 = new GfP6()        
-
         s.square(a)
-        console.log("A square: "+ s)
         s.square(s)
-        console.log("A squaresquare: "+ s)
+
         s.mod(s, p)
-        console.log("A squaresquareMOD: "+ s)
 
         m.mul(a, a)
-        console.log("A mul A: "+ m)
 
         m.mul(m, a)
         m.mul(m, a)
-        console.log("A mul A MUL A MUL A: "+ m)
 
         m.mod(m, p);
-        console.log("A mul A MUL A MUL A MOD P: "+ m)
-
         expect(s.equals(a)).toBeFalsy();
         expect(s.equals(m)).toBeTruthy();
     });
@@ -76,4 +61,50 @@ describe('GfP6', () => {
         expect(n.equals(a)).toBeFalsy();
         expect(n.neg(n).equals(a)).toBeTruthy();
     });
+
+    it('should frobenius', () => {
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let result : GfP6 = new GfP6(new GfP2(BigInt("18124642797753990327701385494316493938656039577508409582829233895818921445537"), 
+        BigInt("63176371102555900418615395030540483786148452706763246422491236552715082206836")),
+        new GfP2(BigInt("56597659247022690698559320133077816354280679433340842274981941894493308593091"),
+        BigInt("12018978604159003115990884228121426344652258324520016301486624064137105124471")), 
+        new GfP2(BigInt(-5), BigInt(6)))
+        
+        expect(n.frobenius(n).equals(result)).toBeTruthy();
+    });
+
+    it('should frobeniusP2', () => {
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let result : GfP6 = new GfP6(new GfP2(BigInt("4985783334309134261147736404674766913742361673560802634030"), 
+        BigInt("9971566668618268522295472809349533827484723347121605268060")),
+        new GfP2(BigInt("195001649086939811183431966224152314445032865108844709974404350059910144313256"),
+        BigInt("260002198782586414911242621632203085926710486811792946632539133413213525751008")), 
+        new GfP2(BigInt(5), BigInt(6)))
+        
+        expect(n.frobeniusP2(n).equals(result)).toBeTruthy();
+    });
+
+    it('should multiply', () => {
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let result : GfP6 = new GfP6(new GfP2(BigInt(56), BigInt(21)), new GfP2(BigInt(91), BigInt(23)), new GfP2(BigInt(130), BigInt(21)))
+
+        expect(n.mul(n, n).equals(result)).toBeTruthy();
+
+    });
+
+    it('should square only', () => {
+        let s: GfP6 = new GfP6()
+        let m: GfP6 = new GfP6()        
+
+        s.square(a)
+
+        m.mul(a, a)
+        s.mod(s,p)
+        m.mod(m, p);
+        expect(s.equals(a)).toBeFalsy();
+        expect(s.equals(m)).toBeTruthy();
+    });
+
+
+
 });
