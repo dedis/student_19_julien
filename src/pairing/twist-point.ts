@@ -1,7 +1,7 @@
 import GfP2 from './gfp2';
 import { zeroBI, oneBI } from '../constants';
 import {p} from './constants'
-import { GfPPool2 } from './gfpPool';
+import { GfPPool2 } from './gfp2';
 
 const twistB = new GfP2(
     BigInt("6500054969564660373279643874235990574282535810762300357187714502686418407178"),

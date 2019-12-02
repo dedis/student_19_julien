@@ -6,7 +6,10 @@ import GfP2 from "./gfp2";
 import GfP6 from "./gfp6";
 import { u, xiToPMinus1Over3, xiToPMinus1Over2, xiToPSquaredMinus1Over3, p } from "./constants";
 import GfP from "./gfp";
-import { GfPPool2, GfPPool6, GfPPool12 } from "./gfpPool";
+import { GfPPool2 } from './gfp2'
+import { GfPPool6 } from './gfp6'
+import { GfPPool12 } from './gfp12'
+
 
 const sixuPlus2NAF = [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 1];
 

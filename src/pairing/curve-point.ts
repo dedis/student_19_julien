@@ -4,7 +4,7 @@ import { p } from './constants';
 import { modSqrt } from '../utils/tonelli-shanks';
 import { oneBI, zeroBI } from '../constants';
 import {toBigIntBE} from 'bigint-buffer'
-import { GfPPool1 } from './gfpPool';
+import { GfPPool1 } from './gfp';
 const curveB = new GfP(BigInt(3));
 
 /**
