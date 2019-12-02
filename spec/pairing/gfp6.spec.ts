@@ -12,11 +12,12 @@ describe('GfP6', () => {
     it('should invert', () => {
         let inv: GfP6 = new GfP6()
         let b: GfP6 = new GfP6()
+        let ainv : GfP6 = new GfP6()
 
         inv.invert(a);
         b.mul(inv, a).mod(b, p);
-
-        expect(a.equals(a.invert(a).invert(a))).toBeTruthy();
+        
+        expect(a.equals(ainv.invert(a).invert(ainv))).toBeTruthy();
         expect(b.isOne()).toBeTruthy();
 
         const one = GfP6.one();
@@ -38,7 +39,10 @@ describe('GfP6', () => {
     it('should square and mul', () => {
         let s: GfP6 = new GfP6()
         let m: GfP6 = new GfP6()        
-        let tmp: GfP6 = new GfP6()
+
+        console.log("A square: "+ s.square(a))
+        console.log("A mul A: "+ m.mul(a,a))
+
 
         s.square(a).square(s).mod(s, p);
         m.mul(a, a).mul(m, a).mul(m, a).mod(m, p);
@@ -50,7 +54,6 @@ describe('GfP6', () => {
     it('should negate', () => {
         let n: GfP6 = new GfP6()
         n.neg(a);
-
         expect(n.equals(a)).toBeFalsy();
         expect(n.neg(n).equals(a)).toBeTruthy();
     });

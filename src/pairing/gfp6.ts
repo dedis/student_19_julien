@@ -46,9 +46,9 @@ export default class GfP6 {
     private z: GfP2;
 
     constructor(x?: GfP2, y?: GfP2, z?: GfP2) {
-        this.x = x || GfP2.zero();
-        this.y = y || GfP2.zero();
-        this.z = z || GfP2.zero();
+        this.x = x || new GfP2(BigInt(0), BigInt(0));
+        this.y = y || new GfP2(BigInt(0), BigInt(0));
+        this.z = z || new GfP2(BigInt(0), BigInt(0));
     }
 
     /**
@@ -118,9 +118,9 @@ export default class GfP6 {
      * @returns the new element
      */
     neg(a: GfP6): GfP6 {
-        this.x.negative(a.x);
-        this.y.negative(a.y);
-        this.z.negative(a.z);
+        this.x.negative(a.x)
+        this.y.negative(a.y)        
+        this.z.negative(a.z)
         return this
     }
 
@@ -266,16 +266,18 @@ export default class GfP6 {
         let c0: GfP2 = GfPPool2.use()
         let c1: GfP2 = GfPPool2.use()
         let c2: GfP2 = GfPPool2.use()
+        let t: GfP2 = GfPPool2.use()
+
 
         v0.square(a.z)
         v1.square(a.y)
         v2.square(a.x)
 
         this.z.copy(c0.add(a.x, a.y).square(c0).sub(c0, v1).sub(c0, v2).mulXi(c0).add(c0, v0))
-        this.y.copy(c1.add(a.y, a.z).square(c1).sub(c1, v0).sub(c1, v1).add(c1, c2.mulXi(v2)))
+        this.y.copy(c1.add(a.y, a.z).square(c1).sub(c1, v0).sub(c1, v1).add(c1, t.mulXi(v2)))
         this.x.copy(c2.add(a.x, a.z).square(c2).sub(c2, v0).add(c2, v1).sub(c2, v2))
 
-        GfP2.release(v0,v1,v2,c0,c1,c2)
+        GfP2.release(v0,v1,v2,c0,c1,c2,t)
 
         return this
     }
@@ -295,10 +297,11 @@ export default class GfP6 {
         A.square(a.z).sub(A, t1.mul(a.x, a.y).mulXi(t1))
         B.square(a.x).mulXi(B).sub(B, t1.mul(a.y, a.z))
         C.square(a.y).sub(C, t1.mul(a.x, a.z))
+
         F.mul(C, a.y).mulXi(F).add(F, t1.mul(A, a.z)).add(F, t1.mul(B, a.x).mulXi(t1)).invert(F)
-        this.x.mul(C, F)
-        this.y.mul(B, F)
-        this.z.mul(A, F)
+        this.x.copy(t1.mul(C, F))
+        this.y.copy(t1.mul(B, F))
+        this.z.copy(t1.mul(A, F))
         GfP2.release(A,B,C,F,t1)
         return this
     }
