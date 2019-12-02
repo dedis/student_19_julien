@@ -194,6 +194,7 @@ export default class GfP2 {
     square(a: GfP2): GfP2 {
         let t1 : GfP = GfPPool1.use()
         let t2 : GfP = GfPPool1.use()
+        let tx : GfP = GfPPool1.use()
         let ty : GfP = GfPPool1.use()
         
         t1.sub(a.y, a.x)
@@ -203,10 +204,10 @@ export default class GfP2 {
         // intermediate modulo is due to a missing implementation
         // in the library that is actually using the unsigned left
         // shift any time
-        t1.mul(a.x, a.y).shiftLeft(t1, 1).mod(t1, p)
-        this.x.copy(t1)
+        tx.mul(a.x, a.y).shiftLeft(tx, 1).mod(tx, p)
+        this.x.copy(tx)
         this.y.copy(ty)
-        GfP.release(t1, t2, ty)
+        GfP.release(t1, t2, ty, tx)
         return this
     }
 

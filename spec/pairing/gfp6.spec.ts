@@ -10,12 +10,20 @@ describe('GfP6', () => {
     );
 
     it('should invert', () => {
+        console.log("SHOULD INVERT : A: "+a)
         let inv: GfP6 = new GfP6()
         let b: GfP6 = new GfP6()
         let ainv : GfP6 = new GfP6()
 
         inv.invert(a);
-        b.mul(inv, a).mod(b, p);
+
+        console.log("Invert of A: "+inv)
+
+        b.mul(inv, a)
+        console.log("B : no mod "+b)
+        b.mod(b, p);
+        console.log("B :  mod "+b)
+
         
         expect(a.equals(ainv.invert(a).invert(ainv))).toBeTruthy();
         expect(b.isOne()).toBeTruthy();
@@ -37,15 +45,26 @@ describe('GfP6', () => {
     });
 
     it('should square and mul', () => {
+        console.log("SQUARE AND MUL: A: "+a)
         let s: GfP6 = new GfP6()
         let m: GfP6 = new GfP6()        
 
-        console.log("A square: "+ s.square(a))
-        console.log("A mul A: "+ m.mul(a,a))
+        s.square(a)
+        console.log("A square: "+ s)
+        s.square(s)
+        console.log("A squaresquare: "+ s)
+        s.mod(s, p)
+        console.log("A squaresquareMOD: "+ s)
 
+        m.mul(a, a)
+        console.log("A mul A: "+ m)
 
-        s.square(a).square(s).mod(s, p);
-        m.mul(a, a).mul(m, a).mul(m, a).mod(m, p);
+        m.mul(m, a)
+        m.mul(m, a)
+        console.log("A mul A MUL A MUL A: "+ m)
+
+        m.mod(m, p);
+        console.log("A mul A MUL A MUL A MOD P: "+ m)
 
         expect(s.equals(a)).toBeFalsy();
         expect(s.equals(m)).toBeTruthy();
