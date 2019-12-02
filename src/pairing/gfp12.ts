@@ -5,6 +5,7 @@ import { oneBI, zeroBI } from '../constants';
 import {GfPPool6} from './gfp6'
 
 import deePool from 'deepool'
+import GfP2 from './gfp2';
 
 export const GfPPool12 = deePool.create(function makeGFP12(){
         return new GfP12()
@@ -40,8 +41,8 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
     private y: GfP6;
 
     constructor(x?: GfP6, y?: GfP6) {
-        this.x = x || GfP6.zero();
-        this.y = y || GfP6.zero();
+        this.x = x || new GfP6(new GfP2(BigInt(0), BigInt(0)),new GfP2(BigInt(0), BigInt(0)),new GfP2(BigInt(0), BigInt(0)));
+        this.y = y || new GfP6(new GfP2(BigInt(0), BigInt(0)),new GfP2(BigInt(0), BigInt(0)),new GfP2(BigInt(0), BigInt(0)));
     }
 
     /**

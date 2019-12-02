@@ -27,9 +27,11 @@ describe('GfP12', () => {
 
         expect(zero.isZero()).toBeTruthy();
         expect(zero.isOne()).toBeFalsy();
+
     });
 
     it('should invert', () => {
+
         let inv: GfP12 = new GfP12()
         let b: GfP12 = new GfP12()
 
@@ -39,9 +41,11 @@ describe('GfP12', () => {
 
         expect(b.equals(GfP12.one())).toBeTruthy();
         expect(inv.invert(inv).mod(inv, p).equals(a)).toBeTruthy();
+
     });
 
     it('should square and multiply', () => {
+
         let s: GfP12 = new GfP12()
         let m: GfP12 = new GfP12()
         let e: GfP12 = new GfP12()
@@ -56,6 +60,7 @@ describe('GfP12', () => {
     });
 
     it('should add and subtract', () => {
+
         let aa: GfP12 = new GfP12()
 
         aa.add(a, a);
@@ -65,6 +70,7 @@ describe('GfP12', () => {
     });
 
     it('should get the negative and conjugate', () => {
+
         let n: GfP12 = new GfP12()
         let c: GfP12 = new GfP12()
 
