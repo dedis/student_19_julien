@@ -5,7 +5,7 @@ import { GfPPool1 } from './gfp';
 import deePool from 'deepool'
 
 export const GfPPool2 = deePool.create(function makeGFP12(){
-        return new GfP2()
+        return new GfP2(new GfP(BigInt(0)), new GfP(BigInt(0)))
 })
 
 /**
@@ -28,9 +28,9 @@ export default class GfP2 {
     private x: GfP;
     private y: GfP;
 
-    constructor(x?: bigint | GfP, y?: bigint | GfP) {
-        this.x = x instanceof GfP ? x : new GfP(x || zeroBI);
-        this.y = y instanceof GfP ? y : new GfP(y || zeroBI);
+    constructor(x: bigint | GfP, y: bigint | GfP) {
+        this.x = x instanceof GfP ? x : new GfP(x);
+        this.y = y instanceof GfP ? y : new GfP(y);
     }
 
     /**
@@ -260,8 +260,9 @@ export default class GfP2 {
         return `(${this.x.toHex()},${this.y.toHex()})`;
     }
 
-    copy(a: GfP2): GfP2{
-        this.setXY(a.x, a.y)
+    copy(c: GfP2): GfP2{
+        this.x.copy(c.x)
+        this.y.copy(c.y)
         return this
     }
 

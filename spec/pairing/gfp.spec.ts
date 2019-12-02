@@ -1,4 +1,5 @@
 import GfP from '../../src/pairing/gfp';
+import { oneBI } from '../../src/constants';
 
 describe('GfP', () => {
     it('should get the correct sign', () => {
@@ -49,14 +50,28 @@ describe('GfP', () => {
         expect(result.mod(three, BigInt(5)).getValue()).toBe(BigInt(2));
     });
 
-    it('should copy correctly with zeroBI and oneBI', () => {
+    it('should copy correctly', () => {
         let three = new GfP(BigInt(3))
         let three_cp = new GfP(BigInt(0))
 
         three_cp.copy(three)
 
-        expect(three_cp.equals(three)).toBeTruthy
+        expect(three_cp.equals(three)).toBeTruthy()
         three = new GfP(BigInt(4))
-        expect(three_cp.equals(three)).toBeFalsy
+        expect(three_cp.equals(three)).toBeFalsy()
     })
+
+    it('should copy correctly with zeroBI and oneBI', () => {
+        let three = new GfP(BigInt(3))
+        let one = new GfP(oneBI)
+        let one_cp = new GfP(oneBI)
+
+        expect(one.equals(one_cp)).toBeTruthy()
+
+        one.add(one, three)
+        expect(one.equals(new GfP(BigInt(4)))).toBeTruthy()
+        expect(one.equals(one_cp)).toBeFalsy()
+
+    })
+
 });
