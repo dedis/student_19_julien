@@ -65,7 +65,6 @@ describe('GfP2', () => {
         const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
         let b = new GfP2(new GfP(),new GfP())
         b.mulScalar(a, new GfP(BigInt(2))).sub(b, a);
-
         expect(a.equals(b)).toBeTruthy();
     });
 

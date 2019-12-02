@@ -2,7 +2,6 @@ import GfP12 from '../../src/pairing/gfp12';
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
 import {p} from '../../src/pairing/constants'
-import { GFpPool12 } from '../../src/pairing/gfpPool';
 
 
 describe('GfP12', () => {

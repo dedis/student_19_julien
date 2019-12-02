@@ -36,7 +36,7 @@ describe('GfP', () => {
         let result1 = new GfP()
         result1.mul(a,a).mul(result1, a).mul(result1, a)
         let result2 = new GfP()
-        result2.sqr(a).sqr(a)
+        result2.sqr(a).sqr(result2)
         expect(result1.equals(result2)).toBeTruthy();
 
         expect(result1.pow(a, BigInt(3)).equals(result2.sqr(a).mul(result2, a))).toBeTruthy();
