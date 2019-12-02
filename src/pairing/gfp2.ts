@@ -118,7 +118,7 @@ export default class GfP2 {
      * @returns the new element
      */
     sub(a: GfP2, b: GfP2): GfP2 {
-        this.x.sub(a.x, b.y)
+        this.x.sub(a.x, b.x)
         this.y.sub(a.y, b.y)
         return this
     }
@@ -218,16 +218,21 @@ export default class GfP2 {
         let t : GfP = GfPPool1.use()
         let t2 : GfP = GfPPool1.use()
         let inv : GfP = GfPPool1.use()
+        let tx : GfP = GfPPool1.use()
+        let ty : GfP = GfPPool1.use()
 
-        t.sqr(a.y)
-        t2.sqr(a.x)
+        t.mul(a.y, a.y)
+        t2.mul(a.x, a.x)
         t.add(t,t2)
         inv.invmod(t, p)
-        t.negate(a.x).mul(this.x, inv).mod(this.x, p)
-        t2.mul(a.y, inv).mod(this.y, p)
-        this.x.copy(t)
-        this.y.copy(t2)
-        GfP.release(t, t2, inv)
+
+        tx.negate(a.x).mul(tx, inv).mod(tx, p)
+        ty.mul(a.y, inv).mod(ty, p)
+
+        this.x.copy(tx)
+        this.y.copy(ty)
+
+        GfP.release(t, t2, inv, tx, ty)
 
         return this
     }
