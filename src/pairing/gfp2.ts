@@ -1,7 +1,12 @@
 import GfP from './gfp';
 import { p } from './constants';
 import { zeroBI, oneBI } from '../constants';
-import { GfPPool1, GfPPool2 } from './gfpPool';
+import { GfPPool1 } from './gfp';
+import deePool from 'deepool'
+
+export const GfPPool2 = deePool.create(function makeGFP12(){
+        return new GfP2()
+})
 
 /**
  * Group field of size p^2

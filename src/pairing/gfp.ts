@@ -1,8 +1,12 @@
 import { egcd } from './util-bigint';
 import { toBufferBE } from 'bigint-buffer';
 import { oneBI, zeroBI } from '../constants';
-import { GfPPool1 } from './gfpPool';
+import deePool from 'deepool'
 
+
+export const GfPPool1 = deePool.create(function makeGFP12(){
+        return new GfP()
+})
 /**
  * Field of size p
  * This object acts as an immutable and then any modification will instantiate

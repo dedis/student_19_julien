@@ -8,8 +8,13 @@ import {
     xiToPSquaredMinus1Over3,
     p,
 } from './constants';
-import { GfPPool2, GfPPool6 } from './gfpPool';
+import { GfPPool2 } from './gfp2';
 
+import deePool from 'deepool'
+
+export const GfPPool6 = deePool.create(function makeGFP12(){
+        return new GfP6()
+})
 
 /**
  * Group field of size p^6

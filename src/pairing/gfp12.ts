@@ -2,7 +2,14 @@ import GfP6 from './gfp6';
 import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6, p } from './constants';
 import { oneBI, zeroBI } from '../constants';
-import {GfPPool6, GfPPool12} from './gfpPool'
+import {GfPPool6} from './gfp6'
+
+import deePool from 'deepool'
+
+export const GfPPool12 = deePool.create(function makeGFP12(){
+        return new GfP12()
+})
+
 /**
  * Group field element of size p^12
  * This object acts as an immutable and then any modification will instantiate
