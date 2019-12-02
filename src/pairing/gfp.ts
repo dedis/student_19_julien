@@ -5,7 +5,7 @@ import deePool from 'deepool'
 
 
 export const GfPPool1 = deePool.create(function makeGFP12(){
-        return new GfP()
+        return new GfP(BigInt(0))
 })
 /**
  * Field of size p
@@ -15,11 +15,10 @@ export const GfPPool1 = deePool.create(function makeGFP12(){
 
  export default class GfP {
     private static ELEM_SIZE = 256 / 8;
-    private i = 0
     private v: bigint;
 
-    constructor(value?: bigint) {
-        this.v = value || zeroBI;
+    constructor(value: bigint) {
+        this.v = value;
     }
 
     /**

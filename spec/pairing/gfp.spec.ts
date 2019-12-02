@@ -21,21 +21,21 @@ describe('GfP', () => {
     it('should add and subtract', () => {
         const one = new GfP(BigInt(1));
         const two = new GfP(BigInt(2));
-        let three = new GfP()
+        let three = new GfP(BigInt(0))
         three.add(one, two)
 
         expect(three.equals(new GfP(BigInt(3)))).toBeTruthy();
 
-        let oneS = new GfP()
+        let oneS = new GfP(BigInt(0))
         oneS.sub(new GfP(BigInt(3)), new GfP(BigInt(2)));
         expect(oneS.equals(new GfP(BigInt(1)))).toBeTruthy();
     });
 
     it('should multiply and square', () => {
         const a = new GfP(BigInt(123));
-        let result1 = new GfP()
+        let result1 = new GfP(BigInt(0))
         result1.mul(a,a).mul(result1, a).mul(result1, a)
-        let result2 = new GfP()
+        let result2 = new GfP(BigInt(0))
         result2.sqr(a).sqr(result2)
         expect(result1.equals(result2)).toBeTruthy();
 
@@ -44,8 +44,19 @@ describe('GfP', () => {
 
     it('should compute the modulo', () => {
         const three = new GfP(BigInt(-3));
-        let result = new GfP()
+        let result = new GfP(BigInt(0))
 
         expect(result.mod(three, BigInt(5)).getValue()).toBe(BigInt(2));
     });
+
+    it('should copy correctly with zeroBI and oneBI', () => {
+        let three = new GfP(BigInt(3))
+        let three_cp = new GfP(BigInt(0))
+
+        three_cp.copy(three)
+
+        expect(three_cp.equals(three)).toBeTruthy
+        three = new GfP(BigInt(4))
+        expect(three_cp.equals(three)).toBeFalsy
+    })
 });
