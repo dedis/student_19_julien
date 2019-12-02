@@ -1,6 +1,7 @@
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
 import {p} from '../../src/pairing/constants'
+import GfP from '../../src/pairing/gfp';
 
 describe('GfP6', () => {
     const a = new GfP6(
@@ -105,6 +106,35 @@ describe('GfP6', () => {
         expect(s.equals(m)).toBeTruthy();
     });
 
+    it('should mulScalar', () => {
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let result : GfP6 = new GfP6(new GfP2(BigInt(56), BigInt(21)), new GfP2(BigInt(91), BigInt(23)), new GfP2(BigInt(130), BigInt(21)))
 
+        expect(n.mul(n, n).equals(result)).toBeTruthy();
+
+    });
+
+    it('should mulScalar', () => {
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let mulS: GfP2 = new GfP2(BigInt(1), BigInt(2))
+        let result : GfP6 = new GfP6(new GfP2(BigInt(4), BigInt(3)), new GfP2(BigInt(10), BigInt(5)), new GfP2(BigInt(16), BigInt(7)))
+
+        expect(n.mulScalar(n, mulS).equals(result)).toBeTruthy();
+    });
+
+    it('should mulGfP', () => {
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let mulS: GfP = new GfP(BigInt(2))
+        let result : GfP6 = new GfP6(new GfP2(BigInt(2), BigInt(4)), new GfP2(BigInt(6), BigInt(8)), new GfP2(BigInt(10), BigInt(12)))
+        expect(n.mulGfP(n, mulS).equals(result)).toBeTruthy();
+    });
+
+    it('should mulTau', () => {
+        let m: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+
+        let n: GfP6 = new GfP6(new GfP2(BigInt(1), BigInt(2)), new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)))
+        let result : GfP6 = new GfP6(new GfP2(BigInt(3), BigInt(4)), new GfP2(BigInt(5), BigInt(6)), new GfP2(BigInt(5), BigInt(5)))        
+        expect(n.mulTau(m).equals(result)).toBeTruthy();
+    });
 
 });
