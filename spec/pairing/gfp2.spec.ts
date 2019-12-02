@@ -98,4 +98,11 @@ describe('GfP2', () => {
         expect(one.equals(one_cp)).toBeFalsy()
 
     })
+
+    it('should compute mulXi', () => {
+        let a = new GfP2(BigInt(2), BigInt(6))
+        let result = new GfP2(BigInt(12), BigInt(16))
+        expect(a.mulXi(a).equals(result)).toBeTruthy()
+    });
+
 });

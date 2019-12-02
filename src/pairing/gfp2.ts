@@ -179,7 +179,7 @@ export default class GfP2 {
 
         tx.add(a.x, a.x).add(tx, a.x).add(tx, a.y)
 
-        ty.add(a.y, a.y).add(ty, a.y).add(ty, a.x);
+        ty.add(a.y, a.y).add(ty, a.y).sub(ty, a.x);
 
         this.x.copy(tx)
         this.y.copy(ty)

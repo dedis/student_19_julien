@@ -1,4 +1,6 @@
 import GfP from '../../src/pairing/gfp';
+import {p} from '../../src/pairing/constants';
+
 import { oneBI } from '../../src/constants';
 
 describe('GfP', () => {
@@ -73,5 +75,21 @@ describe('GfP', () => {
         expect(one.equals(one_cp)).toBeFalsy()
 
     })
+    it('should compute the invmod', () => {
+        let v = new GfP(BigInt(0));
+        const result = new GfP(BigInt("19500164908693981119838931622707971722847607432286901071563143508059255221535"))
+        expect(result.equals(v.invmod(new GfP(BigInt(10)),p))).toBeTruthy()
+    });
 
+    it('should compute the negate', () => {
+        const v = new GfP(BigInt(10));
+        const result = new GfP(BigInt(-10))
+        expect(result.equals(v.negate(v))).toBeTruthy()
+    });
+
+    it('should compute the shiftLeft', () => {
+        const v = new GfP(BigInt(2));
+        const result = new GfP(BigInt(8))
+        expect(result.equals(v.shiftLeft(v, 2))).toBeTruthy()
+    });
 });
