@@ -31,11 +31,10 @@ describe('GfP12', () => {
     });
 
     it('should invert', () => {
-
         let inv: GfP12 = new GfP12()
         let b: GfP12 = new GfP12()
-
-        inv.invert(a).mod(inv, p);
+        inv.invert(a)
+        inv.mod(inv, p);
         b.mul(inv, a)
         b.mod(b, p);
 

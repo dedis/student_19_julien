@@ -167,6 +167,7 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
 }
 
 function mulLine(ret: GfP12, res: Result): GfP12 {
+    let a1 : GfP6 = GfPPool6.use()
     let a2 : GfP6 = GfPPool6.use()
     let t3 : GfP6 = GfPPool6.use()
     let t : GfP2 = GfPPool2.use()
@@ -181,8 +182,8 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
     t2 = new GfP6(GfP2.zero(), res.a, t);
     
     tx.copy(tx.add(ret.getX(), ret.getY()).mul(tx, t2).sub(tx, a2).sub(tx,t3).mod(tx, p));
-    ty.copy(ty.add(t3, a2.mulTau(a2)).mod(ty, p));
-    GfP6.release(a2, t3, t2, tx, ty)
+    ty.copy(ty.add(t3, a1.mulTau(a2)).mod(ty, p));
+    GfP6.release(a1, a2, t3, t2, tx, ty)
     GfP2.release(t)
     return new GfP12(tx, ty);
 }
