@@ -167,7 +167,7 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
         let t1: GfP6 = GfPPool6.use()
         let ty: GfP6 = GfPPool6.use()
 
-        this.x.copy(tx.mul(a.x, b.y, true).add(tx, t.mul(b.x, a.y, true)).mod(tx, p))
+        tx.mul(a.x, b.y, true).add(tx, t.mul(b.x, a.y, true)).mod(tx, p)
 
         
         ty.mul(a.y, b.y, true)
@@ -176,6 +176,7 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
         t1.mulTau(t)
         ty.add(ty, t1)
         ty.mod(ty, p)
+        this.x.copy(tx)
         this.y.copy(ty)
         GfP6.release(tx, t, t1, ty)
         return this

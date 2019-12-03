@@ -249,9 +249,9 @@ export default class GfP6 {
     }
 
     mulTau(a: GfP6): GfP6 {
-        this.z.mulXi(a.x)
         this.setX(a.y)
         this.setY(a.z)
+        this.z.mulXi(a.x)
 
         return this
     }
