@@ -134,6 +134,7 @@ export default class GfP6 {
     frobeniusP2(a: GfP6): GfP6 {
         this.x.mulScalar(a.x, new GfP(xiTo2PSquaredMinus2Over3));
         this.y.mulScalar(a.y, new GfP(xiToPSquaredMinus1Over3));
+        this.z.copy(a.z)
         return this
     }
 

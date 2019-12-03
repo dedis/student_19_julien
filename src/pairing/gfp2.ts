@@ -86,7 +86,7 @@ export default class GfP2 {
      * @return the conjugate
      */
     conjugate(a: GfP2): GfP2 {
-        this.y = a.y
+        this.y.copy(a.y)
         this.x.negate(a.x)
         return this
     }
@@ -164,7 +164,6 @@ export default class GfP2 {
     mulScalar(a: GfP2, k: GfP): GfP2 {
         this.x.mul(a.x, k);
         this.y.mul(a.y, k);
-
         return this
     }
 

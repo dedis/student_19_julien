@@ -1,7 +1,7 @@
 import GfP12 from '../../src/pairing/gfp12';
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
-import {p} from '../../src/pairing/constants'
+import {p, xiToPSquaredMinus1Over6} from '../../src/pairing/constants'
 
 
 describe('GfP12', () => {
@@ -81,6 +81,7 @@ describe('GfP12', () => {
     });
 
     it('should frobenius', () => {
+        let t = new GfP12()
         let resultX = new GfP6(new GfP2(BigInt("11951074425567777564236029039896222338774648658250291865040489018946803642454"), 
         BigInt("54892081592070714004140562431172134438914422279988122694327468951464209228823")), 
         new GfP2(BigInt("55871656295660682778589169201506763040614850432363368324337538269245463106192"), 
@@ -96,9 +97,11 @@ describe('GfP12', () => {
         BigInt("12954623")))
 
         let result = new GfP12(resultX, resultY)
-        expect(a.frobenius(a).equals(result)).toBeTruthy();
+        expect(t.frobenius(a).equals(result)).toBeTruthy();
+
     });
     it('should frobeniusP2', () => {
+        let t = new GfP12()
         let resultX = new GfP6(new GfP2(BigInt("6247822650262726712026905200523361283255902223357314825951963468303087107462"), 
         BigInt("11765762388506801491672576877257674857126465981126323377754601392893855886313")), 
         new GfP2(BigInt("65000549695646603732796438742359905742825358107623003571877145026863255235260"), 
@@ -115,7 +118,7 @@ describe('GfP12', () => {
 
         let result = new GfP12(resultX, resultY)
 
-        expect(a.frobeniusP2(a).mod(a,p).equals(result)).toBeTruthy();
+        expect(t.frobeniusP2(a).mod(t, p).equals(result)).toBeTruthy();
     });
 
     it('should mulScalar', () => {
@@ -156,8 +159,6 @@ describe('GfP12', () => {
 
         let aa = new GfP12(aX, aY)
         let result = new GfP12(resultX, resultY)
-
-        //console.log("A mulS: "+aa.mulScalar(multScalar))
 
         expect(aa.mulScalar(aa, multScalar).equals(result)).toBeTruthy();
     });

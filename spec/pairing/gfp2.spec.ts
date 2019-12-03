@@ -63,10 +63,10 @@ describe('GfP2', () => {
     });
 
     it('should subtract', () => {
-        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
+        const aa = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
         let b = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
-        b.mulScalar(a, new GfP(BigInt(2))).sub(b, a);
-        expect(a.equals(b)).toBeTruthy();
+        b.mulScalar(aa, new GfP(BigInt(2))).sub(b, aa);
+        expect(aa.equals(b)).toBeTruthy();
     });
 
     it('should stringify', () => {
@@ -100,9 +100,9 @@ describe('GfP2', () => {
     })
 
     it('should compute mulXi', () => {
-        let a = new GfP2(BigInt(2), BigInt(6))
+        let aa = new GfP2(BigInt(2), BigInt(6))
         let result = new GfP2(BigInt(12), BigInt(16))
-        expect(a.mulXi(a).equals(result)).toBeTruthy()
+        expect(aa.mulXi(aa).equals(result)).toBeTruthy()
     });
 
 });

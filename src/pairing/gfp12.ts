@@ -125,6 +125,7 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
     frobeniusP2(a: GfP12): GfP12 {
         this.x.frobeniusP2(a.x).mulGfP(this.x, new GfP(xiToPSquaredMinus1Over6));
         this.y.frobeniusP2(a.y);
+
         return this
     }
 
