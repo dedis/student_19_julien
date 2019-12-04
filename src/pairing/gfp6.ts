@@ -22,15 +22,13 @@ export const GfPPool6 = deePool.create(function makeGFP12(){
  * a new object.
  */
 export default class GfP6 {
-    private static ZERO = new GfP6();
-    private static ONE = new GfP6(GfP2.zero(), GfP2.zero(), GfP2.one());
 
     /**
      * Get the addition identity for this group field
      * @returns the element
      */
     public static zero(): GfP6 {
-        return GfP6.ZERO;
+        return new GfP6();
     }
 
     /**
@@ -38,7 +36,7 @@ export default class GfP6 {
      * @returns the element
      */
     public static one(): GfP6 {
-        return GfP6.ONE;
+        return new GfP6(GfP2.zero(), GfP2.zero(), GfP2.one());
     }
 
     private x: GfP2;
@@ -46,9 +44,9 @@ export default class GfP6 {
     private z: GfP2;
 
     constructor(x?: GfP2, y?: GfP2, z?: GfP2) {
-        this.x = x || new GfP2(BigInt(0), BigInt(0));
-        this.y = y || new GfP2(BigInt(0), BigInt(0));
-        this.z = z || new GfP2(BigInt(0), BigInt(0));
+        this.x = x || GfP2.zero()
+        this.y = y || GfP2.zero()
+        this.z = z || GfP2.zero()
     }
 
     /**

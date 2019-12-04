@@ -14,15 +14,13 @@ export const GfPPool2 = deePool.create(function makeGFP12(){
  * a new object.
  */
 export default class GfP2 {
-    private static ZERO = new GfP2(zeroBI, zeroBI);
-    private static ONE = new GfP2(zeroBI, oneBI);
 
     public static zero(): GfP2 {
-        return GfP2.ZERO;
+        return new GfP2(zeroBI, zeroBI);
     }
 
     public static one(): GfP2 {
-        return GfP2.ONE;
+        return new GfP2(zeroBI, oneBI)
     }
 
     private x: GfP;
