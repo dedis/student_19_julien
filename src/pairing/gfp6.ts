@@ -74,7 +74,7 @@ export default class GfP6 {
     }
 
     setX(x: GfP2): GfP6{
-        this.x.copy(y)
+        this.x.copy(x)
         return this
     }
 
