@@ -47,19 +47,19 @@ export default class GfP2 {
         return this.y;
     }
 
-    setX(a: GfP): GfP2{
-        this.x.copy(a)
+    setX(x: GfP): GfP2{
+        this.x.copy(x)
         return this
     }
 
-    setY(a: GfP): GfP2{
-        this.y.copy(a)
+    setY(y: GfP): GfP2{
+        this.y.copy(y)
         return this
     }
 
-    setXY(a: GfP, b: GfP): GfP2{
-        this.setX(a)
-        this.setY(b)
+    setXY(a: GfP2): GfP2{
+        this.setX(a.x)
+        this.setY(a.y)
         return this
     }
 
@@ -258,9 +258,8 @@ export default class GfP2 {
         return `(${this.x.toHex()},${this.y.toHex()})`;
     }
 
-    copy(c: GfP2): GfP2{
-        this.x.copy(c.x)
-        this.y.copy(c.y)
+    copy(a: GfP2): GfP2{
+        this.setXY(a)
         return this
     }
 

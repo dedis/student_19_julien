@@ -73,25 +73,25 @@ export default class GfP6 {
         return this.z;
     }
 
-    setX(a: GfP2): GfP6{
-        this.x.copy(a)
+    setX(x: GfP2): GfP6{
+        this.x.copy(y)
         return this
     }
 
-    setY(a: GfP2): GfP6{
-        this.y.copy(a)
+    setY(y: GfP2): GfP6{
+        this.y.copy(y)
         return this
     }
 
-    setZ(a: GfP2): GfP6{
-        this.z.copy(a)
+    setZ(z: GfP2): GfP6{
+        this.z.copy(z)
         return this
     }
 
-    setXYZ(a: GfP2, b: GfP2, c: GfP2): GfP6{
-        this.setX(a)
-        this.setY(b)
-        this.setZ(c)
+    setXYZ(a: GfP6): GfP6{
+        this.setX(a.x)
+        this.setY(a.y)
+        this.setZ(a.z)
         return this
     }
 
@@ -346,7 +346,7 @@ export default class GfP6 {
     }
 
     copy(a: GfP6): GfP6{
-        this.setXYZ(a.x, a.y, a.z)
+        this.setXYZ(a)
         return this
     }
 

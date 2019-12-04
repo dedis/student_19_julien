@@ -29,8 +29,8 @@ export const GfPPool1 = deePool.create(function makeGFP12(){
         return this.v;
     }
 
-    setValue(a: bigint): GfP{
-        this.v = a
+    setValue(v: bigint): GfP{
+        this.v = v
         return this
     }
 

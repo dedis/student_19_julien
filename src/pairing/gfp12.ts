@@ -59,20 +59,19 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
         return this.y;
     }
 
-    setX(a: GfP6): GfP12{
-        this.x.copy(a)
+    setX(x: GfP6): GfP12{
+        this.x.copy(x)
         return this
     }
 
-    setY(a: GfP6): GfP12{
-        this.y.copy(a)
+    setY(y: GfP6): GfP12{
+        this.y.copy(y)
         return this
     }
     
-
-    setXY(a: GfP6, b: GfP6): GfP12{
-        this.setX(a)
-        this.setY(b)
+    setXY(a: GfP12): GfP12{
+        this.setX(a.x)
+        this.setY(a.y)
         return this
     }
 
@@ -287,7 +286,7 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
     }
 
     copy(a: GfP12): GfP12{
-        this.setXY(a.x, a.y)
+        this.setXY(a)
         return this
     }
 
