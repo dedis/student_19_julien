@@ -2,6 +2,7 @@ import GfP12 from '../../src/pairing/gfp12';
 import GfP6 from '../../src/pairing/gfp6';
 import GfP2 from '../../src/pairing/gfp2';
 import {p, xiToPSquaredMinus1Over6} from '../../src/pairing/constants'
+import { stringify } from 'querystring';
 
 
 describe('GfP12', () => {
@@ -161,6 +162,112 @@ describe('GfP12', () => {
         let result = new GfP12(resultX, resultY)
 
         expect(aa.mulScalar(aa, multScalar).equals(result)).toBeTruthy();
+    });
+
+    it('should be ok', () => {
+        let a1 = new GfP2(BigInt(2), BigInt(2))
+        let a2 = new GfP2(BigInt(2), BigInt(2))
+        let a3 = new GfP2(BigInt(2), BigInt(2))
+
+        let b1 = new GfP2(BigInt(2), BigInt(2))
+        let b2 = new GfP2(BigInt(2), BigInt(2))
+        let b3 = new GfP2(BigInt(2), BigInt(2))
+
+        let a_cp_x = new GfP6(a1, a2, a3)
+        let b_cp_y = new GfP6(b1, b2, b3)
+
+        let a_cp = new GfP12(a_cp_x, b_cp_y)
+
+        let a = new GfP12()
+
+        a.copy(a_cp)
+
+        let r1x = new GfP2(BigInt(2), BigInt(2))
+        let r2x = new GfP2(BigInt(2), BigInt(2))
+        let r3x = new GfP2(BigInt(2), BigInt(2))
+
+        let r1y = new GfP2(BigInt(2), BigInt(2))
+        let r2y = new GfP2(BigInt(2), BigInt(2))
+        let r3y = new GfP2(BigInt(2), BigInt(2))
+
+        let result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
+
+        a.neg(a).neg(a).conjugate(a).conjugate(a)
+        expect(a.equals(result)).toBeTruthy()
+
+        a.frobenius(a) 
+        r1x = new GfP2(BigInt("58214036976977759740636283536938818881727097191801885403170931162284826453877"), 
+        BigInt("11767085468398044347907163779855421383437327721981395691948678331998790755030"))
+        
+        r2x = new GfP2(BigInt("24662724392558161314511115453324284125679458361773736787764352335698624000470"), 
+        BigInt("49325448785116322629022230906648568251358916723547473575528704671397248000940"))
+
+        r3x = new GfP2(BigInt("42343231802146788265143680498783111063982740454153814495232429343203638260975"), 
+        BigInt("57334837809834665186497517590590833713186595133570231288825326142793598253352"))
+
+        r1y = new GfP2(BigInt("61479572611929031958591943323323504954753224517927796502275731080760856923693"), 
+        BigInt("18060952746522072900622589492015272376015200971496255968244032394721483154635"))
+
+        r2y = new GfP2(BigInt("20333082938696529944666518337496278131972942519489589798370614331487014950688"), 
+        BigInt("19058506721568449448775213427477412750486761989313236939456322230699945645765"))
+
+        r3y = new GfP2(BigInt(-2), BigInt(2))
+
+        result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+
+        a.frobeniusP2(a) 
+        r1x = new GfP2(BigInt("648157314786975012248362146631102883971864815106868596978765572274638227104441657271124432967342842539405465836944789705533381769069180"), 
+        BigInt("648157314786975012248362146631102883971864815106868596978765572274638227104441657271124432967342842539405465836944789705533381769069180"))
+        
+        r2x = new GfP2(BigInt("8450142921472447577020951234367735971403447788849905714894114215573728765879529074022919494479453595318418477548628284222210070812437051530075548064502512"), 
+        BigInt("8450142921472447577020951234367735971403447788849905714894114215573728765879529074022919494479453595318418477548628284222210070812437051530075548064502512"))
+
+        r3x = new GfP2(BigInt("130001099391293207455621310816101542963355243405896473316269566706606762875506"), 
+        BigInt("130001099391293207455621310816101542963355243405896473316269566706606762875506"))
+
+        r1y = new GfP2(BigInt("9971566668618268522295472809349533827484723347121605268060"), 
+        BigInt("9971566668618268522295472809349533827484723347121605268060"))
+
+        r2y = new GfP2(BigInt("130001099391293207455621310816101542963355243405896473316269566706606762875504"), 
+        BigInt("130001099391293207455621310816101542963355243405896473316269566706606762875504"))
+
+        r3y = new GfP2(BigInt(2), BigInt(2))
+
+        result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.add(a, a).add(a,a).sub(a, a_cp).mod(a, BigInt(4))
+        expect(a.equals(a_cp)).toBeTruthy()
+
+        a.mul(a,a).mulScalar(a, a_cp_x).mod(a, BigInt("650005496956466037327964387423599057428253581076230035718771450268641840"))
+        r1x = new GfP2(BigInt("384"), BigInt("71207"))
+        r2x = new GfP2(BigInt("480"), BigInt("70919"))
+        r3x = new GfP2(BigInt("544"), BigInt("70407"))
+        r1y = new GfP2(BigInt("432"), BigInt("71063"))
+        r2y = new GfP2(BigInt("512"), BigInt("70663"))
+        r3y = new GfP2(BigInt("560"), BigInt("70039"))
+        result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.exp(a, BigInt(2)).square(a).invert(a).mod(a, BigInt("3073225989610171424486615623738776343520782931328415608878351416870138622913"))
+        r1x = new GfP2(BigInt("0"), BigInt("0"))
+        r2x = new GfP2(BigInt("9"), BigInt("838507091073841188153074059776442784082447119588336746077215170846547974526"))
+        r3x = new GfP2(BigInt("9"), BigInt("838507091073841188153074059776442784082447119588336746077215170846547974526"))
+        r1y = new GfP2(BigInt("2420620470665879523009339378765482889862816335927880653016704880800422214835"), 
+        BigInt("1558388178953127324493794618848078740184237960630261510635754552019068813130"))
+        r2y = new GfP2(BigInt("2230818865554591440109573777637791965093766290253621482586823617321978797358"), 
+        BigInt("2278269266832413460834515177919714696286028801672186275194293933191589651734"))
+        r3y = new GfP2(BigInt("2420620470665879523009339378765482889862816335927880653016704880800422214835"), 
+        BigInt("1558388178953127324493794618848078740184237960630261510635754552019068813130"))
+        result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
     });
 
 });

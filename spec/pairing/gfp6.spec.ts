@@ -137,4 +137,143 @@ describe('GfP6', () => {
         expect(n.mulTau(m).equals(result)).toBeTruthy();
     });
 
+
+    it('should be ok', () => {
+        let a1 = new GfP2(BigInt(2), BigInt(2))
+        let a2 = new GfP2(BigInt(2), BigInt(2))
+        let a3 = new GfP2(BigInt(2), BigInt(2))
+
+        let b1 = new GfP2(BigInt(3), BigInt(3))
+        let b2 = new GfP2(BigInt(3), BigInt(3))
+        let b3 = new GfP2(BigInt(3), BigInt(3))
+
+        let a_cp = new GfP6(a1, a2, a3)
+        let b_cp = new GfP6(b1, b2, b3)
+
+        let a = new GfP6()
+        let b = new GfP6()
+
+        a.copy(a_cp)
+        b.copy(b_cp)
+
+        let r1 = new GfP2(BigInt(2), BigInt(2))
+        let r2 = new GfP2(BigInt(2), BigInt(2))
+        let r3 = new GfP2(BigInt(2), BigInt(2))
+        let result = new GfP6(r1, r2, r3)
+
+        a.neg(a).neg(a)
+        expect(a.equals(result)).toBeTruthy()
+
+        a.frobenius(a)
+        r1 = new GfP2(BigInt("61479572611929031958591943323323504954753224517927796502275731080760856923693"), 
+        BigInt("18060952746522072900622589492015272376015200971496255968244032394721483154635"))
+        r2 = new GfP2(BigInt("20333082938696529944666518337496278131972942519489589798370614331487014950688"), 
+        BigInt("19058506721568449448775213427477412750486761989313236939456322230699945645765"))
+        r3 = new GfP2(BigInt(-2), BigInt(2))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.frobeniusP2(a)
+        r1 = new GfP2(BigInt("9971566668618268522295472809349533827484723347121605268060"), 
+        BigInt("9971566668618268522295472809349533827484723347121605268060"))
+        r2 = new GfP2(BigInt("130001099391293207455621310816101542963355243405896473316269566706606762875504"), 
+        BigInt("130001099391293207455621310816101542963355243405896473316269566706606762875504"))
+        r3 = new GfP2(BigInt(2), BigInt(2))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.add(a, b)
+        r1 = new GfP2(BigInt(5), 
+        BigInt(5))
+        r2 = new GfP2(BigInt(5), 
+        BigInt(5))
+        r3 = new GfP2(BigInt(5), BigInt(5))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+
+        a.sub(a, b)
+        r1 = new GfP2(BigInt(2), 
+        BigInt(2))
+        r2 = new GfP2(BigInt(2), 
+        BigInt(2))
+        r3 = new GfP2(BigInt(2), BigInt(2))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.mod(a, BigInt(2))
+        r1 = new GfP2(BigInt(0), 
+        BigInt(0))
+        r2 = new GfP2(BigInt(0), 
+        BigInt(0))
+        r3 = new GfP2(BigInt(0), BigInt(0))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.mul(a, b)
+        r1 = new GfP2(BigInt(36), 
+        BigInt(0))
+        r2 = new GfP2(BigInt(60), 
+        BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071771"))
+        r3 = new GfP2(BigInt(84), 
+        BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071759"))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.mulScalar(a, a1)
+        r1 = new GfP2(BigInt(8), 
+        BigInt(0))
+        r2 = new GfP2(BigInt(8), 
+        BigInt(0))
+        r3 = new GfP2(BigInt(8), BigInt(0))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.mulGfP(a, new GfP(BigInt(2)))
+        r1 = new GfP2(BigInt(4), 
+        BigInt(4))
+        r2 = new GfP2(BigInt(4), 
+        BigInt(4))
+        r3 = new GfP2(BigInt(4), BigInt(4))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.mulTau(a)
+        r1 = new GfP2(BigInt(2), 
+        BigInt(2))
+        r2 = new GfP2(BigInt(2), 
+        BigInt(2))
+        r3 = new GfP2(BigInt(8), BigInt(4))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.square(a)
+        r1 = new GfP2(BigInt(24), 
+        BigInt(0))
+        r2 = new GfP2(BigInt(40), 
+        BigInt(-8))
+        r3 = new GfP2(BigInt(56), BigInt(-16))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+
+        a.invert(a)
+        r1 = new GfP2(BigInt(0), 
+        BigInt(0))
+        r2 = new GfP2(BigInt("3250027484782330186639821937117995287141267905381150178593857251343209203589"), 
+        BigInt("42250357302170292426317685182533938732836482769954952321720144267461719646659"))
+        r3 = new GfP2(BigInt("61750522210864273546156616805241910455684090202241853393283287775520974868194"), 
+        BigInt("22750192393476311306478753559825967009988875337668051250157000759402464425124"))
+        result = new GfP6(r1, r2, r3)
+        expect(a.equals(result)).toBeTruthy()
+        a.copy(a_cp)
+    });
+
 });

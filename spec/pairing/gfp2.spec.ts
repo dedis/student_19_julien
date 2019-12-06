@@ -105,4 +105,45 @@ describe('GfP2', () => {
         expect(aa.mulXi(aa).equals(result)).toBeTruthy()
     });
 
+    it('should be ok', () => {
+        let a = new GfP2(BigInt(2), BigInt(2))
+        let b = new GfP2(BigInt(3), BigInt(3))
+
+        a.conjugate(a).conjugate(a)
+        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+
+        a.negative(a).negative(a)
+        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+
+        a.add(a,b)
+        expect(a.equals(new GfP2(BigInt(5), BigInt(5)))).toBeTruthy()
+
+        a.sub(a, b)
+        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+
+        a.mul(a, b)
+        expect(a.equals(new GfP2(BigInt(12), BigInt(0)))).toBeTruthy()
+
+        a = new GfP2(BigInt(2), BigInt(2))
+        a.mulScalar(a, new GfP(BigInt(2)))
+        expect(a.equals(new GfP2(BigInt(4), BigInt(4)))).toBeTruthy()
+
+        a = new GfP2(BigInt(2), BigInt(2))
+        a.mulXi(a)
+        expect(a.equals(new GfP2(BigInt(8), BigInt(4)))).toBeTruthy()
+        
+        a = new GfP2(BigInt(2), BigInt(2))
+        a.square(a)
+        expect(a.equals(new GfP2(BigInt(8), BigInt(0)))).toBeTruthy()
+
+        a = new GfP2(BigInt(2), BigInt(2))
+        a.invert(a)
+        expect(a.equals(new GfP2(BigInt("48750412271734952799597329056769929307119018580717252678907858770148138053837"), 
+        BigInt("16250137423911650933199109685589976435706339526905750892969286256716046017946")))).toBeTruthy
+
+        a = new GfP2(BigInt(36), BigInt(36))
+        a.mod(a, BigInt(34))
+        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+    });
+
 });

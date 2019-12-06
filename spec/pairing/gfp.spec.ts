@@ -92,4 +92,29 @@ describe('GfP', () => {
         const result = new GfP(BigInt(8))
         expect(result.equals(v.shiftLeft(v, 2))).toBeTruthy()
     });
+
+    it('should be ok', () => {
+        let a = new GfP(BigInt(2))
+        let b = new GfP(BigInt(3))
+
+        a.add(a,b)
+        expect(a.equals(new GfP(BigInt(5)))).toBeTruthy()
+        a.sub(a,b)
+        expect(a.equals(new GfP(BigInt(2)))).toBeTruthy()
+        a.mul(a,b)
+        expect(a.equals(new GfP(BigInt(6)))).toBeTruthy()
+        a.sqr(a)
+        expect(a.equals(new GfP(BigInt(36)))).toBeTruthy()
+        b.pow(b,BigInt(2))
+        expect(b.equals(new GfP(BigInt(9)))).toBeTruthy()
+        a.mod(a,BigInt(34))
+        expect(a.equals(new GfP(BigInt(2)))).toBeTruthy()   
+        a.invmod(a, BigInt(5))
+        expect(a.equals(new GfP(BigInt(-2)))).toBeTruthy()     
+        a.negate(a)
+        expect(a.equals(new GfP(BigInt(2)))).toBeTruthy()    
+        a.shiftLeft(a, 1)
+        expect(a.equals(new GfP(BigInt(4)))).toBeTruthy()    
+    });
+
 });
