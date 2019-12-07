@@ -65,23 +65,8 @@ export const GfPPool1 = deePool.create(function makeGFP12(){
      * @param a the value to add
      * @returns the new value
      */
-    add(a: GfP, b: GfP, bool?:boolean): GfP {
-        if(bool){
-            console.log("b.v: "+a.v)
-            console.log("a.v: "+b.v + a.v)
-            console.log("b.v + a.v: "+b.v + a.v)
-
-        } 
-
-
+    add(a: GfP, b: GfP): GfP {
         this.v = a.v + b.v
-
-        if(bool){
-            console.log("b.v: "+a.v)
-            console.log("a.v: "+b.v + a.v)
-            console.log("b.v + a.v: "+b.v + a.v)
-
-        } 
         return this
     }
 
@@ -134,9 +119,10 @@ export const GfPPool1 = deePool.create(function makeGFP12(){
      * @returns the new value
      */
     mod(a: GfP, p: bigint): GfP {
-        let tmp: bigint = a.v % p
-        if(tmp < 0) tmp += p
-        this.v = tmp
+        let tmp: bigint = a.v
+        if(a.v < 0) tmp = p + (a.v % p)
+        tmp = tmp % p
+        this.v = tmp 
         return this
         }
 

@@ -1,5 +1,6 @@
 import CurvePoint from '../../src/pairing/curve-point';
 import { order } from '../../src/pairing/constants';
+import GfP from '../../src/pairing/gfp';
 
 describe('BN256 Curve Point', () => {
     it('should add one', () => {
@@ -7,17 +8,13 @@ describe('BN256 Curve Point', () => {
         one.mul(CurvePoint.generator(), BigInt(1));
 
         const g = new CurvePoint();
-        console.log("g1 : "+ g)
         g.mul(CurvePoint.generator(), order);
-        console.log("g2 : "+ g)
 
         expect(g.isInfinity()).toBeTruthy();
 
         g.add(g, one);
-        console.log("g3 : "+ g)
 
         g.makeAffine();
-        console.log("g4 : "+ g)
 
         expect(g.equals(one)).toBeTruthy();
         expect(g.isOnCurve()).toBeTruthy();
@@ -129,21 +126,33 @@ describe('BN256 Curve Point', () => {
         const one = new CurvePoint();
         one.mul(CurvePoint.generator(), BigInt(1));
         let a = new CurvePoint()
-        a.add(one,one)     
-        console.log("a is : "+a)   
+        a.add(one,one) 
+        expect(a.getX().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071760"))).toBeTruthy()
+        expect(a.getY().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071772"))).toBeTruthy()
 
     });
 
-    it('should double only', () => {
-        const one = new CurvePoint();
-        one.mul(CurvePoint.generator(), BigInt(1));
-        console.log("one is : " +one)   
 
+    it('should double only', () => {
+        let one = new CurvePoint();
+        
+        one.mul(CurvePoint.generator(), BigInt(1));
+        let a = new CurvePoint()
+
+        a.dbl(one)  
+
+        expect(a.getX().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071760"))).toBeTruthy()
+        expect(a.getY().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071772"))).toBeTruthy()
+    });
+
+    it('should double add equal', () => {
+        const one = new CurvePoint();
+        
+        one.mul(CurvePoint.generator(), BigInt(1));
         let a = new CurvePoint()
         a.dbl(one)  
-        console.log("one is : " +one)   
-   
-        console.log("a is : " +a)   
-
+        let b = new CurvePoint()
+        b.add(one, one)
+        expect(a.equals(b)).toBeTruthy()
     });
 });

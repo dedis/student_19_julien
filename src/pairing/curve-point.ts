@@ -184,19 +184,19 @@ export default class CurvePoint {
         t4.sqr(r);
         t.add(v, v);
         t6.sub(t4, j);
-        tx.sub(t6, t).mod(t6, p)
+        tx.sub(t6, t).mod(tx, p)
 
         t.sub(v, tx);
         t4.mul(s1, j);
         t6.add(t4, t4);
         t4.mul(r, t);
-        ty.sub(t4, t6).mod(t4, p)
+        ty.sub(t4, t6).mod(ty, p)
 
         t.add(a.z, b.z);
         t4.sqr(t);
         t.sub(t4, z1z1);
         t4.sub(t, z2z2);
-        tz.mul(t4, h).mod(t4, p)
+        tz.mul(t4, h).mod(tz, p)
         
         this.x = tx;
         this.y = ty;
@@ -225,14 +225,13 @@ export default class CurvePoint {
         let tmp : GfP = GfPPool1.use()
 
         A.sqr(a.x);
-
         B.sqr(a.y);
         C.sqr(B);
 
 
         t.add(a.x, B);
         t2.sqr(t);
-        t = t2.sub(t2, A);
+        t.sub(t2, A);
         t2.sub(t, C);
         d.add(t2, t2);
         t.add(A, A);
@@ -240,25 +239,23 @@ export default class CurvePoint {
         f.sqr(e);
 
         t.add(d, d);
-        tx.sub(f, t).mod(f, p)
-
+        tx.sub(f, t)
+        tx.mod(tx, p)
         t.add(C, C);
-        tmp.add(t,t);
-        t.add(tmp, tmp);
+        t2.add(t,t);
+        t.add(t2, t2);
         ty.sub(d, tx)
-        
+
         t2.mul(e, ty);
-        ty.sub(t2, t).mod(t2, p)
+        ty.sub(t2, t).mod(ty, p)
         t.mul(a.y, a.z);
-        tz.add(t, t).mod(t, p)
+        tz.add(t, t).mod(tz, p)
 
-        this.x.clone(tx);
-        this.y.clone(ty);
-        this.z.clone(tz);
+        this.x = tx;
+        this.y = ty;
+        this.z = tz;
 
-        GfP.release(A,B,C,t,t2,d,e,f)
-
-
+        GfP.release(A,B,C,t,t2,d,e,f) //tx, ty, tz cannot release!
     }
 
     /**
