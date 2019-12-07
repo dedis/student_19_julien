@@ -11,8 +11,10 @@ const curveB = new GfP(BigInt(3));
  * Point class used by G1
  */
 export default class CurvePoint {
-    static generator = new CurvePoint(oneBI, BigInt(-2), oneBI, oneBI);
 
+    public static generator(): CurvePoint {
+        return new CurvePoint(oneBI, BigInt(-2), oneBI, oneBI);
+    }
     /**
      * Hash the message to a point
      * @param msg The message to hash
@@ -160,6 +162,7 @@ export default class CurvePoint {
         j.mul(h, i);
 
         t.sub(s2, s1);
+
         if (h.signum() === 0 && t.signum() === 0) {
             this.dbl(a);
             GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, i, j)
@@ -170,6 +173,10 @@ export default class CurvePoint {
         let v : GfP = GfPPool1.use()
         let t4 : GfP = GfPPool1.use()
         let t6 : GfP = GfPPool1.use()
+        let tx : GfP = GfPPool1.use()
+        let ty : GfP = GfPPool1.use()
+        let tz : GfP = GfPPool1.use()
+
 
         r.add(t, t);
         v.mul(u1, i);
@@ -177,19 +184,24 @@ export default class CurvePoint {
         t4.sqr(r);
         t.add(v, v);
         t6.sub(t4, j);
-        this.x.copy(t6.sub(t6, t).mod(t6, p));
+        tx.sub(t6, t).mod(t6, p)
 
-        t.sub(v, this.x);
+        t.sub(v, tx);
         t4.mul(s1, j);
         t6.add(t4, t4);
         t4.mul(r, t);
-        this.y.copy(t4.sub(t4, t6).mod(t4, p))
+        ty.sub(t4, t6).mod(t4, p)
 
         t.add(a.z, b.z);
         t4.sqr(t);
         t.sub(t4, z1z1);
         t4.sub(t, z2z2);
-        this.z.copy(t4.mul(t4, h).mod(t4, p))
+        tz.mul(t4, h).mod(t4, p)
+        
+        this.x = tx;
+        this.y = ty;
+        this.z = tz;
+
 
         GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, i, j, r, v, t4, t6)
     }
@@ -199,7 +211,6 @@ export default class CurvePoint {
      * @param a the point to double
      */
     dbl(a: CurvePoint): void {
-
         let A : GfP = GfPPool1.use()
         let B : GfP = GfPPool1.use()
         let C : GfP = GfPPool1.use()
@@ -208,11 +219,16 @@ export default class CurvePoint {
         let d : GfP = GfPPool1.use()
         let e : GfP = GfPPool1.use()
         let f : GfP = GfPPool1.use()
-
+        let tx : GfP = GfPPool1.use()
+        let ty : GfP = GfPPool1.use()
+        let tz : GfP = GfPPool1.use()
+        let tmp : GfP = GfPPool1.use()
 
         A.sqr(a.x);
+
         B.sqr(a.y);
         C.sqr(B);
+
 
         t.add(a.x, B);
         t2.sqr(t);
@@ -224,21 +240,25 @@ export default class CurvePoint {
         f.sqr(e);
 
         t.add(d, d);
-        this.x.copy(f.sub(f, t).mod(f, p));
+        tx.sub(f, t).mod(f, p)
 
         t.add(C, C);
-        t2.add(t,t);
-        t.add(t2, t2);
-
-        this.y.copy(d.sub(d, this.x));
+        tmp.add(t,t);
+        t.add(tmp, tmp);
+        ty.sub(d, tx)
         
-        t2.mul(e, this.y);
-        this.y.copy(t2.sub(t2, t).mod(t2, p));
-
+        t2.mul(e, ty);
+        ty.sub(t2, t).mod(t2, p)
         t.mul(a.y, a.z);
-        this.z.copy(t.add(t, t).mod(t, p));
+        tz.add(t, t).mod(t, p)
+
+        this.x.clone(tx);
+        this.y.clone(ty);
+        this.z.clone(tz);
 
         GfP.release(A,B,C,t,t2,d,e,f)
+
+
     }
 
     /**
@@ -251,15 +271,14 @@ export default class CurvePoint {
         sum.setInfinity();
         const t = new CurvePoint();
         let s :string = scalar.toString(2); //convert bigint to binary string to get length
-        for (let i = s.length; i >= 0; i--) {
-            t.dbl(sum);
 
+        for (let i = s.length; i >= 0; i--) {
+            t.dbl(sum);          
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & scalar;
             if(maskAndNumber != zeroBI) sum.add(t,a);
             else sum.copy(t);
         }
-
         this.copy(sum);
     }
 
@@ -278,11 +297,11 @@ export default class CurvePoint {
         let zInv2 : GfP = GfPPool1.use()
         let t : GfP = GfPPool1.use()
 
-
-
         zInv.invmod(this.z, p);
         t.mul(this.y, zInv);
         zInv2.sqr(zInv);
+
+
         this.y.copy(t.mul(t, zInv2).mod(t, p));
         this.x.copy(this.x.mul(this.x, zInv2).mod(this.x, p));
         this.z.copy(new GfP(oneBI));
