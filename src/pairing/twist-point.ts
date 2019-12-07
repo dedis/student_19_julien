@@ -165,6 +165,10 @@ export default class TwistPoint {
         let v : GfP2 = GfPPool2.use()
         let t4 : GfP2 = GfPPool2.use()
         let t6 : GfP2 = GfPPool2.use()
+        let tx : GfP2 = GfPPool2.use()
+        let ty : GfP2 = GfPPool2.use()
+        let tz : GfP2 = GfPPool2.use()
+
 
         r.add(t, t);
         v.mul(u1, i);
@@ -172,19 +176,22 @@ export default class TwistPoint {
         t4.square(r);
         t.add(v, v);
         t6.sub(t4, j);
-        this.x.copy(t6.sub(t6, t));
+        tx.sub(t6, t)
 
-        t.sub(v, this.x);
+        t.sub(v, tx);
         t4.mul(s1, j);
         t6.add(t4, t4);
         t4.mul(r, t);
-        this.y.copy(t4.sub(t4, t6));
+        ty.sub(t4, t6)
 
         t.add(a.z, b.z);
         t4.square(t);
         t.sub(t4, z12);
         t4.sub(t, z22);
-        this.z.copy(t4.mul(t4, h));
+        tz.mul(t4, h)
+        this.x = tx
+        this.y = ty
+        this.z = tz
 
         GfP2.release(z12, z22, u1, u2, t, s1, s2, h, i, j, r, v, t4, t6)
         }
@@ -202,6 +209,9 @@ export default class TwistPoint {
         let d : GfP2 = GfPPool2.use()
         let e : GfP2 = GfPPool2.use()
         let f : GfP2 = GfPPool2.use()
+        let tx : GfP2 = GfPPool2.use()
+        let ty : GfP2 = GfPPool2.use()
+        let tz : GfP2 = GfPPool2.use()
 
         A.square(a.x);
         B.square(a.y);
@@ -218,18 +228,22 @@ export default class TwistPoint {
 
         t.add(d, d);
 
-        this.x.copy(f.sub(f, t));
+        tx.sub(f, t)
 
         t.add(C, C);
         t2.add(t, t);
         t.add(t2, t2);
-        this.y.copy(d.sub(d, this.x));
-        t2.mul(e, this.y);
-        this.y.copy(t2.sub(t2, t));
+        ty.sub(d, tx)
+
+        t2.mul(e, ty);
+        ty.sub(t2, t)
 
         t.mul(a.y, a.z);
-        this.z.copy(t.add(t, t));
+        tz.add(t, t)
 
+        this.x = tx
+        this.y = ty
+        this.z = tz
         GfP2.release(A,B,C,t,t2,d,e,f)
     }
 
@@ -271,12 +285,19 @@ export default class TwistPoint {
         let zInv : GfP2 = GfPPool2.use()
         let t : GfP2 = GfPPool2.use()
         let zInv2 : GfP2 = GfPPool2.use()
+        let tx : GfP2 = GfPPool2.use()
+        let ty : GfP2 = GfPPool2.use()
+
 
         zInv.invert(this.z);
         t.mul(this.y, zInv);
         zInv2.square(zInv);
-        this.y.copy(t.mul(t, zInv2));
-        this.x.copy(t.mul(this.x, zInv2));
+
+        ty.mul(t, zInv2)
+        tx.mul(this.x, zInv2)
+
+        this.y = ty;
+        this.x = tx;
         this.z = GfP2.one();
         this.t = GfP2.one();
 
