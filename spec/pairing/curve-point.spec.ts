@@ -4,23 +4,30 @@ import { order } from '../../src/pairing/constants';
 describe('BN256 Curve Point', () => {
     it('should add one', () => {
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator, BigInt(1));
+        one.mul(CurvePoint.generator(), BigInt(1));
 
         const g = new CurvePoint();
-        g.mul(CurvePoint.generator, order);
+        console.log("g1 : "+ g)
+        g.mul(CurvePoint.generator(), order);
+        console.log("g2 : "+ g)
+
         expect(g.isInfinity()).toBeTruthy();
 
         g.add(g, one);
+        console.log("g3 : "+ g)
+
         g.makeAffine();
+        console.log("g4 : "+ g)
 
         expect(g.equals(one)).toBeTruthy();
         expect(g.isOnCurve()).toBeTruthy();
         expect(one.isOnCurve()).toBeTruthy();
+
     });
 
     it('should add and double', () => {
         const a = new CurvePoint();
-        a.mul(CurvePoint.generator, BigInt(123456789));
+        a.mul(CurvePoint.generator(), BigInt(123456789));
 
         const aa = new CurvePoint();
         aa.add(a, a);
@@ -32,13 +39,13 @@ describe('BN256 Curve Point', () => {
         expect(aa.getY().equals(d.getY())).toBeTruthy();
     });
 
-    it('should add infinity', () => {
+    it('should add infinity', () => { //pass
         const inf = new CurvePoint();
         inf.setInfinity();
         expect(inf.isInfinity()).toBeTruthy();
 
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator, BigInt(1));
+        one.mul(CurvePoint.generator(), BigInt(1));
 
         const t = new CurvePoint();
         t.add(inf, one);
@@ -50,9 +57,9 @@ describe('BN256 Curve Point', () => {
         expect(t.getY().equals(one.getY())).toBeTruthy();
     });
 
-    it('should make basic operations', () => {
+    it('should make basic operations', () => { //pass
         const g = new CurvePoint();
-        g.copy(CurvePoint.generator);
+        g.copy(CurvePoint.generator());
 
         const x = BigInt('32498273234');
         const X = new CurvePoint()
@@ -76,7 +83,7 @@ describe('BN256 Curve Point', () => {
 
     it('should negate the point', () => {
         const p = new CurvePoint();
-        p.mul(CurvePoint.generator, BigInt(12345));
+        p.mul(CurvePoint.generator(), BigInt(12345));
 
         const np = new CurvePoint();
         np.negative(p);
@@ -89,21 +96,21 @@ describe('BN256 Curve Point', () => {
         expect(p.getY().equals(nnp.getY())).toBeTruthy();
     });
 
-    it('should make the point affine', () => {
+    it('should make the point affine', () => { //pass
         const p = new CurvePoint();
         p.makeAffine();
         expect(p.isInfinity()).toBeTruthy();
     });
 
-    it('should test the equality', () => {
+    it('should test the equality', () => {  //pass
         const p = new CurvePoint();
-        p.mul(CurvePoint.generator, BigInt(123));
+        p.mul(CurvePoint.generator(), BigInt(123));
 
         const p2 = new CurvePoint();
-        p2.mul(CurvePoint.generator, BigInt(123));
+        p2.mul(CurvePoint.generator(), BigInt(123));
 
         const p3 = new CurvePoint();
-        p3.mul(CurvePoint.generator, BigInt(12));
+        p3.mul(CurvePoint.generator(), BigInt(12));
 
         expect(p.equals(p)).toBeTruthy();
         expect(p.equals(p2)).toBeTruthy();
@@ -111,10 +118,32 @@ describe('BN256 Curve Point', () => {
         expect(p.equals(null)).toBeFalsy();
     });
 
-    it('should stringify', () => {
+    it('should stringify', () => { //pass
         const p = new CurvePoint();
         p.setInfinity();
 
         expect(p.toString()).toBe('(0,1)');
+    });
+    
+    it('should add only', () => {
+        const one = new CurvePoint();
+        one.mul(CurvePoint.generator(), BigInt(1));
+        let a = new CurvePoint()
+        a.add(one,one)     
+        console.log("a is : "+a)   
+
+    });
+
+    it('should double only', () => {
+        const one = new CurvePoint();
+        one.mul(CurvePoint.generator(), BigInt(1));
+        console.log("one is : " +one)   
+
+        let a = new CurvePoint()
+        a.dbl(one)  
+        console.log("one is : " +one)   
+   
+        console.log("a is : " +a)   
+
     });
 });
