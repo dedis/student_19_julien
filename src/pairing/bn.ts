@@ -53,7 +53,7 @@ export class G1 {
      * Set the point to the generator of the curve
      */
     setBase(): void {
-        this.p = CurvePoint.generator.clone();
+        this.p = CurvePoint.generator().clone();
     }
 
     /**
@@ -76,7 +76,7 @@ export class G1 {
      * @param k the scalar
      */
     scalarBaseMul(k: bigint): void {
-        this.p.mul(CurvePoint.generator, k);
+        this.p.mul(CurvePoint.generator(), k);
     }
 
     /**
@@ -214,7 +214,7 @@ export class G2 {
      * Set to the generator of the curve
      */
     setBase(): void {
-        this.p = TwistPoint.generator.clone();
+        this.p = TwistPoint.generator().clone();
     }
 
     /**
@@ -237,7 +237,7 @@ export class G2 {
      * @param k the scalar
      */
     scalarBaseMul(k?: bigint): void {
-        this.p.mul(TwistPoint.generator, k);
+        this.p.mul(TwistPoint.generator(), k);
     }
 
     /**
