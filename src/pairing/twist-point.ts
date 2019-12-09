@@ -33,10 +33,18 @@ export default class TwistPoint {
     private t: GfP2;
 
     constructor(x?: GfP2, y?: GfP2, z?: GfP2, t?: GfP2) {
-            this.x = x || GfP2.zero();
+
+        this.x = x instanceof GfP2? new GfP2(x.getX().getValue(), x.getY().getValue()) : GfP2.zero()
+        this.y = y instanceof GfP2? new GfP2(y.getX().getValue(), y.getY().getValue()) : GfP2.zero()
+        this.z = z instanceof GfP2? new GfP2(z.getX().getValue(), z.getY().getValue()) : GfP2.zero()
+        this.t = t instanceof GfP2? new GfP2(t.getX().getValue(), t.getY().getValue()) : GfP2.zero()
+
+        
+
+            /*this.x = x || GfP2.zero();
             this.y = y || GfP2.zero();
             this.z = z || GfP2.zero();
-            this.t = t || GfP2.zero();
+            this.t = t || GfP2.zero();*/
     }
 
     /**
