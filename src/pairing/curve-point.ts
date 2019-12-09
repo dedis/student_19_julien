@@ -82,6 +82,7 @@ export default class CurvePoint {
     isOnCurve(): boolean {
         let yy : GfP = GfPPool1.use()
         let xxx : GfP = GfPPool1.use()
+        //console.log(GfPPool1.size())
         yy.sqr(this.y);
         xxx.pow(this.x, BigInt("3"));
 

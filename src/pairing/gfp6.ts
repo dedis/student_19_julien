@@ -12,7 +12,7 @@ import { GfPPool2 } from './gfp2';
 
 import deePool from 'deepool'
 
-export const GfPPool6 = deePool.create(function makeGFP12(){
+export const GfPPool6 = deePool.create(function makeGFP6(){
         return new GfP6()
 })
 

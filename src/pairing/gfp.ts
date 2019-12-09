@@ -4,7 +4,7 @@ import { oneBI, zeroBI } from '../constants';
 import deePool from 'deepool'
 
 
-export const GfPPool1 = deePool.create(function makeGFP12(){
+export const GfPPool1 = deePool.create(function makeGFP1(){
         return new GfP(BigInt(0))
 })
 /**
