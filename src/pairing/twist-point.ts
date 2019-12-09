@@ -2,6 +2,7 @@ import GfP2 from './gfp2';
 import { zeroBI, oneBI } from '../constants';
 import {p} from './constants'
 import { GfPPool2 } from './gfp2';
+import GfP from './gfp';
 
 const twistB = new GfP2(
     BigInt("6500054969564660373279643874235990574282535810762300357187714502686418407178"),
@@ -39,12 +40,6 @@ export default class TwistPoint {
         this.z = z instanceof GfP2? new GfP2(z.getX().getValue(), z.getY().getValue()) : GfP2.zero()
         this.t = t instanceof GfP2? new GfP2(t.getX().getValue(), t.getY().getValue()) : GfP2.zero()
 
-        
-
-            /*this.x = x || GfP2.zero();
-            this.y = y || GfP2.zero();
-            this.z = z || GfP2.zero();
-            this.t = t || GfP2.zero();*/
     }
 
     /**
@@ -90,13 +85,12 @@ export default class TwistPoint {
             return true;
         }
 
-        let yy : GfP2 = GfPPool2.use()
         let xxx : GfP2 = GfPPool2.use()
-
-        yy.square(cpy.y).mod(yy, p);
         xxx.square(cpy.x).mul(xxx, cpy.x).add(xxx, twistB).mod(xxx, p);
-        let result : boolean = yy.equals(xxx)
-        GfP2.release(yy, xxx)
+        cpy.y.square(cpy.y).mod(cpy.y, p)
+        
+        let result : boolean = cpy.y.equals(xxx)
+        GfP2.release(xxx)
         return result
     }
 
@@ -169,39 +163,47 @@ export default class TwistPoint {
             return;
         }
 
-        let r : GfP2 = GfPPool2.use()
-        let v : GfP2 = GfPPool2.use()
-        let t4 : GfP2 = GfPPool2.use()
-        let t6 : GfP2 = GfPPool2.use()
+        //let r : GfP2 = GfPPool2.use()
+        //let v : GfP2 = GfPPool2.use()
+        //let t4 : GfP2 = GfPPool2.use()
+        //let t6 : GfP2 = GfPPool2.use()
         let tx : GfP2 = GfPPool2.use()
-        let ty : GfP2 = GfPPool2.use()
-        let tz : GfP2 = GfPPool2.use()
+        //let ty : GfP2 = GfPPool2.use()
+        //let tz : GfP2 = GfPPool2.use()
 
 
-        r.add(t, t);
-        v.mul(u1, i);
+        u2.add(t, t);
+        s2.mul(u1, i);
 
-        t4.square(r);
-        t.add(v, v);
-        t6.sub(t4, j);
-        tx.sub(t6, t)
+        u1.square(u2);
+        t.add(s2, s2);
+        i.sub(u1, j);
+        tx.sub(i, t)
 
-        t.sub(v, tx);
-        t4.mul(s1, j);
-        t6.add(t4, t4);
-        t4.mul(r, t);
-        ty.sub(t4, t6)
+        t.sub(s2, tx);
+        u1.mul(s1, j);
+        i.add(u1, u1);
+        u1.mul(u2, t);
+        s1.sub(u1, i)
 
         t.add(a.z, b.z);
-        t4.square(t);
-        t.sub(t4, z12);
-        t4.sub(t, z22);
-        tz.mul(t4, h)
-        this.x = tx
-        this.y = ty
-        this.z = tz
+        u1.square(t);
+        t.sub(u1, z12);
+        u1.sub(t, z22);
+        t.mul(u1, h)
 
-        GfP2.release(z12, z22, u1, u2, t, s1, s2, h, i, j, r, v, t4, t6)
+        /*this.getX().getX().setValue(tx.getX().getValue()) 
+        this.getX().getY().setValue(tx.getY().getValue()) */
+
+        //this.x.setXY(tx)
+
+        //this.x.copy(tx)
+
+        this.x = tx
+        this.y = s1
+        this.z = t
+
+        GfP2.release(z12, z22, u1, u2, s2, h, i, j)
         }
 
     /**
