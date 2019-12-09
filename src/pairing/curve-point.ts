@@ -140,7 +140,7 @@ export default class CurvePoint {
         let s1 : GfP = GfPPool1.use()
         let s2 : GfP = GfPPool1.use()
         let h : GfP = GfPPool1.use()
-        let i : GfP = GfPPool1.use()
+        //let i : GfP = GfPPool1.use()
         let j : GfP = GfPPool1.use()
 
 
@@ -158,53 +158,53 @@ export default class CurvePoint {
         h.sub(u2, u1);
 
         t.add(h, h);
-        i.sqr(t);
-        j.mul(h, i);
+        u2.sqr(t);
+        j.mul(h, u2);
 
         t.sub(s2, s1);
 
         if (h.signum() === 0 && t.signum() === 0) {
             this.dbl(a);
-            GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, i, j)
+            GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, j)
             return;
         }
 
-        let r : GfP = GfPPool1.use()
-        let v : GfP = GfPPool1.use()
-        let t4 : GfP = GfPPool1.use()
+        //let r : GfP = GfPPool1.use()
+        //let v : GfP = GfPPool1.use()
+        //let t4 : GfP = GfPPool1.use()
         let t6 : GfP = GfPPool1.use()
         let tx : GfP = GfPPool1.use()
-        let ty : GfP = GfPPool1.use()
-        let tz : GfP = GfPPool1.use()
+        //let ty : GfP = GfPPool1.use()
+        //let tz : GfP = GfPPool1.use()
 
 
-        r.add(t, t);
-        v.mul(u1, i);
+        s2.add(t, t);
+        u1.mul(u1, u2);
 
-        t4.sqr(r);
-        t.add(v, v);
-        t6.sub(t4, j);
+        u2.sqr(s2);
+        t.add(u1, u1);
+        t6.sub(u2, j);
         tx.sub(t6, t).mod(tx, p)
 
-        t.sub(v, tx);
-        t4.mul(s1, j);
-        t6.add(t4, t4);
-        t4.mul(r, t);
-        ty.sub(t4, t6).mod(ty, p)
+        t.sub(u1, tx);
+        u2.mul(s1, j);
+        t6.add(u2, u2);
+        u2.mul(s2, t);
+        u1.sub(u2, t6).mod(u1, p)
 
         t.add(a.z, b.z);
-        t4.sqr(t);
-        t.sub(t4, z1z1);
-        t4.sub(t, z2z2);
-        tz.mul(t4, h).mod(tz, p)
+        u2.sqr(t);
+        t.sub(u2, z1z1);
+        u2.sub(t, z2z2);
+        u2.mul(u2, h).mod(u2, p)
         
         //this.x.setValue(tx.getValue())
         this.x = tx
-        this.y = ty;
-        this.z = tz;
+        this.y = u1;
+        this.z = u2;
 
 
-        GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, i, j, r, v, t4, t6)
+        GfP.release(z1z1, z2z2, t, s1, s2, h, j, t6)
     }
 
     /**
@@ -215,47 +215,46 @@ export default class CurvePoint {
         let A : GfP = GfPPool1.use()
         let B : GfP = GfPPool1.use()
         let C : GfP = GfPPool1.use()
-        let t : GfP = GfPPool1.use()
+        //let t : GfP = GfPPool1.use()
         let t2 : GfP = GfPPool1.use()
         let d : GfP = GfPPool1.use()
-        let e : GfP = GfPPool1.use()
+        //let e : GfP = GfPPool1.use()
         let f : GfP = GfPPool1.use()
-        let tx : GfP = GfPPool1.use()
-        let ty : GfP = GfPPool1.use()
-        let tz : GfP = GfPPool1.use()
+        //let tx : GfP = GfPPool1.use()
+        //let ty : GfP = GfPPool1.use()
+        //let tz : GfP = GfPPool1.use()
 
         A.sqr(a.x);
         B.sqr(a.y);
         C.sqr(B);
 
-
-        t.add(a.x, B);
-        t2.sqr(t);
-        t.sub(t2, A);
-        t2.sub(t, C);
+        B.add(a.x, B);
+        t2.sqr(B);
+        B.sub(t2, A);
+        t2.sub(B, C);
         d.add(t2, t2);
-        t.add(A, A);
-        e.add(t, A);
-        f.sqr(e);
+        B.add(A, A);
+        A.add(B, A);
+        f.sqr(A);
 
-        t.add(d, d);
-        tx.sub(f, t)
-        tx.mod(tx, p)
-        t.add(C, C);
-        t2.add(t,t);
-        t.add(t2, t2);
-        ty.sub(d, tx)
+        B.add(d, d);
+        f.sub(f, B)
+        f.mod(f, p)
+        B.add(C, C);
+        t2.add(B,B);
+        B.add(t2, t2);
+        C.sub(d, f)
 
-        t2.mul(e, ty);
-        ty.sub(t2, t).mod(ty, p)
-        t.mul(a.y, a.z);
-        tz.add(t, t).mod(tz, p)
+        t2.mul(A, C);
+        C.sub(t2, B).mod(C, p)
+        B.mul(a.y, a.z);
+        d.add(B, B).mod(d, p)
 
-        this.x.copy(tx);
-        this.y.copy(ty);
-        this.z.copy(tz);
+        this.x.copy(f);
+        this.y.copy(C);
+        this.z.copy(d);
 
-        GfP.release(A,B,C,t,t2,d,e,f,tx,ty,tz) //tx, ty, tz cannot release!
+        GfP.release(A,B,C,t2,d,f) //tx, ty, tz cannot release!
     }
 
     /**
@@ -290,21 +289,14 @@ export default class CurvePoint {
             return;
         }
 
-        let zInv : GfP = GfPPool1.use()
-        let zInv2 : GfP = GfPPool1.use()
-        let t : GfP = GfPPool1.use()
+        this.z.invmod(this.z, p);
+        this.y.mul(this.y, this.z);
+        this.t.sqr(this.z);
 
-        zInv.invmod(this.z, p);
-        t.mul(this.y, zInv);
-        zInv2.sqr(zInv);
-
-
-        this.y.copy(t.mul(t, zInv2).mod(t, p));
-        this.x.copy(this.x.mul(this.x, zInv2).mod(this.x, p));
+        this.y.copy(this.y.mul(this.y, this.t).mod(this.y, p));
+        this.x.copy(this.x.mul(this.x, this.t).mod(this.x, p));
         this.z.copy(new GfP(oneBI));
         this.t.copy(new GfP(oneBI));
-        
-        GfP.release(zInv, zInv2, t)
     }
 
     /**
@@ -322,11 +314,10 @@ export default class CurvePoint {
      * @param p the point to copy
      */
     copy(p: CurvePoint): void {
-        // immutable objects so we can copy them
-        this.x = p.x;
-        this.y = p.y;
-        this.z = p.z;
-        this.t = p.t;
+        this.x.copy(p.x);
+        this.y.copy(p.y);
+        this.z.copy(p.z);
+        this.t.copy(p.t);
     }
 
     /**
