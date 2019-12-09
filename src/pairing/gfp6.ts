@@ -43,20 +43,10 @@ export default class GfP6 {
 
     constructor(x?: GfP2, y?: GfP2, z?: GfP2) {
 
-        /*this.x = x || GfP2.zero()
-        this.y = y || GfP2.zero()
-        this.z = z || GfP2.zero()*///NOPP
-
-        // OK
         this.x = x instanceof GfP2? new GfP2(x.getX().getValue(), x.getY().getValue()) : GfP2.zero()
         this.y = y instanceof GfP2? new GfP2(y.getX().getValue(), y.getY().getValue()) : GfP2.zero()
         this.z = z instanceof GfP2? new GfP2(z.getX().getValue(), z.getY().getValue()) : GfP2.zero()
-
         
-        /*this.x.copy(x instanceof GfP ? x : x || GfP2.zero())
-        this.y.copy(y instanceof GfP ? y : y || GfP2.zero())
-        this.z.copy(z instanceof GfP ? z : z || GfP2.zero())*/ //NOPP
-
     }
 
     /**
@@ -133,31 +123,16 @@ export default class GfP6 {
     }
 
     frobenius(a: GfP6): GfP6 {
-        let tx : GfP2 = GfPPool2.use()
-        let ty : GfP2 = GfPPool2.use()
-
-        tx.conjugate(a.x).mul(tx, xiTo2PMinus2Over3);
-        ty.conjugate(a.y).mul(ty, xiToPMinus1Over3);
-
-        this.x.copy(tx)
-        this.y.copy(ty)
+        this.x.conjugate(a.x).mul(this.x, xiTo2PMinus2Over3);
+        this.y.conjugate(a.y).mul(this.y, xiToPMinus1Over3);
         this.z.conjugate(a.z);
-
-        GfP2.release(tx,ty)
         return this
     }
 
     frobeniusP2(a: GfP6): GfP6 {
-        let tx : GfP2 = GfPPool2.use()
-        let ty : GfP2 = GfPPool2.use()
-
-        tx.mulScalar(a.x, new GfP(xiTo2PSquaredMinus2Over3));
-        ty.mulScalar(a.y, new GfP(xiToPSquaredMinus1Over3));
-    
-        this.x.copy(tx)
-        this.y.copy(ty)
+        this.x.mulScalar(a.x, new GfP(xiTo2PSquaredMinus2Over3));
+        this.y.mulScalar(a.y, new GfP(xiToPSquaredMinus1Over3));
         this.z.copy(a.z)
-        GfP2.release(tx, ty)
         return this
     }
 

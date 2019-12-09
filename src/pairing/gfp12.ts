@@ -37,8 +37,6 @@ import GfP2 from './gfp2';
     private y: GfP6;
 
     constructor(x?: GfP6, y?: GfP6) {
-        /*this.x = x || GfP6.zero()
-        this.y = y || GfP6.zero()*/
 
         this.x = x instanceof GfP6? new GfP6(new GfP2(x.getX().getX().getValue(), x.getX().getY().getValue()),
                                             new GfP2(x.getY().getX().getValue(), x.getY().getY().getValue()),

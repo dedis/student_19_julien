@@ -148,7 +148,7 @@ export default class GfP2 {
         this.x.copy(tx)
         this.y.copy(ty)
 
-        GfP.release(tx, ty)
+        GfP.release(tx, ty, t)
         return this
     }
 
