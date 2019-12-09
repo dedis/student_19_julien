@@ -42,7 +42,6 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     let rt : GfP2 = GfPPool2.use()
     let t : GfP2 = GfPPool2.use()
     let t2 : GfP2 = GfPPool2.use()
-
     let atmp : GfP2 = GfPPool2.use()
     let ctmp : GfP2 = GfPPool2.use()
     let btmp : GfP2 = GfPPool2.use()
@@ -55,13 +54,12 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     E.add(I, I);
     E.add(E, E);
     J.mul(H, E);
-
-    L1.sub(D, r.getY()).sub(D, r.getY());
+    L1.sub(D, r.getY()).sub(L1, r.getY());
     V.mul(r.getX(), E);
 
     rx.square(L1).sub(rx, J).sub(rx, V).sub(rx, V).mod(rx, p);
     rz.add(r.getZ(), H).square(rz).sub(rz, r.getT()).sub(rz, I).mod(rz, p);
-    
+
     t.sub(V, rx).mul(t, L1);
     t2.mul(r.getY(), J)
     t2.add(t2, t2);
@@ -75,7 +73,7 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     atmp.sub(t2, t).mod(atmp, p);
     ctmp.mulScalar(rz, q.getY());
     ctmp.add(ctmp, ctmp).mod(ctmp, p);
-
+    
     btmp.sub(GfP2.zero(), L1).mulScalar(btmp, q.getX());
     btmp.add(btmp, btmp).mod(btmp, p);
 
@@ -174,17 +172,20 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
     let t2 : GfP6 = GfPPool6.use()
     let tx : GfP6 = GfPPool6.use()
     let ty : GfP6 = GfPPool6.use()
-
-    a2.mul(new GfP6(GfP2.zero(), res.a, res.b), ret.getX());
+    
+    let tmp : GfP6 = new GfP6(GfP2.zero(), res.a, res.b)
+    
+    a2.mul(tmp, ret.getX(), false);
     t3.mulScalar(ret.getY(), res.c);
-
     t.add(res.b, res.c);
     t2 = new GfP6(GfP2.zero(), res.a, t);
-    
-    tx.copy(tx.add(ret.getX(), ret.getY()).mul(tx, t2).sub(tx, a2).sub(tx,t3).mod(tx, p));
-    ty.copy(ty.add(t3, a1.mulTau(a2)).mod(ty, p));
+
+    tx.add(ret.getX(), ret.getY()).mul(tx, t2).sub(tx, a2).sub(tx,t3).mod(tx, p);
+    ty.add(t3, a1.mulTau(a2)).mod(ty, p);
+
     GfP6.release(a1, a2, t3, t2, tx, ty)
     GfP2.release(t)
+
     return new GfP12(tx, ty);
 }
 
@@ -193,14 +194,11 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
  * See algorithm 1 from http://cryptojedi.org/papers/dclxvi-20100714.pdf
  */
 function miller(q: TwistPoint, p: CurvePoint): GfP12 {
-
-    //none are released! Check if it is ok
     let ret : GfP12 = GfPPool12.use()
     let r2 : GfP2 = GfPPool2.use()
     let qx : GfP2 = GfPPool2.use()
     let qy : GfP2 = GfPPool2.use()
     let q2x : GfP2 = GfPPool2.use()
-
 
     ret = GfP12.one();
 
