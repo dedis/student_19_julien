@@ -167,7 +167,7 @@ export default class TwistPoint {
         //let v : GfP2 = GfPPool2.use()
         //let t4 : GfP2 = GfPPool2.use()
         //let t6 : GfP2 = GfPPool2.use()
-        let tx : GfP2 = GfPPool2.use()
+        //let tx : GfP2 = GfPPool2.use()
         //let ty : GfP2 = GfPPool2.use()
         //let tz : GfP2 = GfPPool2.use()
 
@@ -178,19 +178,19 @@ export default class TwistPoint {
         u1.square(u2);
         t.add(s2, s2);
         i.sub(u1, j);
-        tx.sub(i, t)
+        this.x.sub(i, t)
 
-        t.sub(s2, tx);
+        t.sub(s2, this.x);
         u1.mul(s1, j);
         i.add(u1, u1);
         u1.mul(u2, t);
-        s1.sub(u1, i)
+        this.y.sub(u1, i)
 
         t.add(a.z, b.z);
         u1.square(t);
         t.sub(u1, z12);
         u1.sub(t, z22);
-        t.mul(u1, h)
+        this.z.mul(u1, h)
 
         /*this.getX().getX().setValue(tx.getX().getValue()) 
         this.getX().getY().setValue(tx.getY().getValue()) */
@@ -199,11 +199,11 @@ export default class TwistPoint {
 
         //this.x.copy(tx)
 
-        this.x = tx
-        this.y = s1
-        this.z = t
+        //this.x = tx
+        //this.y = s1
+        //this.z = t
 
-        GfP2.release(z12, z22, u1, u2, s2, h, i, j)
+        GfP2.release(z12, z22, u1, u2, s2, h, i, j, s1, t)
         }
 
     /**
@@ -238,28 +238,28 @@ export default class TwistPoint {
 
         B.add(d, d);
 
-        f.sub(f, B)
+        this.x.sub(f, B)
 
         B.add(C, C);
         t2.add(B, B);
         B.add(t2, t2);
-        C.sub(d, f)
+        C.sub(d, this.x)
 
         t2.mul(A, C);
-        C.sub(t2, B)
+        this.y.sub(t2, B)
 
         B.mul(a.y, a.z);
-        d.add(B, B)
+        this.z.add(B, B)
 
-        this.x = f
-        this.y = C
-        this.z = d
+        //this.x = f
+        //this.y = C
+        //this.z = d
 
         /*this.x.copy(f)
         this.y.copy(C)
         this.z.copy(d)
         this copy makes one test fails sometimes*/
-        GfP2.release(A,B,t2)
+        GfP2.release(A,B,t2, f, C, d)
     }
 
     /**
@@ -297,12 +297,6 @@ export default class TwistPoint {
             this.setInfinity();
             return;
         }
-        //let zInv : GfP2 = GfPPool2.use()
-        //let t : GfP2 = GfPPool2.use()
-        //let zInv2 : GfP2 = GfPPool2.use()
-        //let tx : GfP2 = GfPPool2.use()
-        //let ty : GfP2 = GfPPool2.use()
-
 
         this.z.invert(this.z);
         this.y.mul(this.y, this.z);
@@ -315,7 +309,6 @@ export default class TwistPoint {
         this.z.copy(GfP2.one());
         this.t.copy(GfP2.one());
 
-        //GfP2.release(zInv2)
     }
 
     /**
