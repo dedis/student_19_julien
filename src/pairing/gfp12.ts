@@ -307,4 +307,4 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
     return new GfP12()
 })
 
-//GfPPool12.grow(5120)
+GfPPool12.grow(2620)

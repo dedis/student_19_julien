@@ -216,4 +216,4 @@ import deePool from 'deepool'
 export const GfPPool1 = deePool.create(function makeGFP1(){
     return new GfP(BigInt(0))
 })
-//GfPPool1.grow(20000000)
+GfPPool1.grow(10)
