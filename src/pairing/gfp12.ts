@@ -39,8 +39,18 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
     private y: GfP6;
 
     constructor(x?: GfP6, y?: GfP6) {
-        this.x = x || GfP6.zero()
-        this.y = y || GfP6.zero()
+        /*this.x = x || GfP6.zero()
+        this.y = y || GfP6.zero()*/
+
+        this.x = x instanceof GfP6? new GfP6(new GfP2(x.getX().getX().getValue(), x.getX().getY().getValue()),
+                                            new GfP2(x.getY().getX().getValue(), x.getY().getY().getValue()),
+                                            new GfP2(x.getZ().getX().getValue(), x.getZ().getY().getValue()))
+        : GfP6.zero()
+
+        this.y = y instanceof GfP6? new GfP6(new GfP2(y.getX().getX().getValue(), y.getX().getY().getValue()),
+                                            new GfP2(y.getY().getX().getValue(), y.getY().getY().getValue()),
+                                            new GfP2(y.getZ().getX().getValue(), y.getZ().getY().getValue()))
+        : GfP6.zero()
     }
 
     /**
