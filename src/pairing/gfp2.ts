@@ -4,9 +4,7 @@ import { zeroBI, oneBI } from '../constants';
 import { GfPPool1 } from './gfp';
 import deePool from 'deepool'
 
-export const GfPPool2 = deePool.create(function makeGFP2(){
-        return new GfP2(new GfP(BigInt(0)), new GfP(BigInt(0)))
-})
+
 
 /**
  * Group field of size p^2
@@ -270,3 +268,8 @@ export default class GfP2 {
     }
 
 }
+
+export const GfPPool2 = deePool.create(function makeGFP2(){
+    return new GfP2(new GfP(BigInt(0)), new GfP(BigInt(0)))
+})
+//GfPPool2.grow(2621440)

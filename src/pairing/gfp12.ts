@@ -7,9 +7,7 @@ import {GfPPool6} from './gfp6'
 import deePool from 'deepool'
 import GfP2 from './gfp2';
 
-export const GfPPool12 = deePool.create(function makeGFP12(){
-        return new GfP12()
-})
+
 
 /**
  * Group field element of size p^12
@@ -306,3 +304,9 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
         }
     }
 }
+
+export const GfPPool12 = deePool.create(function makeGFP12(){
+    return new GfP12()
+})
+
+//GfPPool12.grow(5120)

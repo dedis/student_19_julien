@@ -4,9 +4,6 @@ import { oneBI, zeroBI } from '../constants';
 import deePool from 'deepool'
 
 
-export const GfPPool1 = deePool.create(function makeGFP1(){
-        return new GfP(BigInt(0))
-})
 /**
  * Field of size p
  * This object acts as an immutable and then any modification will instantiate
@@ -201,7 +198,7 @@ export const GfPPool1 = deePool.create(function makeGFP1(){
     }
 
     copy(a: GfP): GfP{
-        this.setValue(a.v)
+        this.v = a.v
         return this
     }
     clone(a: GfP): GfP{
@@ -214,3 +211,9 @@ export const GfPPool1 = deePool.create(function makeGFP1(){
         }
     }
 }
+
+
+export const GfPPool1 = deePool.create(function makeGFP1(){
+    return new GfP(BigInt(0))
+})
+//GfPPool1.grow(20000000)

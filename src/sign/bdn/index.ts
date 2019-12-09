@@ -6,6 +6,10 @@ import BN256Scalar from "../../pairing/scalar";
 import * as BLS from "../bls";
 import Mask from "../mask";
 import { toBigIntBE } from 'bigint-buffer';
+import { GfPPool1 } from "../../pairing/gfp";
+import { GfPPool2 } from "../../pairing/gfp2";
+import { GfPPool6 } from "../../pairing/gfp6";
+import { GfPPool12 } from "../../pairing/gfp12";
 
 const COEF_SIZE = 128 / 8;
 
@@ -122,6 +126,15 @@ export function sign(msg: Buffer, secret: BN256Scalar): BdnSignature {
  */
 export function verify(msg: Buffer, mask: Mask, sig: Buffer): boolean {
     const pub = aggregatePublicKeys(mask) as BN256G2Point;
+    let b : boolean = BLS.verify(msg, pub, sig);
+/*
+    console.log("GFPPOOL1: "+GfPPool1.size())
+    console.log("GFPPOOL2: "+GfPPool2.size())
+    console.log("GFPPOOL6: "+GfPPool6.size())
+    console.log("GFPPOOL12: "+GfPPool12.size())
+*/
 
-    return BLS.verify(msg, pub, sig);
+
+
+    return b
 }

@@ -82,7 +82,6 @@ export default class CurvePoint {
     isOnCurve(): boolean {
         let yy : GfP = GfPPool1.use()
         let xxx : GfP = GfPPool1.use()
-        //console.log(GfPPool1.size())
         yy.sqr(this.y);
         xxx.pow(this.x, BigInt("3"));
 
@@ -103,10 +102,10 @@ export default class CurvePoint {
      * Set the point to the infinity
      */
     setInfinity(): void {
-        this.x = new GfP(zeroBI);
-        this.y = new GfP(oneBI);
-        this.z = new GfP(zeroBI);
-        this.t = new GfP(zeroBI);
+        this.x.setValue(zeroBI);
+        this.y.setValue(oneBI);
+        this.z.setValue(zeroBI);
+        this.t.setValue(zeroBI);
     }
 
     /**
@@ -199,7 +198,8 @@ export default class CurvePoint {
         t4.sub(t, z2z2);
         tz.mul(t4, h).mod(tz, p)
         
-        this.x = tx;
+        //this.x.setValue(tx.getValue())
+        this.x = tx
         this.y = ty;
         this.z = tz;
 
@@ -223,7 +223,6 @@ export default class CurvePoint {
         let tx : GfP = GfPPool1.use()
         let ty : GfP = GfPPool1.use()
         let tz : GfP = GfPPool1.use()
-        let tmp : GfP = GfPPool1.use()
 
         A.sqr(a.x);
         B.sqr(a.y);
@@ -252,11 +251,11 @@ export default class CurvePoint {
         t.mul(a.y, a.z);
         tz.add(t, t).mod(tz, p)
 
-        this.x = tx;
-        this.y = ty;
-        this.z = tz;
+        this.x.copy(tx);
+        this.y.copy(ty);
+        this.z.copy(tz);
 
-        GfP.release(A,B,C,t,t2,d,e,f) //tx, ty, tz cannot release!
+        GfP.release(A,B,C,t,t2,d,e,f,tx,ty,tz) //tx, ty, tz cannot release!
     }
 
     /**
@@ -313,13 +312,9 @@ export default class CurvePoint {
      * @param a the point to negate
      */
     negative(a: CurvePoint): void {
-        let t : GfP = GfPPool1.use()
-
         this.x.copy(a.x);
-        this.y.copy(t.negate(a.y));
+        this.y.negate(a.y);
         this.z.copy(a.z);
-        
-        GfP.release(t)
     }
 
     /**
@@ -341,7 +336,6 @@ export default class CurvePoint {
     clone(): CurvePoint {
         const p = new CurvePoint();
         p.copy(this);
-
         return p;
     }
 
