@@ -44,9 +44,21 @@ export default class GfP6 {
     private z: GfP2;
 
     constructor(x?: GfP2, y?: GfP2, z?: GfP2) {
-        this.x = x || GfP2.zero()
+
+        /*this.x = x || GfP2.zero()
         this.y = y || GfP2.zero()
-        this.z = z || GfP2.zero()
+        this.z = z || GfP2.zero()*///NOPP
+
+        // OK
+        this.x = x instanceof GfP2? new GfP2(x.getX().getValue(), x.getY().getValue()) : GfP2.zero()
+        this.y = y instanceof GfP2? new GfP2(y.getX().getValue(), y.getY().getValue()) : GfP2.zero()
+        this.z = z instanceof GfP2? new GfP2(z.getX().getValue(), z.getY().getValue()) : GfP2.zero()
+
+        
+        /*this.x.copy(x instanceof GfP ? x : x || GfP2.zero())
+        this.y.copy(y instanceof GfP ? y : y || GfP2.zero())
+        this.z.copy(z instanceof GfP ? z : z || GfP2.zero())*/ //NOPP
+
     }
 
     /**
