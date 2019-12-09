@@ -179,8 +179,7 @@ export default class GfP6 {
         let t0: GfP2 = GfPPool2.use()
         let t1: GfP2 = GfPPool2.use()
         let tz: GfP2 = GfPPool2.use()
-        let ty: GfP2 = GfPPool2.use()
-        let tx: GfP2 = GfPPool2.use()
+
 
         v0.mul(a.z, b.z, true)
         v1.mul(a.y, b.y, true)
@@ -198,28 +197,26 @@ export default class GfP6 {
 
         t0.add(a.y, a.z)
         t1.add(b.y, b.z)
-        ty.mul(t0, t1, true)
+        this.y.mul(t0, t1, true)
         t0.mulXi(v2)
 
         if(!bool){
-            ty.sub(ty, v0).sub(ty, v1).add(ty, t0).mod(ty, p)
+            this.y.sub(this.y, v0).sub(this.y, v1).add(this.y, t0).mod(this.y, p)
         }else{
-            ty.sub(ty, v0).sub(ty, v1).add(ty, t0)
+            this.y.sub(this.y, v0).sub(this.y, v1).add(this.y, t0)
         }
         t0.add(a.x, a.z)
         t1.add(b.x, b.z)
 
-        tx.mul(t0, t1, true)
+        this.x.mul(t0, t1, true)
 
         if(!bool){
-            tx.sub(tx, v0).add(tx, v1).sub(tx, v2).mod(tx, p)
+            this.x.sub(this.x, v0).add(this.x, v1).sub(this.x, v2).mod(this.x, p)
         }else{
-            tx.sub(tx, v0).add(tx, v1).sub(tx, v2)
+            this.x.sub(this.x, v0).add(this.x, v1).sub(this.x, v2)
         }
-        this.x.copy(tx)
-        this.y.copy(ty)
         this.z.copy(tz)
-        GfP2.release(v0,v1,v2,t0,t1,tx,ty,tz)
+        GfP2.release(v0,v1,v2,t0,t1,tz)
         return this
     }
 
@@ -264,10 +261,7 @@ export default class GfP6 {
         let v1: GfP2 = GfPPool2.use()
         let v2: GfP2 = GfPPool2.use()
         let c0: GfP2 = GfPPool2.use()
-        let c1: GfP2 = GfPPool2.use()
-        let c2: GfP2 = GfPPool2.use()
         let t: GfP2 = GfPPool2.use()
-
 
         v0.square(a.z)
         v1.square(a.y)
@@ -275,16 +269,11 @@ export default class GfP6 {
 
         c0.add(a.x, a.y).square(c0).sub(c0, v1).sub(c0, v2).mulXi(c0).add(c0, v0)
 
-        c1.add(a.y, a.z).square(c1).sub(c1, v0).sub(c1, v1).add(c1, t.mulXi(v2))
+        this.y.add(a.y, a.z).square(this.y).sub(this.y, v0).sub(this.y, v1).add(this.y, t.mulXi(v2))
+        this.x.add(a.x, a.z).square(this.x).sub(this.x, v0).add(this.x, v1).sub(this.x, v2)
+        this.z.copy(c0)   
 
-        c2.add(a.x, a.z).square(c2).sub(c2, v0).add(c2, v1).sub(c2, v2)
-
-        this.z.copy(c0)
-        this.y.copy(c1)
-        this.x.copy(c2)    
-
-
-        GfP2.release(v0,v1,v2,c0,c1,c2,t)
+        GfP2.release(v0,v1,v2,c0,t)
 
         return this
     }
@@ -306,9 +295,10 @@ export default class GfP6 {
         C.square(a.y).sub(C, t1.mul(a.x, a.z))
 
         F.mul(C, a.y).mulXi(F).add(F, t1.mul(A, a.z)).add(F, t1.mul(B, a.x).mulXi(t1)).invert(F)
-        this.x.copy(t1.mul(C, F))
-        this.y.copy(t1.mul(B, F))
-        this.z.copy(t1.mul(A, F))
+        
+        this.x.mul(C, F)
+        this.y.mul(B, F)
+        this.z.mul(A, F)
         GfP2.release(A,B,C,F,t1)
         return this
     }
