@@ -214,47 +214,52 @@ export default class TwistPoint {
         let A : GfP2 = GfPPool2.use()
         let B : GfP2 = GfPPool2.use()
         let C : GfP2 = GfPPool2.use()
-        let t : GfP2 = GfPPool2.use()
+        //let t : GfP2 = GfPPool2.use()
         let t2 : GfP2 = GfPPool2.use()
         let d : GfP2 = GfPPool2.use()
-        let e : GfP2 = GfPPool2.use()
+        //let e : GfP2 = GfPPool2.use()
         let f : GfP2 = GfPPool2.use()
-        let tx : GfP2 = GfPPool2.use()
-        let ty : GfP2 = GfPPool2.use()
-        let tz : GfP2 = GfPPool2.use()
+        //let tx : GfP2 = GfPPool2.use()
+        //let ty : GfP2 = GfPPool2.use()
+        //let tz : GfP2 = GfPPool2.use()
 
         A.square(a.x);
         B.square(a.y);
         C.square(B);
 
-        t.add(a.x, B);
-        t2.square(t);
-        t.sub(t2, A);
-        t2.sub(t, C);
+        B.add(a.x, B);
+        t2.square(B);
+        B.sub(t2, A);
+        t2.sub(B, C);
         d.add(t2, t2);
-        t.add(A, A);
-        e.add(t, A);
-        f.square(e);
+        B.add(A, A);
+        A.add(B, A);
+        f.square(A);
 
-        t.add(d, d);
+        B.add(d, d);
 
-        tx.sub(f, t)
+        f.sub(f, B)
 
-        t.add(C, C);
-        t2.add(t, t);
-        t.add(t2, t2);
-        ty.sub(d, tx)
+        B.add(C, C);
+        t2.add(B, B);
+        B.add(t2, t2);
+        C.sub(d, f)
 
-        t2.mul(e, ty);
-        ty.sub(t2, t)
+        t2.mul(A, C);
+        C.sub(t2, B)
 
-        t.mul(a.y, a.z);
-        tz.add(t, t)
+        B.mul(a.y, a.z);
+        d.add(B, B)
 
-        this.x = tx
-        this.y = ty
-        this.z = tz
-        GfP2.release(A,B,C,t,t2,d,e,f)
+        this.x = f
+        this.y = C
+        this.z = d
+
+        /*this.x.copy(f)
+        this.y.copy(C)
+        this.z.copy(d)
+        this copy makes one test fails sometimes*/
+        GfP2.release(A,B,t2)
     }
 
     /**
@@ -292,26 +297,25 @@ export default class TwistPoint {
             this.setInfinity();
             return;
         }
-        let zInv : GfP2 = GfPPool2.use()
-        let t : GfP2 = GfPPool2.use()
-        let zInv2 : GfP2 = GfPPool2.use()
-        let tx : GfP2 = GfPPool2.use()
-        let ty : GfP2 = GfPPool2.use()
+        //let zInv : GfP2 = GfPPool2.use()
+        //let t : GfP2 = GfPPool2.use()
+        //let zInv2 : GfP2 = GfPPool2.use()
+        //let tx : GfP2 = GfPPool2.use()
+        //let ty : GfP2 = GfPPool2.use()
 
 
-        zInv.invert(this.z);
-        t.mul(this.y, zInv);
-        zInv2.square(zInv);
+        this.z.invert(this.z);
+        this.y.mul(this.y, this.z);
+        this.t.square(this.z);
 
-        ty.mul(t, zInv2)
-        tx.mul(this.x, zInv2)
+        this.y.mul(this.y, this.t)
+        this.z.mul(this.x, this.t)
 
-        this.y = ty;
-        this.x = tx;
-        this.z = GfP2.one();
-        this.t = GfP2.one();
+        this.x.copy(this.z);
+        this.z.copy(GfP2.one());
+        this.t.copy(GfP2.one());
 
-        GfP2.release(zInv, zInv2, t)
+        //GfP2.release(zInv2)
     }
 
     /**
@@ -319,11 +323,9 @@ export default class TwistPoint {
      * @param a the point
      */
     neg(a: TwistPoint): void {
-        this.x = a.x;
-        let tmp : GfP2 = GfPPool2.use()
-        this.y.copy(tmp.negative(a.y));
-        GfP2.release(tmp)
-        this.z = a.z;
+        this.x.copy(a.x);
+        this.y.negative(a.y);
+        this.z.copy(a.z);
     }
 
     /**
@@ -331,10 +333,10 @@ export default class TwistPoint {
      * @param a the point
      */
     copy(a: TwistPoint): void {
-        this.x = a.x;
-        this.y = a.y;
-        this.z = a.z;
-        this.t = a.t;
+        this.x.copy(a.x);
+        this.y.copy(a.y);
+        this.z.copy(a.z);
+        this.t.copy(a.t);
     }
 
     /**
