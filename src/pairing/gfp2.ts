@@ -189,20 +189,18 @@ export default class GfP2 {
     square(a: GfP2): GfP2 {
         let t1 : GfP = GfPPool1.use()
         let t2 : GfP = GfPPool1.use()
-        let tx : GfP = GfPPool1.use()
-        let ty : GfP = GfPPool1.use()
-        
+
         t1.sub(a.y, a.x)
         t2.add(a.x, a.y)
-        ty.mul(t1, t2).mod(ty, p)
+        t2.mul(t1, t2).mod(t2, p)
 
         // intermediate modulo is due to a missing implementation
         // in the library that is actually using the unsigned left
         // shift any time
-        tx.mul(a.x, a.y).shiftLeft(tx, 1).mod(tx, p)
-        this.x.copy(tx)
-        this.y.copy(ty)
-        GfP.release(t1, t2, ty, tx)
+        t1.mul(a.x, a.y).shiftLeft(t1, 1).mod(t1, p)
+        this.x.copy(t1)
+        this.y.copy(t2)
+        GfP.release(t1, t2)
         return this
     }
 
@@ -213,22 +211,19 @@ export default class GfP2 {
     invert(a: GfP2): GfP2 {
         let t : GfP = GfPPool1.use()
         let t2 : GfP = GfPPool1.use()
-        let inv : GfP = GfPPool1.use()
-        let tx : GfP = GfPPool1.use()
-        let ty : GfP = GfPPool1.use()
 
         t.mul(a.y, a.y)
         t2.mul(a.x, a.x)
         t.add(t,t2)
-        inv.invmod(t, p)
+        t2.invmod(t, p)
 
-        tx.negate(a.x).mul(tx, inv).mod(tx, p)
-        ty.mul(a.y, inv).mod(ty, p)
+        t.negate(a.x).mul(t, t2).mod(t, p)
+        t2.mul(a.y, t2).mod(t2, p)
 
-        this.x.copy(tx)
-        this.y.copy(ty)
+        this.x.copy(t)
+        this.y.copy(t2)
 
-        GfP.release(t, t2, inv, tx, ty)
+        GfP.release(t, t2)
 
         return this
     }
