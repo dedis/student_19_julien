@@ -104,7 +104,6 @@ import GfP2 from './gfp2';
     conjugate(a: GfP12): GfP12 {
         this.x.neg(a.x)
         this.y.copy(a.y)
-
         return this
     }
 
@@ -115,7 +114,6 @@ import GfP2 from './gfp2';
     neg(a: GfP12): GfP12 {
         this.x.neg(a.x);
         this.y.neg(a.y);
-
         return this
     }
 
@@ -128,7 +126,6 @@ import GfP2 from './gfp2';
     frobeniusP2(a: GfP12): GfP12 {
         this.x.frobeniusP2(a.x).mulGfP(this.x, new GfP(xiToPSquaredMinus1Over6));
         this.y.frobeniusP2(a.y);
-
         return this
     }
 
@@ -169,20 +166,15 @@ import GfP2 from './gfp2';
         let tx: GfP6 = GfPPool6.use()
         let t: GfP6 = GfPPool6.use()
         let t1: GfP6 = GfPPool6.use()
-        let ty: GfP6 = GfPPool6.use()
 
         tx.mul(a.x, b.y, true).add(tx, t.mul(b.x, a.y, true)).mod(tx, p)
-
         
-        ty.mul(a.y, b.y, true)
-
         t.mul(a.x, b.x, true)
         t1.mulTau(t)
-        ty.add(ty, t1)
-        ty.mod(ty, p)
+        this.y.mul(a.y, b.y, true).add(this.y, t1).mod(this.y, p)
+
         this.x.copy(tx)
-        this.y.copy(ty)
-        GfP6.release(tx, t, t1, ty)
+        GfP6.release(tx, t, t1)
         return this
     }
 
@@ -211,7 +203,6 @@ import GfP2 from './gfp2';
         //Get the string of the BigInt, convert to byte, then get number of bits
 
         for (let i = s.length - 1; i >= 0; i--) {
-
             t.square(sum).mod(t, p);
             let maskn = oneBI << BigInt(i);
             let maskAndNumber = maskn & k;
@@ -230,18 +221,16 @@ import GfP2 from './gfp2';
     square(a: GfP12): GfP12 {
         let v0: GfP6 = GfPPool6.use()
         let t: GfP6 = GfPPool6.use()
-        let ty: GfP6 = GfPPool6.use()
-        
+
         v0.mul(a.x, a.y, true);
+        t.mulTau(a.x).add(t, a.y);
 
-        t.mulTau(a.x);
-        t.add(a.y, t);
-        ty.add(a.x, a.y).mul(ty, t, true).sub(ty, v0);
+        this.y.add(a.x, a.y).mul(this.y, t, true).sub(this.y, v0);
         t.mulTau(v0);
-        this.y.copy(ty.sub(ty, t));
-        this.x.copy(t.add(v0,v0))
+        this.y.sub(this.y, t);
+        this.x.add(v0,v0)
 
-        GfP6.release(v0, t, ty)
+        GfP6.release(v0, t)
 
         return this
     }
@@ -257,17 +246,12 @@ import GfP2 from './gfp2';
 
         let gfp12: GfP12 = GfPPool12.use()
 
-
         t1.square(a.x);
-        t2.square(a.y);
-
-        t1.sub(t2, t3.mulTau(t1));
-        t2.invert(t1);
-        
-        gfp12.x.neg(a.x)
-        gfp12.setY(a.y)
+        t2.square(a.y).sub(t2, t3.mulTau(t1)).invert(t2);
+        gfp12.conjugate(a)
 
         this.mulScalar(gfp12, t2)
+
         GfP6.release(t1,t2, t3)
         GfP12.release(gfp12)
 
