@@ -294,8 +294,8 @@ export default class CurvePoint {
 
         this.y.copy(this.y.mul(this.y, this.t).mod(this.y, p));
         this.x.copy(this.x.mul(this.x, this.t).mod(this.x, p));
-        this.z.copy(new GfP(oneBI));
-        this.t.copy(new GfP(oneBI));
+        this.z.setValue(oneBI)
+        this.t.setValue(oneBI)
     }
 
     /**

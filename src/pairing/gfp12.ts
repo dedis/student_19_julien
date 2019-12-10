@@ -3,6 +3,7 @@ import GfP from './gfp';
 import { xiToPMinus1Over6, xiToPSquaredMinus1Over6, p } from './constants';
 import { oneBI, zeroBI } from '../constants';
 import {GfPPool6} from './gfp6'
+import {GfPPool1} from './gfp'
 
 import deePool from 'deepool'
 import GfP2 from './gfp2';
@@ -124,8 +125,11 @@ import GfP2 from './gfp2';
     }
 
     frobeniusP2(a: GfP12): GfP12 {
-        this.x.frobeniusP2(a.x).mulGfP(this.x, new GfP(xiToPSquaredMinus1Over6));
+        let tmp : GfP = GfPPool1.use()
+        tmp.setValue(xiToPSquaredMinus1Over6)
+        this.x.frobeniusP2(a.x).mulGfP(this.x, tmp);
         this.y.frobeniusP2(a.y);
+        GfP.release(tmp)
         return this
     }
 
@@ -291,4 +295,4 @@ export const GfPPool12 = deePool.create(function makeGFP12(){
     return new GfP12()
 })
 
-GfPPool12.grow(2620)
+//GfPPool12.grow(2620)

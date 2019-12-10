@@ -5,7 +5,7 @@ import CurvePoint from "./curve-point";
 import GfP2 from "./gfp2";
 import GfP6 from "./gfp6";
 import { u, xiToPMinus1Over3, xiToPMinus1Over2, xiToPSquaredMinus1Over3, p } from "./constants";
-import GfP from "./gfp";
+import GfP, { GfPPool1 } from "./gfp";
 import { GfPPool2 } from './gfp2'
 import { GfPPool6 } from './gfp6'
 import { GfPPool12 } from './gfp12'
@@ -241,9 +241,10 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
         GfP2.one(),
         GfP2.one(),
     );
-
+    let tmp :GfP = GfPPool1.use()
+    tmp.setValue(xiToPSquaredMinus1Over3)
     const minusQ2 = new TwistPoint(
-        q2x.mulScalar(aAffine.getX(),new GfP(xiToPSquaredMinus1Over3)),
+        q2x.mulScalar(aAffine.getX(),tmp),
         aAffine.getY(),
         GfP2.one(),
         GfP2.one(),
@@ -256,6 +257,7 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
 
     r2.square(minusQ2.getY());
     const res2 = lineFunctionAdd(r, minusQ2, bAffine, r2);
+    GfP.release(tmp)
     return mulLine(ret, res2);
 }
 

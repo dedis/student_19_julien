@@ -1,5 +1,5 @@
 import GfP2 from './gfp2';
-import GfP from './gfp';
+import GfP, { GfPPool1 } from './gfp';
 
 import {
     xiTo2PMinus2Over3,
@@ -130,9 +130,16 @@ export default class GfP6 {
     }
 
     frobeniusP2(a: GfP6): GfP6 {
-        this.x.mulScalar(a.x, new GfP(xiTo2PSquaredMinus2Over3));
-        this.y.mulScalar(a.y, new GfP(xiToPSquaredMinus1Over3));
+        let tmp1 : GfP = GfPPool1.use()
+        let tmp2 : GfP = GfPPool1.use()
+
+        tmp1.setValue(xiTo2PSquaredMinus2Over3)
+        tmp2.setValue(xiToPSquaredMinus1Over3)
+
+        this.x.mulScalar(a.x, tmp1);
+        this.y.mulScalar(a.y, tmp2);
         this.z.copy(a.z)
+        GfP.release(tmp1, tmp2)
         return this
     }
 
@@ -336,4 +343,4 @@ export const GfPPool6 = deePool.create(function makeGFP6(){
     return new GfP6()
 })
 
-GfPPool6.grow(6)
+//GfPPool6.grow(6)
