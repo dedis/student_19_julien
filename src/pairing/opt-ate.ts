@@ -77,13 +77,27 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     btmp.sub(GfP2.zero(), L1).mulScalar(btmp, q.getX());
     btmp.add(btmp, btmp).mod(btmp, p);
 
-    let a : GfP2 = GfPPool2.use()
-    let c : GfP2 = GfPPool2.use()
-    let b : GfP2 = GfPPool2.use()
-    
+    let a : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let c : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let b : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let rOut : TwistPoint = new TwistPoint()
+
     a.copy(atmp)
     b.copy(btmp)
     c.copy(ctmp)
+    
+    rOut.getX().getX().setValue(rx.getX().getValue())
+    rOut.getX().getY().setValue(rx.getY().getValue())
+
+    rOut.getY().getX().setValue(ry.getX().getValue())
+    rOut.getY().getY().setValue(ry.getY().getValue())
+
+    rOut.getZ().getX().setValue(rz.getX().getValue())
+    rOut.getZ().getY().setValue(rz.getY().getValue())
+
+    rOut.getT().getX().setValue(rt.getX().getValue())
+    rOut.getT().getY().setValue(rt.getY().getValue())
+
 
     GfP2.release(B, D, H, I, E, J, L1, V, rx, ry, rz, rt, t, t2, atmp, ctmp, btmp)
 
@@ -91,7 +105,7 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
         a,
         b,
         c,
-        rOut: new TwistPoint(rx, ry, rz, rt),
+        rOut
     };
 }
 
@@ -147,20 +161,33 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
     ctmp.mul(rz, r.getT());
     ctmp.add(ctmp, ctmp).mulScalar(ctmp, q.getY());
 
-    let a : GfP2 = GfPPool2.use()
-    let c : GfP2 = GfPPool2.use()
-    let b : GfP2 = GfPPool2.use()
+    let a : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let c : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let b : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let rOut : TwistPoint = new TwistPoint()
 
     a.copy(atmp)
     b.copy(btmp)
     c.copy(ctmp)
+    rOut.getX().getX().setValue(rx.getX().getValue())
+    rOut.getX().getY().setValue(rx.getY().getValue())
+
+    rOut.getY().getX().setValue(ry.getX().getValue())
+    rOut.getY().getY().setValue(ry.getY().getValue())
+
+    rOut.getZ().getX().setValue(rz.getX().getValue())
+    rOut.getZ().getY().setValue(rz.getY().getValue())
+
+    rOut.getT().getX().setValue(rt.getX().getValue())
+    rOut.getT().getY().setValue(rt.getY().getValue())
+
     GfP2.release(A,B,C,D,E,G,rx,ry,rt,rz,t, atmp, btmp, ctmp)
 
     return {
         a,
         b,
         c,
-        rOut: new TwistPoint(rx, ry, rz, rt),
+        rOut
     };
 }
 
@@ -172,21 +199,30 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
     let t2 : GfP6 = GfPPool6.use()
     let tx : GfP6 = GfPPool6.use()
     let ty : GfP6 = GfPPool6.use()
-    
-    let tmp : GfP6 = new GfP6(GfP2.zero(), res.a, res.b)
+    let tmp : GfP6 = GfPPool6.use()
+
+    tmp.setX(GfP2.zero())
+    tmp.setY(res.a)
+    tmp.setZ(res.b)
     
     a2.mul(tmp, ret.getX(), false);
     t3.mulScalar(ret.getY(), res.c);
     t.add(res.b, res.c);
-    t2 = new GfP6(GfP2.zero(), res.a, t);
+    t2.setX(GfP2.zero())
+    t2.setY(res.a)
+    t2.setZ(t)
 
     tx.add(ret.getX(), ret.getY()).mul(tx, t2).sub(tx, a2).sub(tx,t3).mod(tx, p);
     ty.add(t3, a1.mulTau(a2)).mod(ty, p);
 
-    GfP6.release(a1, a2, t3, t2, tx, ty)
+    let gfp12: GfP12 = new GfP12()
+    gfp12.setX(tx)
+    gfp12.setY(ty)
+
+    GfP6.release(a1, a2, t3, t2, tx, ty, tmp)
     GfP2.release(t)
 
-    return new GfP12(tx, ty);
+    return gfp12
 }
 
 /**
@@ -318,7 +354,7 @@ function finalExponentiation(a: GfP12): GfP12 {
     t1.mul(t1, t0).square(t1).mod(t1, p);
     t0.mul(t1, y1).mod(t0, p);
     t1.mul(t1, y0).mod(t1, p);
-    t0.copy(t0.square(t0).mul(t0, t1).mod(t0, p))
+    t0.square(t0).mul(t0, t1).mod(t0, p)
 
     GfP12.release(t1,t2,fp,fp2,fp3,fu,fu2,fu3,fu2p,fu3p,y0,y1,y2,y3,y4,y5,y6)
 
