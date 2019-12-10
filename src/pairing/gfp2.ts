@@ -267,4 +267,4 @@ export default class GfP2 {
 export const GfPPool2 = deePool.create(function makeGFP2(){
     return new GfP2(new GfP(BigInt(0)), new GfP(BigInt(0)))
 })
-//GfPPool2.grow(336720)
+//GfPPool2.grow(2560)

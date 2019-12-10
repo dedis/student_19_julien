@@ -343,4 +343,4 @@ export const GfPPool6 = deePool.create(function makeGFP6(){
     return new GfP6()
 })
 
-//GfPPool6.grow(6)
+//GfPPool6.grow(5)
