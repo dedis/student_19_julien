@@ -169,16 +169,13 @@ export default class GfP2 {
      */
 
     mulXi(a: GfP2): GfP2 {
-        let tx : GfP = GfPPool1.use()
-        let ty : GfP = GfPPool1.use()
+        let tmp : GfP2 = GfPPool2.use()
+        tmp.copy(a)
 
-        tx.add(a.x, a.x).add(tx, a.x).add(tx, a.y)
+        this.x.add(tmp.x, tmp.x).add(this.x, tmp.x).add(this.x, tmp.y)
+        this.y.add(tmp.y, tmp.y).add(this.y, tmp.y).sub(this.y, tmp.x);
 
-        ty.add(a.y, a.y).add(ty, a.y).sub(ty, a.x);
-
-        this.x.copy(tx)
-        this.y.copy(ty)
-        GfP.release(tx)
+        GfP2.release(tmp)
         return this
     }
 

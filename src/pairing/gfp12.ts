@@ -173,9 +173,8 @@ import GfP2 from './gfp2';
 
         tx.mul(a.x, b.y, true).add(tx, t.mul(b.x, a.y, true)).mod(tx, p)
         
-        t.mul(a.x, b.x, true)
-        t1.mulTau(t)
-        this.y.mul(a.y, b.y, true).add(this.y, t1).mod(this.y, p)
+        t.mul(a.x, b.x, true).mulTau(t)
+        this.y.mul(a.y, b.y, true).add(this.y, t).mod(this.y, p)
 
         this.x.copy(tx)
         GfP6.release(tx, t, t1)

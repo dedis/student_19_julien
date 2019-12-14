@@ -252,10 +252,12 @@ export default class GfP6 {
     }
 
     mulTau(a: GfP6): GfP6 {
-        this.setX(a.y)
-        this.setY(a.z)
-        this.z.mulXi(a.x)
-
+        let tmp: GfP6 = GfPPool6.use()
+        tmp.copy(a)
+        this.setX(tmp.y)
+        this.setY(tmp.z)
+        this.z.mulXi(tmp.x)
+        GfP6.release(tmp)
         return this
     }
 

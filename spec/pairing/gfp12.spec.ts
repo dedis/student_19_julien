@@ -34,7 +34,9 @@ describe('GfP12', () => {
     it('should invert', () => {
         let inv: GfP12 = new GfP12()
         let b: GfP12 = new GfP12()
+
         inv.invert(a).mod(inv, p);
+        
         b.mul(inv, a).mod(b, p);
 
         expect(b.equals(GfP12.one())).toBeTruthy();
