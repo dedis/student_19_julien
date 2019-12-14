@@ -198,7 +198,7 @@ describe('GfP6', () => {
         expect(a.equals(result)).toBeTruthy()
         a.copy(a_cp)
 
-        a.mod(a, BigInt(2))
+        a.mod(a, 2n)
         r1 = new GfP2(0n, 0n)
         r2 = new GfP2(0n, 0n)
         r3 = new GfP2(0n, 0n)

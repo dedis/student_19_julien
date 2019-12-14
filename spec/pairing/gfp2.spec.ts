@@ -63,9 +63,9 @@ describe('GfP2', () => {
     });
 
     it('should subtract', () => {
-        const aa = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        let b = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
-        b.mulScalar(aa, new GfP(BigInt(2))).sub(b, aa);
+        const aa = new GfP2(23423492374n, 12934872398472394827398479n);
+        let b = new GfP2(new GfP(0n),new GfP(0n))
+        b.mulScalar(aa, new GfP(2n)).sub(b, aa);
         expect(aa.equals(b)).toBeTruthy();
     });
 

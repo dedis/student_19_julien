@@ -150,13 +150,13 @@ describe('GfP12', () => {
     });
 
     it('should be ok', () => {
-        let a1 = new GfP2(BigInt(2), BigInt(2))
-        let a2 = new GfP2(BigInt(2), BigInt(2))
-        let a3 = new GfP2(BigInt(2), BigInt(2))
+        let a1 = new GfP2(2n, 2n)
+        let a2 = new GfP2(2n, 2n)
+        let a3 = new GfP2(2n, 2n)
 
-        let b1 = new GfP2(BigInt(2), BigInt(2))
-        let b2 = new GfP2(BigInt(2), BigInt(2))
-        let b3 = new GfP2(BigInt(2), BigInt(2))
+        let b1 = new GfP2(2n, 2n)
+        let b2 = new GfP2(2n, 2n)
+        let b3 = new GfP2(2n, 2n)
 
         let a_cp_x = new GfP6(a1, a2, a3)
         let b_cp_y = new GfP6(b1, b2, b3)
@@ -167,13 +167,13 @@ describe('GfP12', () => {
 
         a.copy(a_cp)
 
-        let r1x = new GfP2(BigInt(2), BigInt(2))
-        let r2x = new GfP2(BigInt(2), BigInt(2))
-        let r3x = new GfP2(BigInt(2), BigInt(2))
+        let r1x = new GfP2(2n, 2n)
+        let r2x = new GfP2(2n, 2n)
+        let r3x = new GfP2(2n, 2n)
 
-        let r1y = new GfP2(2n, BigInt(2))
-        let r2y = new GfP2(BigInt(2), BigInt(2))
-        let r3y = new GfP2(BigInt(2), BigInt(2))
+        let r1y = new GfP2(2n, 2n)
+        let r2y = new GfP2(2n, 2n)
+        let r3y = new GfP2(2n, 2n)
 
         let result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
 
@@ -196,7 +196,7 @@ describe('GfP12', () => {
         r2y = new GfP2(20333082938696529944666518337496278131972942519489589798370614331487014950688n, 
         19058506721568449448775213427477412750486761989313236939456322230699945645765n)
 
-        r3y = new GfP2(BigInt(-2), BigInt(2))
+        r3y = new GfP2(-2n, 2n)
 
         result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
         expect(a.equals(result)).toBeTruthy()
@@ -219,13 +219,13 @@ describe('GfP12', () => {
         r2y = new GfP2(130001099391293207455621310816101542963355243405896473316269566706606762875504n, 
         130001099391293207455621310816101542963355243405896473316269566706606762875504n)
 
-        r3y = new GfP2(BigInt(2), BigInt(2))
+        r3y = new GfP2(2n, 2n)
 
         result = new GfP12(new GfP6(r1x, r2x, r3x), new GfP6(r1y, r2y, r3y))
         expect(a.equals(result)).toBeTruthy()
         a.copy(a_cp)
 
-        a.add(a, a).add(a,a).sub(a, a_cp).mod(a, BigInt(4))
+        a.add(a, a).add(a,a).sub(a, a_cp).mod(a, 4n)
         expect(a.equals(a_cp)).toBeTruthy()
 
         a.mul(a,a).mulScalar(a, a_cp_x).mod(a, 650005496956466037327964387423599057428253581076230035718771450268641840n)
@@ -239,7 +239,7 @@ describe('GfP12', () => {
         expect(a.equals(result)).toBeTruthy()
         a.copy(a_cp)
 
-        a.exp(a, BigInt(2)).square(a).invert(a).mod(a, 3073225989610171424486615623738776343520782931328415608878351416870138622913n)
+        a.exp(a, 2n).square(a).invert(a).mod(a, 3073225989610171424486615623738776343520782931328415608878351416870138622913n)
         r1x = new GfP2(0n, 0n)
         r2x = new GfP2(9n, 838507091073841188153074059776442784082447119588336746077215170846547974526n)
         r3x = new GfP2(9n, 838507091073841188153074059776442784082447119588336746077215170846547974526n)
