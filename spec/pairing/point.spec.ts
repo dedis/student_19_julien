@@ -31,7 +31,7 @@ describe('BN256 Point Tests', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
             const p1 = new BN256G1Point(toBigIntBE(Buffer.from(a)));
 
-            const aa = new BN256G1Point().mul(new BN256Scalar(BigInt(3)), p1);
+            const aa = new BN256G1Point().mul(new BN256Scalar(3n), p1);
             const bb = new BN256G1Point().add(p1, p1);
             bb.add(bb, p1);
 
@@ -127,7 +127,7 @@ describe('BN256 Point Tests', () => {
         const prop = jsc.forall(jsc.array(jsc.uint8), (a) => {
             const p1 = new BN256G2Point(toBigIntBE(Buffer.from(a)));
 
-            const aa = new BN256G2Point().mul(new BN256Scalar(BigInt(3)), p1);
+            const aa = new BN256G2Point().mul(new BN256Scalar(3n), p1);
             const bb = new BN256G2Point().add(p1, p1);
             bb.add(bb, p1);
 

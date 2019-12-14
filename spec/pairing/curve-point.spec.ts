@@ -5,7 +5,7 @@ import GfP from '../../src/pairing/gfp';
 describe('BN256 Curve Point', () => {
     it('should add one', () => {
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator(), BigInt(1));
+        one.mul(CurvePoint.generator(), 1n);
 
         const g = new CurvePoint();
         g.mul(CurvePoint.generator(), order);
@@ -24,7 +24,7 @@ describe('BN256 Curve Point', () => {
 
     it('should add and double', () => {
         const a = new CurvePoint();
-        a.mul(CurvePoint.generator(), BigInt(123456789));
+        a.mul(CurvePoint.generator(), 123456789n);
 
         const aa = new CurvePoint();
         aa.add(a, a);
@@ -42,7 +42,7 @@ describe('BN256 Curve Point', () => {
         expect(inf.isInfinity()).toBeTruthy();
 
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator(), BigInt(1));
+        one.mul(CurvePoint.generator(), 1n);
 
         const t = new CurvePoint();
         t.add(inf, one);
@@ -58,11 +58,11 @@ describe('BN256 Curve Point', () => {
         const g = new CurvePoint();
         g.copy(CurvePoint.generator());
 
-        const x = BigInt('32498273234');
+        const x = 32498273234n;
         const X = new CurvePoint()
         X.mul(g, x);
 
-        const y = BigInt('98732423523');
+        const y = 98732423523n;
         const Y = new CurvePoint()
         Y.mul(g, y);
 
@@ -80,7 +80,7 @@ describe('BN256 Curve Point', () => {
 
     it('should negate the point', () => {
         const p = new CurvePoint();
-        p.mul(CurvePoint.generator(), BigInt(12345));
+        p.mul(CurvePoint.generator(), 12345n);
 
         const np = new CurvePoint();
         np.negative(p);
@@ -101,13 +101,13 @@ describe('BN256 Curve Point', () => {
 
     it('should test the equality', () => {  //pass
         const p = new CurvePoint();
-        p.mul(CurvePoint.generator(), BigInt(123));
+        p.mul(CurvePoint.generator(), 123n);
 
         const p2 = new CurvePoint();
-        p2.mul(CurvePoint.generator(), BigInt(123));
+        p2.mul(CurvePoint.generator(), 123n);
 
         const p3 = new CurvePoint();
-        p3.mul(CurvePoint.generator(), BigInt(12));
+        p3.mul(CurvePoint.generator(), 12n);
 
         expect(p.equals(p)).toBeTruthy();
         expect(p.equals(p2)).toBeTruthy();
@@ -124,11 +124,11 @@ describe('BN256 Curve Point', () => {
     
     it('should add only', () => {
         const one = new CurvePoint();
-        one.mul(CurvePoint.generator(), BigInt(1));
+        one.mul(CurvePoint.generator(), 1n);
         let a = new CurvePoint()
         a.add(one,one) 
-        expect(a.getX().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071760"))).toBeTruthy()
-        expect(a.getY().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071772"))).toBeTruthy()
+        expect(a.getX().getValue() == 65000549695646603732796438742359905742825358107623003571877145026864184071760n).toBeTruthy()
+        expect(a.getY().getValue() == 65000549695646603732796438742359905742825358107623003571877145026864184071772n).toBeTruthy()
 
     });
 
@@ -136,19 +136,19 @@ describe('BN256 Curve Point', () => {
     it('should double only', () => {
         let one = new CurvePoint();
         
-        one.mul(CurvePoint.generator(), BigInt(1));
+        one.mul(CurvePoint.generator(), 1n);
         let a = new CurvePoint()
 
         a.dbl(one)  
 
-        expect(a.getX().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071760"))).toBeTruthy()
-        expect(a.getY().getValue() == (BigInt("65000549695646603732796438742359905742825358107623003571877145026864184071772"))).toBeTruthy()
+        expect(a.getX().getValue() == 65000549695646603732796438742359905742825358107623003571877145026864184071760n).toBeTruthy()
+        expect(a.getY().getValue() == 65000549695646603732796438742359905742825358107623003571877145026864184071772n).toBeTruthy()
     });
 
     it('should double add equal', () => {
         const one = new CurvePoint();
         
-        one.mul(CurvePoint.generator(), BigInt(1));
+        one.mul(CurvePoint.generator(), 1n);
         let a = new CurvePoint()
         a.dbl(one)  
         let b = new CurvePoint()

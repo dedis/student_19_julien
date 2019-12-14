@@ -178,7 +178,7 @@ export default class GfP2 {
 
         this.x.copy(tx)
         this.y.copy(ty)
-        GfP.release(tx, ty)
+        GfP.release(tx)
         return this
     }
 
@@ -265,6 +265,6 @@ export default class GfP2 {
 }
 
 export const GfPPool2 = deePool.create(function makeGFP2(){
-    return new GfP2(new GfP(BigInt(0)), new GfP(BigInt(0)))
+    return new GfP2(0n, 0n)
 })
 //GfPPool2.grow(2560)

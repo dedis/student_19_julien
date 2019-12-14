@@ -15,8 +15,8 @@ describe('GfP2', () => {
     });
 
     it('should invert', () => {
-        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        let inv = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
+        const a = new GfP2(23423492374n, 12934872398472394827398479n);
+        let inv = new GfP2(new GfP(0n),new GfP(0n))
         inv.invert(a);
         expect(a.equals(inv)).toBeFalsy();
         expect(inv.invert(inv).equals(a)).toBeTruthy();
@@ -25,16 +25,16 @@ describe('GfP2', () => {
     });
 
     it('should get the conjugate', () => {
-        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        let c = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
+        const a = new GfP2(23423492374n, 12934872398472394827398479n);
+        let c = new GfP2(new GfP(0n),new GfP(0n))
         c.conjugate(a);
         expect(c.equals(a)).toBeFalsy();
         expect(c.conjugate(c).equals(a)).toBeTruthy();
     });
 
     it('should get the negative', () => {
-        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        let n = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
+        const a = new GfP2(23423492374n, 12934872398472394827398479n);
+        let n = new GfP2(new GfP(0n),new GfP(0n))
         n.negative(a);
 
         expect(a.equals(n)).toBeFalsy();
@@ -42,21 +42,21 @@ describe('GfP2', () => {
     });
 
     it('should square', () => {
-        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        let s = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
+        const a = new GfP2(23423492374n, 12934872398472394827398479n);
+        let s = new GfP2(new GfP(0n),new GfP(0n))
         s.square(a);
-        let m = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
+        let m = new GfP2(new GfP(0n),new GfP(0n))
         m.mul(a, a);
 
         expect(s.equals(m)).toBeTruthy();
     });
 
     it('should multiply by a scalar', () => {
-        const a = new GfP2(BigInt('23423492374'), BigInt('12934872398472394827398479'));
-        let b = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
-        let c = new GfP2(new GfP(BigInt(0)),new GfP(BigInt(0)))
+        const a = new GfP2(23423492374n, 12934872398472394827398479n);
+        let b = new GfP2(new GfP(0n),new GfP(0n))
+        let c = new GfP2(new GfP(0n),new GfP(0n))
 
-        b.mulScalar(a, new GfP(BigInt(3)));
+        b.mulScalar(a, new GfP(3n));
         c.add(a, a).add(c, a);
 
         expect(b.equals(c)).toBeTruthy();
@@ -76,74 +76,74 @@ describe('GfP2', () => {
     });
 
     it('should copy correctly', () => {
-        let three = new GfP2(BigInt(3), BigInt(3))
-        let three_cp = new GfP2(BigInt(0), BigInt(0))
+        let three = new GfP2(3n, 3n)
+        let three_cp = new GfP2(0n, 0n)
 
         three_cp.copy(three)
 
         expect(three_cp.equals(three)).toBeTruthy()
-        three = new GfP2(BigInt(4), BigInt(4))
+        three = new GfP2(4n, 4n)
         expect(three_cp.equals(three)).toBeFalsy()
     })
 
     it('should copy correctly with zeroBI and oneBI', () => {
-        let three = new GfP2(BigInt(3), BigInt(3))
+        let three = new GfP2(3n, 3n)
         let one = new GfP2(oneBI, oneBI)
         let one_cp = new GfP2(oneBI, oneBI)
 
         expect(one.equals(one_cp)).toBeTruthy()
 
         one.add(one, three)
-        expect(one.equals(new GfP2(BigInt(4), BigInt(4)))).toBeTruthy()
+        expect(one.equals(new GfP2(4n, 4n))).toBeTruthy()
         expect(one.equals(one_cp)).toBeFalsy()
 
     })
 
     it('should compute mulXi', () => {
-        let aa = new GfP2(BigInt(2), BigInt(6))
-        let result = new GfP2(BigInt(12), BigInt(16))
+        let aa = new GfP2(2n, 6n)
+        let result = new GfP2(12n, 16n)
         expect(aa.mulXi(aa).equals(result)).toBeTruthy()
     });
 
     it('should be ok', () => {
-        let a = new GfP2(BigInt(2), BigInt(2))
-        let b = new GfP2(BigInt(3), BigInt(3))
+        let a = new GfP2(2n, 2n)
+        let b = new GfP2(3n, 3n)
 
         a.conjugate(a).conjugate(a)
-        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+        expect(a.equals(new GfP2(2n, 2n))).toBeTruthy()
 
         a.negative(a).negative(a)
-        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+        expect(a.equals(new GfP2(2n, 2n))).toBeTruthy()
 
         a.add(a,b)
-        expect(a.equals(new GfP2(BigInt(5), BigInt(5)))).toBeTruthy()
+        expect(a.equals(new GfP2(5n, 5n))).toBeTruthy()
 
         a.sub(a, b)
-        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+        expect(a.equals(new GfP2(2n, 2n))).toBeTruthy()
 
         a.mul(a, b)
-        expect(a.equals(new GfP2(BigInt(12), BigInt(0)))).toBeTruthy()
+        expect(a.equals(new GfP2(12n, 0n))).toBeTruthy()
 
-        a = new GfP2(BigInt(2), BigInt(2))
-        a.mulScalar(a, new GfP(BigInt(2)))
-        expect(a.equals(new GfP2(BigInt(4), BigInt(4)))).toBeTruthy()
+        a = new GfP2(2n, 2n)
+        a.mulScalar(a, new GfP(2n))
+        expect(a.equals(new GfP2(4n, 4n))).toBeTruthy()
 
-        a = new GfP2(BigInt(2), BigInt(2))
+        a = new GfP2(2n, 2n)
         a.mulXi(a)
-        expect(a.equals(new GfP2(BigInt(8), BigInt(4)))).toBeTruthy()
+        expect(a.equals(new GfP2(8n, 4n))).toBeTruthy()
         
-        a = new GfP2(BigInt(2), BigInt(2))
+        a = new GfP2(2n, 2n)
         a.square(a)
-        expect(a.equals(new GfP2(BigInt(8), BigInt(0)))).toBeTruthy()
+        expect(a.equals(new GfP2(8n, 0n))).toBeTruthy()
 
-        a = new GfP2(BigInt(2), BigInt(2))
+        a = new GfP2(2n, 2n)
         a.invert(a)
-        expect(a.equals(new GfP2(BigInt("48750412271734952799597329056769929307119018580717252678907858770148138053837"), 
-        BigInt("16250137423911650933199109685589976435706339526905750892969286256716046017946")))).toBeTruthy
+        expect(a.equals(new GfP2(48750412271734952799597329056769929307119018580717252678907858770148138053837n, 
+       16250137423911650933199109685589976435706339526905750892969286256716046017946n))).toBeTruthy
 
-        a = new GfP2(BigInt(36), BigInt(36))
-        a.mod(a, BigInt(34))
-        expect(a.equals(new GfP2(BigInt(2), BigInt(2)))).toBeTruthy()
+        a = new GfP2(36n, 36n)
+        a.mod(a, 34n)
+        expect(a.equals(new GfP2(2n, 2n))).toBeTruthy()
     });
 
 });

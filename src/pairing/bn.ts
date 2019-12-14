@@ -37,7 +37,7 @@ export class G1 {
         this.p = new CurvePoint();
 
         if (typeof k !== 'undefined') {
-            this.scalarBaseMul(BigInt(k));
+            this.scalarBaseMul(k);
         }
     }
 

@@ -1,8 +1,8 @@
 import { zeroBI, oneBI } from '../constants';
 const ZERO = zeroBI;
 const ONE = oneBI;
-const TWO = BigInt("2");
-const FOUR = BigInt("4");
+const TWO = 2n;
+const FOUR = 4n;
 
 // FROM: method 3https://helloacm.com/compute-powermod-abn/
 //Note: method 1 and 2 does not work with big numbers

@@ -72,9 +72,9 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     
     D.sub(GfP2.zero(), D).mulScalar(D, q.getX()).add(D, D).mod(D, p);
 
-    let a : GfP2 = new GfP2(BigInt(0), BigInt(0))
-    let c : GfP2 = new GfP2(BigInt(0), BigInt(0))
-    let b : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let a : GfP2 = new GfP2(0n, 0n)
+    let c : GfP2 = new GfP2(0n, 0n)
+    let b : GfP2 = new GfP2(0n, 0n)
     let rOut : TwistPoint = new TwistPoint()
 
     a.copy(I)
@@ -150,9 +150,9 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
     B.add(r.getX(), E).square(B).sub(B, A).sub(B, G).sub(B, C);
     C.mul(rz, r.getT()).add(C, C).mulScalar(C, q.getY());
 
-    let a : GfP2 = new GfP2(BigInt(0), BigInt(0))
-    let c : GfP2 = new GfP2(BigInt(0), BigInt(0))
-    let b : GfP2 = new GfP2(BigInt(0), BigInt(0))
+    let a : GfP2 = new GfP2(0n, 0n)
+    let c : GfP2 = new GfP2(0n, 0n)
+    let b : GfP2 = new GfP2(0n, 0n)
     let rOut : TwistPoint = new TwistPoint()
 
     a.copy(B)

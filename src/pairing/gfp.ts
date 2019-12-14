@@ -102,8 +102,8 @@ import deePool from 'deepool'
      * @returns the new value
      */
     pow(a: GfP, k: bigint) {
-        let tmp = BigInt("1")
-        for(let i = BigInt(1); i <= k; i++){
+        let tmp = 1n
+        for(let i = 1n; i <= k; i++){
             tmp = tmp * a.v;
         }
         this.v = tmp
@@ -214,6 +214,6 @@ import deePool from 'deepool'
 
 
 export const GfPPool1 = deePool.create(function makeGFP1(){
-    return new GfP(BigInt(0))
+    return new GfP(0n)
 })
 //GfPPool1.grow(10)

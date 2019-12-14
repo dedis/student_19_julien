@@ -5,7 +5,7 @@ import { modSqrt } from '../utils/tonelli-shanks';
 import { oneBI, zeroBI } from '../constants';
 import {toBigIntBE} from 'bigint-buffer'
 import { GfPPool1 } from './gfp';
-const curveB = new GfP(BigInt(3));
+const curveB = new GfP(3n);
 
 /**
  * Point class used by G1
@@ -13,7 +13,7 @@ const curveB = new GfP(BigInt(3));
 export default class CurvePoint {
 
     public static generator(): CurvePoint {
-        return new CurvePoint(oneBI, BigInt(-2), oneBI, oneBI);
+        return new CurvePoint(oneBI, -2n, oneBI, oneBI);
     }
     /**
      * Hash the message to a point
@@ -83,7 +83,7 @@ export default class CurvePoint {
         let yy : GfP = GfPPool1.use()
         let xxx : GfP = GfPPool1.use()
         yy.sqr(this.y);
-        xxx.pow(this.x, BigInt("3"));
+        xxx.pow(this.x, 3n);
 
         yy.sub(yy, xxx);
 
@@ -238,18 +238,18 @@ export default class CurvePoint {
 
         B.add(d, d);
         f.sub(f, B)
-        f.mod(f, p)
+        this.x.mod(f, p)
         B.add(C, C);
         t2.add(B,B);
         B.add(t2, t2);
-        C.sub(d, f)
+        C.sub(d, this.x)
 
         t2.mul(A, C);
         C.sub(t2, B).mod(C, p)
         B.mul(a.y, a.z);
         d.add(B, B).mod(d, p)
 
-        this.x.copy(f);
+        //this.x.copy(f);
         this.y.copy(C);
         this.z.copy(d);
 
@@ -292,8 +292,8 @@ export default class CurvePoint {
         this.y.mul(this.y, this.z);
         this.t.sqr(this.z);
 
-        this.y.copy(this.y.mul(this.y, this.t).mod(this.y, p));
-        this.x.copy(this.x.mul(this.x, this.t).mod(this.x, p));
+        this.y.mul(this.y, this.t).mod(this.y, p)
+        this.x.mul(this.x, this.t).mod(this.x, p)
         this.z.setValue(oneBI)
         this.t.setValue(oneBI)
     }

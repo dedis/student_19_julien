@@ -73,14 +73,14 @@ describe('BN256 Scalar Tests', () => {
     });
 
     it('should get the negative', () => {
-        const a = new BN256Scalar(BigInt(-1));
+        const a = new BN256Scalar(-1n);
         const n = new BN256Scalar().neg(a);
 
         expect(n.equals(new BN256Scalar().one()))
     });
 
     it('should get the inverse', () => {
-        const a = new BN256Scalar(BigInt(123));
+        const a = new BN256Scalar(123n);
         const inv = new BN256Scalar().inv(a);
 
         const one = new BN256Scalar().mul(a, inv);
@@ -112,7 +112,7 @@ describe('BN256 Scalar Tests', () => {
     });
 
     it('should clone', () => {
-        const a = new BN256Scalar(BigInt(123));
+        const a = new BN256Scalar(123n);
         const b = new BN256Scalar().set(a);
 
         expect(a.clone().equals(a)).toBeTruthy();

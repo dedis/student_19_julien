@@ -10,8 +10,8 @@ describe('BDN signatures Test', () => {
     it('should hash to R', () => {
         // reference test from Kyber Go
         const p1 = new BN256G2Point().base();
-        const p2 = new BN256G2Point().mul(new BN256Scalar(BigInt(2)), p1);
-        const p3 = new BN256G2Point().mul(new BN256Scalar(BigInt(3)), p1);
+        const p2 = new BN256G2Point().mul(new BN256Scalar(2n), p1);
+        const p3 = new BN256G2Point().mul(new BN256Scalar(3n), p1);
 
         const coefs = hashPointToR([p1, p2, p3]);
 

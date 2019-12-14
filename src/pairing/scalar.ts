@@ -33,7 +33,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     set(a: BN256Scalar): BN256Scalar {
-        this.v = BigInt(a.v);
+        this.v = a.v;
         return this;
     }
 
@@ -123,7 +123,7 @@ export default class BN256Scalar implements Scalar {
 
     /** @inheritdoc */
     clone(): BN256Scalar {
-        const s = new BN256Scalar(BigInt(this.v));
+        const s = new BN256Scalar(this.v);
         return s;
     }
 
