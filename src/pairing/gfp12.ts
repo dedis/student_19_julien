@@ -169,15 +169,13 @@ import GfP2 from './gfp2';
     mul(a: GfP12, b: GfP12): GfP12 {
         let tx: GfP6 = GfPPool6.use()
         let t: GfP6 = GfPPool6.use()
-        let t1: GfP6 = GfPPool6.use()
 
         tx.mul(a.x, b.y, true).add(tx, t.mul(b.x, a.y, true)).mod(tx, p)
-        
         t.mul(a.x, b.x, true).mulTau(t)
         this.y.mul(a.y, b.y, true).add(this.y, t).mod(this.y, p)
 
         this.x.copy(tx)
-        GfP6.release(tx, t, t1)
+        GfP6.release(tx, t)
         return this
     }
 
@@ -245,17 +243,16 @@ import GfP2 from './gfp2';
     invert(a: GfP12): GfP12 {
         let t1: GfP6 = GfPPool6.use()
         let t2: GfP6 = GfPPool6.use()
-        let t3: GfP6 = GfPPool6.use()
 
         let gfp12: GfP12 = GfPPool12.use()
 
         t1.square(a.x);
-        t2.square(a.y).sub(t2, t3.mulTau(t1)).invert(t2);
+        t2.square(a.y).sub(t2, t1.mulTau(t1)).invert(t2);
         gfp12.conjugate(a)
 
         this.mulScalar(gfp12, t2)
 
-        GfP6.release(t1,t2, t3)
+        GfP6.release(t1,t2)
         GfP12.release(gfp12)
 
         return this
