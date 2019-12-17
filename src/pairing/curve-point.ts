@@ -224,12 +224,9 @@ export default class CurvePoint {
         C.sub(d, this.x)
 
         t2.mul(A, C);
-        C.sub(t2, B).mod(C, p)
+        this.y.sub(t2, B).mod(this.y, p)
         B.mul(a.y, a.z);
-        d.add(B, B).mod(d, p)
-
-        this.y.copy(C);
-        this.z.copy(d);
+        this.z.add(B, B).mod(this.z, p)
 
         GfP.release(A,B,C,t2,d,f)
     }

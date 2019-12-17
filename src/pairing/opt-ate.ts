@@ -36,6 +36,10 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     let rx : GfP2 = GfPPool2.use()
     let rt : GfP2 = GfPPool2.use()
 
+    let a : GfP2 = new GfP2(0n, 0n)
+    let c : GfP2 = new GfP2(0n, 0n)
+    let b : GfP2 = new GfP2(0n, 0n)
+
     B.mul(p_1.getX(), r.getT());
     D.add(p_1.getY(), r.getZ()).square(D).sub(D, r2).sub(D, r.getT()).mul(D, r.getT());
 
@@ -57,33 +61,14 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
     I.add(p_1.getY(), B).square(I).sub(I, r2).sub(I, rt);
     E.mul(D, p_1.getX()).add(E, E);
 
-    I.sub(E, I).mod(I, p);
-    E.mulScalar(B, q.getY()).add(E, E).mod(E, p);
+    a.sub(E, I).mod(a, p);
+    c.mulScalar(B, q.getY()).add(c, c).mod(c, p);
     
-    D.sub(GfP2.zero(), D).mulScalar(D, q.getX()).add(D, D).mod(D, p);
+    b.sub(GfP2.zero(), D).mulScalar(b, q.getX()).add(b, b).mod(b, p);
 
-    let a : GfP2 = new GfP2(0n, 0n)
-    let c : GfP2 = new GfP2(0n, 0n)
-    let b : GfP2 = new GfP2(0n, 0n)
-    let rOut : TwistPoint = new TwistPoint()
 
-    a.copy(I)
-    b.copy(D)
-    c.copy(E)
+    let rOut : TwistPoint = new TwistPoint(rx, J, B, rt)
     
-    rOut.getX().getX().setValue(rx.getX().getValue())
-    rOut.getX().getY().setValue(rx.getY().getValue())
-
-    rOut.getY().getX().setValue(J.getX().getValue())
-    rOut.getY().getY().setValue(J.getY().getValue())
-
-    rOut.getZ().getX().setValue(B.getX().getValue())
-    rOut.getZ().getY().setValue(B.getY().getValue())
-
-    rOut.getT().getX().setValue(rt.getX().getValue())
-    rOut.getT().getY().setValue(rt.getY().getValue())
-
-
     GfP2.release(B, D, I, E, J, rx, rt)
 
     return {
@@ -99,9 +84,7 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
  * Tate Pairing", http://arxiv.org/pdf/0904.0854v3.pdf
  */
 function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
-
-    let A : GfP2 = GfPPool2.use()
-    let B : GfP2 = GfPPool2.use()
+    
     let C : GfP2 = GfPPool2.use()
     let D : GfP2 = GfPPool2.use()
     let E : GfP2 = GfPPool2.use()
@@ -109,19 +92,21 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
     let rx : GfP2 = GfPPool2.use()
     let rz : GfP2 = GfPPool2.use()
     let rt : GfP2 = GfPPool2.use()
-    let btmp : GfP2 = GfPPool2.use()
 
+    let a : GfP2 = new GfP2(0n, 0n)
+    let c : GfP2 = new GfP2(0n, 0n)
+    let b : GfP2 = new GfP2(0n, 0n)
 
-    A.square(r.getX());
-    B.square(r.getY());
-    C.square(B);
-    D.add(r.getX(), B).square(D).sub(D, A).sub(D, C).add(D, D);
+    c.square(r.getX());
+    a.square(r.getY());
+    C.square(a);
+    D.add(r.getX(), a).square(D).sub(D, c).sub(D, C).add(D, D);
 
-    E.add(A, A).add(E, A);
+    E.add(c, c).add(E, c);
     G.square(E);
 
     rx.sub(G, D).sub(rx, D)
-    rz.add(r.getY(), r.getZ()).square(rz).sub(rz, B).sub(rz, r.getT());
+    rz.add(r.getY(), r.getZ()).square(rz).sub(rz, a).sub(rz, r.getT());
     D.sub(D, rx).mul(D, E);
 
     C.add(C, C).add(C, C).add(C, C);
@@ -130,32 +115,14 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
     rt.square(rz);
 
     C.mul(E, r.getT()).add(C, C);
-    btmp.sub(GfP2.zero(), C).mulScalar(btmp, q.getX());
-    C.add(B, B).add(C, C)
-    B.add(r.getX(), E).square(B).sub(B, A).sub(B, G).sub(B, C);
-    C.mul(rz, r.getT()).add(C, C).mulScalar(C, q.getY());
+    b.sub(GfP2.zero(), C).mulScalar(b, q.getX());
+    C.add(a, a).add(C, C)
+    a.add(r.getX(), E).square(a).sub(a, c).sub(a, G).sub(a, C);
+    c.mul(rz, r.getT()).add(c, c).mulScalar(c, q.getY());
 
-    let a : GfP2 = new GfP2(0n, 0n)
-    let c : GfP2 = new GfP2(0n, 0n)
-    let b : GfP2 = new GfP2(0n, 0n)
-    let rOut : TwistPoint = new TwistPoint()
+    let rOut : TwistPoint = new TwistPoint(rx, D, rz, rt)
 
-    a.copy(B)
-    b.copy(btmp)
-    c.copy(C)
-    rOut.getX().getX().setValue(rx.getX().getValue())
-    rOut.getX().getY().setValue(rx.getY().getValue())
-
-    rOut.getY().getX().setValue(D.getX().getValue())
-    rOut.getY().getY().setValue(D.getY().getValue())
-
-    rOut.getZ().getX().setValue(rz.getX().getValue())
-    rOut.getZ().getY().setValue(rz.getY().getValue())
-
-    rOut.getT().getX().setValue(rt.getX().getValue())
-    rOut.getT().getY().setValue(rt.getY().getValue())
-
-    GfP2.release(A,B,C,D,E,G,rx,rt,rz, btmp)
+    GfP2.release(C,D,E,G,rx,rt,rz)
 
     return {
         a,
@@ -171,27 +138,22 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
     let t2 : GfP6 = GfPPool6.use()
     let tx : GfP6 = GfPPool6.use()
 
-    let t : GfP2 = GfPPool2.use()
     a2.setX(GfP2.zero())
     a2.setY(res.a)
     a2.setZ(res.b)
     
-    a2.mul(a2, ret.getX(), false);
+    a2.mul(a2, ret.getX());
     t3.mulScalar(ret.getY(), res.c);
-    t.add(res.b, res.c);
+    t2.getZ().add(res.b, res.c);
     t2.setX(GfP2.zero())
     t2.setY(res.a)
-    t2.setZ(t)
 
     tx.add(ret.getX(), ret.getY()).mul(tx, t2).sub(tx, a2).sub(tx,t3).mod(tx, p);
-    t3.add(t3, t2.mulTau(a2)).mod(t3, p);
+    t3.add(t3, a2.mulTau(a2)).mod(t3, p);
 
-    let gfp12: GfP12 = new GfP12()
-    gfp12.setX(tx)
-    gfp12.setY(t3)
+    let gfp12: GfP12 = new GfP12(tx, t3)
 
-    GfP6.release( a2, t3, t2, tx)
-    GfP2.release(t)
+    GfP6.release(a2, t3, t2, tx)
 
     return gfp12
 }
@@ -284,7 +246,6 @@ function finalExponentiation(a: GfP12): GfP12 {
     let fu2 : GfP12 = GfPPool12.use()
     let fu3 : GfP12 = GfPPool12.use()
     let fu2p : GfP12 = GfPPool12.use()
-    let fu3p : GfP12 = GfPPool12.use()
     let y3 : GfP12 = GfPPool12.use()
 
     t1.conjugate(a).mul(t1, t2.invert(a)).mod(t1, p);
@@ -299,7 +260,6 @@ function finalExponentiation(a: GfP12): GfP12 {
     fu2.exp(fu, u).mod(fu2, p);
     fu3.exp(fu2, u).mod(fu3, p);
     fu2p.frobenius(fu2);
-    fu3p.frobenius(fu3)     
     
     t2.mul(t2, fp2).mul(t2, fp3).mod(t2, p);
     fp2.conjugate(t1);
@@ -307,7 +267,7 @@ function finalExponentiation(a: GfP12): GfP12 {
     y3.frobenius(fu).conjugate(y3);
     fu.mul(fu, fu2p).conjugate(fu).mod(fu, p);
     fu2p.conjugate(fu2);
-    fu2.mul(fu3, fu3p).conjugate(fu2).mod(fu2, p);
+    fu2.mul(fu3, t1.frobenius(fu3)).conjugate(fu2).mod(fu2, p);
 
     fu3.square(fu2).mul(fu3, fu).mul(fu3, fu2p).mod(fu3, p);
     t1.mul(y3, fu2p).mul(t1, fu3).square(t1).mod(t1, p);
@@ -317,10 +277,9 @@ function finalExponentiation(a: GfP12): GfP12 {
     t1.mul(t1, t2).mod(t1, p);
     fu3.square(fu3).mul(fu3, t1).mod(fu3, p)
 
-    let gfp12: GfP12 = new GfP12()
-    gfp12.setXY(fu3)
+    let gfp12: GfP12 = new GfP12(fu3.getX(), fu3.getY())
 
-    GfP12.release(t1,t2,fp2,fp3,fu,fu2,fu2p,fu3p,y3,fu3)
+    GfP12.release(t1,t2,fp2,fp3,fu,fu2,fu2p,y3,fu3)
 
     return gfp12
 }

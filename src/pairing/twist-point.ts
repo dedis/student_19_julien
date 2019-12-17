@@ -270,9 +270,8 @@ export default class TwistPoint {
         this.t.square(this.z);
 
         this.y.mul(this.y, this.t)
-        this.z.mul(this.x, this.t)
+        this.x.mul(this.x, this.t)
 
-        this.x.copy(this.z);
         this.z.copy(GfP2.one());
         this.t.copy(GfP2.one());
 

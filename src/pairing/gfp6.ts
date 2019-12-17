@@ -131,15 +131,10 @@ export default class GfP6 {
 
     frobeniusP2(a: GfP6): GfP6 {
         let tmp1 : GfP = GfPPool1.use()
-        let tmp2 : GfP = GfPPool1.use()
-
-        tmp1.setValue(xiTo2PSquaredMinus2Over3)
-        tmp2.setValue(xiToPSquaredMinus1Over3)
-
-        this.x.mulScalar(a.x, tmp1);
-        this.y.mulScalar(a.y, tmp2);
+        this.x.mulScalar(a.x, tmp1.setValue(xiTo2PSquaredMinus2Over3));
+        this.y.mulScalar(a.y, tmp1.setValue(xiToPSquaredMinus1Over3));
         this.z.copy(a.z)
-        GfP.release(tmp1, tmp2)
+        GfP.release(tmp1)
         return this
     }
 
