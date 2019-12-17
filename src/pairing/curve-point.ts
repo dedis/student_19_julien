@@ -140,7 +140,6 @@ export default class CurvePoint {
         let s1 : GfP = GfPPool1.use()
         let s2 : GfP = GfPPool1.use()
         let h : GfP = GfPPool1.use()
-        //let i : GfP = GfPPool1.use()
         let j : GfP = GfPPool1.use()
 
 
@@ -169,13 +168,7 @@ export default class CurvePoint {
             return;
         }
 
-        //let r : GfP = GfPPool1.use()
-        //let v : GfP = GfPPool1.use()
-        //let t4 : GfP = GfPPool1.use()
         let t6 : GfP = GfPPool1.use()
-        //let ty : GfP = GfPPool1.use()
-        //let tz : GfP = GfPPool1.use()
-
 
         s2.add(t, t);
         u1.mul(u1, u2);
@@ -214,14 +207,9 @@ export default class CurvePoint {
         let A : GfP = GfPPool1.use()
         let B : GfP = GfPPool1.use()
         let C : GfP = GfPPool1.use()
-        //let t : GfP = GfPPool1.use()
         let t2 : GfP = GfPPool1.use()
         let d : GfP = GfPPool1.use()
-        //let e : GfP = GfPPool1.use()
         let f : GfP = GfPPool1.use()
-        //let tx : GfP = GfPPool1.use()
-        //let ty : GfP = GfPPool1.use()
-        //let tz : GfP = GfPPool1.use()
 
         A.sqr(a.x);
         B.sqr(a.y);

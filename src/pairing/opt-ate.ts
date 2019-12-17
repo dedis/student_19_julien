@@ -30,21 +30,11 @@ interface Result {
 function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2): Result {
     let B : GfP2 = GfPPool2.use()
     let D : GfP2 = GfPPool2.use()
-    //let H : GfP2 = GfPPool2.use()
     let I : GfP2 = GfPPool2.use()
     let E : GfP2 = GfPPool2.use()
     let J : GfP2 = GfPPool2.use()
-    //let L1 : GfP2 = GfPPool2.use()
-    //let V : GfP2 = GfPPool2.use()
     let rx : GfP2 = GfPPool2.use()
-    //let ry : GfP2 = GfPPool2.use()
-    //let rz : GfP2 = GfPPool2.use()
     let rt : GfP2 = GfPPool2.use()
-    //let t : GfP2 = GfPPool2.use()
-    //let t2 : GfP2 = GfPPool2.use()
-    //let atmp : GfP2 = GfPPool2.use()
-    //let ctmp : GfP2 = GfPPool2.use()
-    //let btmp : GfP2 = GfPPool2.use()
 
     B.mul(p_1.getX(), r.getT());
     D.add(p_1.getY(), r.getZ()).square(D).sub(D, r2).sub(D, r.getT()).mul(D, r.getT());
@@ -117,13 +107,8 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
     let E : GfP2 = GfPPool2.use()
     let G : GfP2 = GfPPool2.use()
     let rx : GfP2 = GfPPool2.use()
-    //let ry : GfP2 = GfPPool2.use()
     let rz : GfP2 = GfPPool2.use()
     let rt : GfP2 = GfPPool2.use()
-    //let t : GfP2 = GfPPool2.use()
-
-    //let atmp : GfP2 = GfPPool2.use()
-    //let ctmp : GfP2 = GfPPool2.use()
     let btmp : GfP2 = GfPPool2.use()
 
 
@@ -181,13 +166,10 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
 }
 
 function mulLine(ret: GfP12, res: Result): GfP12 {
-    //let a1 : GfP6 = GfPPool6.use()
     let a2 : GfP6 = GfPPool6.use()
     let t3 : GfP6 = GfPPool6.use()
     let t2 : GfP6 = GfPPool6.use()
     let tx : GfP6 = GfPPool6.use()
-    //let ty : GfP6 = GfPPool6.use()
-    //let tmp : GfP6 = GfPPool6.use()
 
     let t : GfP2 = GfPPool2.use()
     a2.setX(GfP2.zero())
@@ -224,7 +206,6 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
     let r2 : GfP2 = GfPPool2.use()
     let qx : GfP2 = GfPPool2.use()
     let qy : GfP2 = GfPPool2.use()
-    //let q2x : GfP2 = GfPPool2.use()
 
     ret = GfP12.one();
 
@@ -295,10 +276,8 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
  */
 function finalExponentiation(a: GfP12): GfP12 {
     
-    //let t0 : GfP12 = GfPPool12.use()
     let t1 : GfP12 = GfPPool12.use()
     let t2 : GfP12 = GfPPool12.use()
-    //let fp : GfP12 = GfPPool12.use()
     let fp2 : GfP12 = GfPPool12.use()
     let fp3 : GfP12 = GfPPool12.use()
     let fu : GfP12 = GfPPool12.use()
@@ -306,14 +285,7 @@ function finalExponentiation(a: GfP12): GfP12 {
     let fu3 : GfP12 = GfPPool12.use()
     let fu2p : GfP12 = GfPPool12.use()
     let fu3p : GfP12 = GfPPool12.use()
-
-    //let y0 : GfP12 = GfPPool12.use()
-    //let y1 : GfP12 = GfPPool12.use()
-    //let y2 : GfP12 = GfPPool12.use()
     let y3 : GfP12 = GfPPool12.use()
-    //let y4 : GfP12 = GfPPool12.use()
-    //let y5 : GfP12 = GfPPool12.use()
-    //let y6 : GfP12 = GfPPool12.use()
 
     t1.conjugate(a).mul(t1, t2.invert(a)).mod(t1, p);
     t2.frobeniusP2(t1);

@@ -163,15 +163,6 @@ export default class TwistPoint {
             return;
         }
 
-        //let r : GfP2 = GfPPool2.use()
-        //let v : GfP2 = GfPPool2.use()
-        //let t4 : GfP2 = GfPPool2.use()
-        //let t6 : GfP2 = GfPPool2.use()
-        //let tx : GfP2 = GfPPool2.use()
-        //let ty : GfP2 = GfPPool2.use()
-        //let tz : GfP2 = GfPPool2.use()
-
-
         u2.add(t, t);
         s2.mul(u1, i);
 
@@ -214,14 +205,9 @@ export default class TwistPoint {
         let A : GfP2 = GfPPool2.use()
         let B : GfP2 = GfPPool2.use()
         let C : GfP2 = GfPPool2.use()
-        //let t : GfP2 = GfPPool2.use()
         let t2 : GfP2 = GfPPool2.use()
         let d : GfP2 = GfPPool2.use()
-        //let e : GfP2 = GfPPool2.use()
         let f : GfP2 = GfPPool2.use()
-        //let tx : GfP2 = GfPPool2.use()
-        //let ty : GfP2 = GfPPool2.use()
-        //let tz : GfP2 = GfPPool2.use()
 
         A.square(a.x);
         B.square(a.y);
