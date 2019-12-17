@@ -38,13 +38,14 @@
     "hash.js": "^1.1.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-syntax-bigint": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
     "@types/elliptic": "^6.4.2",
     "@types/jasmine": "^3.3.5",
     "@types/node": "^9.6.6",
     "ajv": "^6.9.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
+    "babel-loader": "^8.0.6",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.19.1",
@@ -54,12 +55,12 @@
     "jsverify": "^0.8.4",
     "nyc": "^14.1.1",
     "prettier": "^1.10.2",
-    "ts-loader": "^5.3.3",
+    "ts-loader": "^6.2.1",
     "ts-node": "^7.0.1",
     "typedoc": "^0.15.0",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.2.1"
+    "webpack-cli": "^3.3.10"
   },
   "nyc": {
     "all": true,

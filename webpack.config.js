@@ -18,7 +18,7 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["env"]
+            presets: ["@babel/preset-env"]
           }
         }
       },
@@ -29,7 +29,8 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              presets: ["env"]
+              presets: ["@babel/preset-env"],
+              plugins: ["@babel/plugin-syntax-bigint"]
             }
           },
           "ts-loader"
