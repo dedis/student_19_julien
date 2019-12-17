@@ -130,10 +130,9 @@ describe('GfP6', () => {
     });
 
     it('should mulTau', () => {
-        let n: GfP6 = new GfP6(new GfP2(1n,2n), new GfP2(3n, 4n), new GfP2(5n, 6n))
         let m: GfP6 = new GfP6(new GfP2(1n,2n), new GfP2(3n, 4n), new GfP2(5n, 6n))
         let result: GfP6 = new GfP6(new GfP2(3n,4n), new GfP2(5n, 6n), new GfP2(5n, 5n))
-        expect(n.mulTau(m).equals(result)).toBeTruthy();
+        expect(m.mulTau(m).equals(result)).toBeTruthy();
     });
 
 

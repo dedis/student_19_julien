@@ -183,17 +183,6 @@ export default class TwistPoint {
         u1.sub(t, z22);
         this.z.mul(u1, h)
 
-        /*this.getX().getX().setValue(tx.getX().getValue()) 
-        this.getX().getY().setValue(tx.getY().getValue()) */
-
-        //this.x.setXY(tx)
-
-        //this.x.copy(tx)
-
-        //this.x = tx
-        //this.y = s1
-        //this.z = t
-
         GfP2.release(z12, z22, u1, u2, s2, h, i, j, s1, t)
         }
 
@@ -237,14 +226,6 @@ export default class TwistPoint {
         B.mul(a.y, a.z);
         this.z.add(B, B)
 
-        //this.x = f
-        //this.y = C
-        //this.z = d
-
-        /*this.x.copy(f)
-        this.y.copy(C)
-        this.z.copy(d)
-        this copy makes one test fails sometimes*/
         GfP2.release(A,B,t2, f, C, d)
     }
 

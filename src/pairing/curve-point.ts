@@ -168,21 +168,18 @@ export default class CurvePoint {
             return;
         }
 
-        let t6 : GfP = GfPPool1.use()
-
         s2.add(t, t);
         u1.mul(u1, u2);
 
         u2.sqr(s2);
         t.add(u1, u1);
-        t6.sub(u2, j);
-        this.x.sub(t6, t).mod(this.x, p)
+        this.x.sub(u2, j).sub(this.x, t).mod(this.x, p)
 
         t.sub(u1, this.x);
         u2.mul(s1, j);
-        t6.add(u2, u2);
+        u1.add(u2, u2);
         u2.mul(s2, t);
-        this.y.sub(u2, t6).mod(this.y, p)
+        this.y.sub(u2, u1).mod(this.y, p)
 
         t.add(a.z, b.z);
         u2.sqr(t);
@@ -190,13 +187,7 @@ export default class CurvePoint {
         u2.sub(t, z2z2);
         this.z.mul(u2, h).mod(this.z, p)
         
-        //this.x.setValue(tx.getValue())
-        //this.x = tx
-        //this.y = u1;
-        //this.z = u2;
-
-
-        GfP.release(z1z1, z2z2, t, s1, s2, h, j, t6, u1, u2)
+        GfP.release(z1z1, z2z2, t, s1, s2, h, j, u1, u2)
     }
 
     /**
@@ -237,7 +228,6 @@ export default class CurvePoint {
         B.mul(a.y, a.z);
         d.add(B, B).mod(d, p)
 
-        //this.x.copy(f);
         this.y.copy(C);
         this.z.copy(d);
 
