@@ -205,11 +205,11 @@ import deePool from 'deepool'
         return new GfP(a.v)
     }
 
-    static release(...a: GfP[]): void{
+    /*static release(...a: GfP[]): void{
         for(let i = 0; i<a.length; i++){
             GfPPool1.recycle(a[i])
         }
-    }
+    }*/
 }
 
 

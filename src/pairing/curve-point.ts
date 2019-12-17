@@ -93,7 +93,9 @@ export default class CurvePoint {
             yy.mod(yy, p);
         }
         let r:boolean = yy.signum() == 0
-        GfP.release(yy, xxx)
+        GfPPool1.recycle(yy)
+        GfPPool1.recycle(xxx)
+
 
         return r;
     }
@@ -164,7 +166,15 @@ export default class CurvePoint {
 
         if (h.signum() === 0 && t.signum() === 0) {
             this.dbl(a);
-            GfP.release(z1z1, z2z2, u1, u2, t, s1, s2, h, j)
+            GfPPool1.recycle(z1z1)
+            GfPPool1.recycle(z2z2)
+            GfPPool1.recycle(t)
+            GfPPool1.recycle(s1)
+            GfPPool1.recycle(s2)
+            GfPPool1.recycle(h)
+            GfPPool1.recycle(j)
+            GfPPool1.recycle(u1)
+            GfPPool1.recycle(u2)            
             return;
         }
 
@@ -186,8 +196,16 @@ export default class CurvePoint {
         t.sub(u2, z1z1);
         u2.sub(t, z2z2);
         this.z.mul(u2, h).mod(this.z, p)
-        
-        GfP.release(z1z1, z2z2, t, s1, s2, h, j, u1, u2)
+        GfPPool1.recycle(z1z1)
+        GfPPool1.recycle(z2z2)
+        GfPPool1.recycle(t)
+        GfPPool1.recycle(s1)
+        GfPPool1.recycle(s2)
+        GfPPool1.recycle(h)
+        GfPPool1.recycle(j)
+        GfPPool1.recycle(u1)
+        GfPPool1.recycle(u2)
+
     }
 
     /**
@@ -228,7 +246,13 @@ export default class CurvePoint {
         B.mul(a.y, a.z);
         this.z.add(B, B).mod(this.z, p)
 
-        GfP.release(A,B,C,t2,d,f)
+        GfPPool1.recycle(A)
+        GfPPool1.recycle(B)
+        GfPPool1.recycle(C)
+        GfPPool1.recycle(t2)
+        GfPPool1.recycle(d)
+        GfPPool1.recycle(f)
+
     }
 
     /**

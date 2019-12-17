@@ -90,7 +90,7 @@ export default class TwistPoint {
         cpy.y.square(cpy.y).mod(cpy.y, p)
         
         let result : boolean = cpy.y.equals(xxx)
-        GfP2.release(xxx)
+        GfPPool2.recycle(xxx)
         return result
     }
 
@@ -159,7 +159,16 @@ export default class TwistPoint {
         t.sub(s2, s1);
         if (h.isZero() && t.isZero()) {
             this.double(a);
-            GfP2.release(z12, z22, u1, u2, t, s1, s2, h, i, j)
+            GfPPool2.recycle(z12)
+            GfPPool2.recycle(z22)
+            GfPPool2.recycle(u1)
+            GfPPool2.recycle(u2)
+            GfPPool2.recycle(s2)
+            GfPPool2.recycle(h)
+            GfPPool2.recycle(i)
+            GfPPool2.recycle(j)
+            GfPPool2.recycle(s1)
+            GfPPool2.recycle(t)            
             return;
         }
 
@@ -183,7 +192,16 @@ export default class TwistPoint {
         u1.sub(t, z22);
         this.z.mul(u1, h)
 
-        GfP2.release(z12, z22, u1, u2, s2, h, i, j, s1, t)
+        GfPPool2.recycle(z12)
+        GfPPool2.recycle(z22)
+        GfPPool2.recycle(u1)
+        GfPPool2.recycle(u2)
+        GfPPool2.recycle(s2)
+        GfPPool2.recycle(h)
+        GfPPool2.recycle(i)
+        GfPPool2.recycle(j)
+        GfPPool2.recycle(s1)
+        GfPPool2.recycle(t)
         }
 
     /**
@@ -226,7 +244,13 @@ export default class TwistPoint {
         B.mul(a.y, a.z);
         this.z.add(B, B)
 
-        GfP2.release(A,B,t2, f, C, d)
+        GfPPool2.recycle(A)
+        GfPPool2.recycle(B)
+        GfPPool2.recycle(t2)
+        GfPPool2.recycle(f)
+        GfPPool2.recycle(C)
+        GfPPool2.recycle(d)
+
     }
 
     /**

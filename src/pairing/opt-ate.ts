@@ -69,7 +69,14 @@ function lineFunctionAdd(r: TwistPoint, p_1: TwistPoint, q: CurvePoint, r2: GfP2
 
     let rOut : TwistPoint = new TwistPoint(rx, J, B, rt)
     
-    GfP2.release(B, D, I, E, J, rx, rt)
+    GfPPool2.recycle(B)
+    GfPPool2.recycle(D)
+    GfPPool2.recycle(I)
+    GfPPool2.recycle(E)
+    GfPPool2.recycle(J)
+    GfPPool2.recycle(rx)
+    GfPPool2.recycle(rt)
+
 
     return {
         a,
@@ -122,8 +129,13 @@ function lineFunctionDouble(r: TwistPoint, q: CurvePoint): Result {
 
     let rOut : TwistPoint = new TwistPoint(rx, D, rz, rt)
 
-    GfP2.release(C,D,E,G,rx,rt,rz)
-
+    GfPPool2.recycle(C)
+    GfPPool2.recycle(D)
+    GfPPool2.recycle(E)
+    GfPPool2.recycle(G)
+    GfPPool2.recycle(rx)
+    GfPPool2.recycle(rt)
+    GfPPool2.recycle(rz)
     return {
         a,
         b,
@@ -153,7 +165,12 @@ function mulLine(ret: GfP12, res: Result): GfP12 {
 
     let gfp12: GfP12 = new GfP12(tx, t3)
 
-    GfP6.release(a2, t3, t2, tx)
+
+    GfPPool6.recycle(a2)
+    GfPPool6.recycle(t3)
+    GfPPool6.recycle(t2)
+    GfPPool6.recycle(tx)
+
 
     return gfp12
 }
@@ -226,8 +243,11 @@ function miller(q: TwistPoint, p: CurvePoint): GfP12 {
 
     r2.square(minusQ2.getY());
     const res2 = lineFunctionAdd(r, minusQ2, bAffine, r2);
-    GfP.release(tmp)
-    GfP2.release(qx, qy)
+
+    GfPPool1.recycle(tmp)
+    GfPPool2.recycle(qx)
+    GfPPool2.recycle(qy)
+
     return mulLine(ret, res2);
 }
 
@@ -279,7 +299,16 @@ function finalExponentiation(a: GfP12): GfP12 {
 
     let gfp12: GfP12 = new GfP12(fu3.getX(), fu3.getY())
 
-    GfP12.release(t1,t2,fp2,fp3,fu,fu2,fu2p,y3,fu3)
+    GfPPool12.recycle(t1)
+    GfPPool12.recycle(t2)
+    GfPPool12.recycle(fp2)
+    GfPPool12.recycle(fp3)
+    GfPPool12.recycle(fu)
+    GfPPool12.recycle(fu2)
+    GfPPool12.recycle(fu2p)
+    GfPPool12.recycle(y3)
+    GfPPool12.recycle(fu3)
+
 
     return gfp12
 }

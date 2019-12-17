@@ -129,7 +129,7 @@ import GfP2 from './gfp2';
         tmp.setValue(xiToPSquaredMinus1Over6)
         this.x.frobeniusP2(a.x).mulGfP(this.x, tmp);
         this.y.frobeniusP2(a.y);
-        GfP.release(tmp)
+        GfPPool1.recycle(tmp)
         return this
     }
 
@@ -175,7 +175,9 @@ import GfP2 from './gfp2';
         this.y.mul(a.y, b.y, true).add(this.y, t).mod(this.y, p)
 
         this.x.copy(tx)
-        GfP6.release(tx, t)
+        GfPPool6.recycle(tx)
+        GfPPool6.recycle(t)
+
         return this
     }
 
@@ -211,7 +213,9 @@ import GfP2 from './gfp2';
             else sum.copy(t);
         }
         this.copy(sum)
-        GfP12.release(sum, t)
+        GfPPool12.recycle(sum)
+        GfPPool12.recycle(t)
+
         return this
     }
 
@@ -231,7 +235,9 @@ import GfP2 from './gfp2';
         this.y.sub(this.y, t);
         this.x.add(v0,v0)
 
-        GfP6.release(v0, t)
+        GfPPool6.recycle(t)
+        GfPPool6.recycle(v0)
+
 
         return this
     }
@@ -252,8 +258,10 @@ import GfP2 from './gfp2';
 
         this.mulScalar(gfp12, t2)
 
-        GfP6.release(t1,t2)
-        GfP12.release(gfp12)
+        GfPPool6.recycle(t1)
+        GfPPool6.recycle(t2)
+
+        GfPPool12.recycle(gfp12)
 
         return this
     }
@@ -280,11 +288,11 @@ import GfP2 from './gfp2';
         return this
     }
 
-    static release(...a:GfP12[]): void{
+    /*static release(...a:GfP12[]): void{
         for(let i = 0; i<a.length; i++){
             GfPPool12.recycle(a[i])
         }
-    }
+    }*/
 }
 
 export const GfPPool12 = deePool.create(function makeGFP12(){

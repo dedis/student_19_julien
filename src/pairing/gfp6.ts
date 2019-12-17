@@ -134,7 +134,7 @@ export default class GfP6 {
         this.x.mulScalar(a.x, tmp1.setValue(xiTo2PSquaredMinus2Over3));
         this.y.mulScalar(a.y, tmp1.setValue(xiToPSquaredMinus1Over3));
         this.z.copy(a.z)
-        GfP.release(tmp1)
+        GfPPool1.recycle(tmp1)
         return this
     }
 
@@ -218,7 +218,12 @@ export default class GfP6 {
             this.x.sub(this.x, v0).add(this.x, v1).sub(this.x, v2)
         }
         this.z.copy(tz)
-        GfP2.release(v0,v1,v2,t0,t1,tz)
+        GfPPool2.recycle(v0)
+        GfPPool2.recycle(v1)
+        GfPPool2.recycle(v2)
+        GfPPool2.recycle(t0)
+        GfPPool2.recycle(t1)
+        GfPPool2.recycle(tz)
         return this
     }
 
@@ -252,7 +257,7 @@ export default class GfP6 {
         this.setX(tmp.y)
         this.setY(tmp.z)
         this.z.mulXi(tmp.x)
-        GfP6.release(tmp)
+        GfPPool6.recycle(tmp)
         return this
     }
 
@@ -277,8 +282,11 @@ export default class GfP6 {
         this.x.add(a.x, a.z).square(this.x).sub(this.x, v0).add(this.x, v1).sub(this.x, v2)
         this.z.copy(c0)   
 
-        GfP2.release(v0,v1,v2,c0,t)
-
+        GfPPool2.recycle(v0)
+        GfPPool2.recycle(v1)
+        GfPPool2.recycle(v2)
+        GfPPool2.recycle(c0)
+        GfPPool2.recycle(t)
         return this
     }
 
@@ -303,7 +311,12 @@ export default class GfP6 {
         this.x.mul(C, F)
         this.y.mul(B, F)
         this.z.mul(A, F)
-        GfP2.release(A,B,C,F,t1)
+        
+        GfPPool2.recycle(A)
+        GfPPool2.recycle(B)
+        GfPPool2.recycle(C)
+        GfPPool2.recycle(F)
+        GfPPool2.recycle(t1)
         return this
     }
 
@@ -329,11 +342,11 @@ export default class GfP6 {
         return this
     }
 
-    static release(...a:GfP6[]): void{
+    /*static release(...a:GfP6[]): void{
         for(let i = 0; i<a.length; i++){
             GfPPool6.recycle(a[i])
         }
-    }
+    }*/
 }
 
 export const GfPPool6 = deePool.create(function makeGFP6(){

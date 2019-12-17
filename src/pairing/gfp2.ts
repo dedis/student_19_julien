@@ -146,7 +146,9 @@ export default class GfP2 {
             this.y.sub(this.y,t)
         }
 
-        GfP.release(tx, t)
+        GfPPool1.recycle(tx)
+        GfPPool1.recycle(t)
+
         return this
     }
 
@@ -173,7 +175,7 @@ export default class GfP2 {
         this.x.add(tmp.x, tmp.x).add(this.x, tmp.x).add(this.x, tmp.y)
         this.y.add(tmp.y, tmp.y).add(this.y, tmp.y).sub(this.y, tmp.x);
 
-        GfP2.release(tmp)
+        GfPPool2.recycle(tmp)
         return this
     }
 
@@ -194,7 +196,9 @@ export default class GfP2 {
         // shift any time
         this.x.mul(a.x, a.y).shiftLeft(this.x, 1).mod(this.x, p)
         this.y.copy(t2)
-        GfP.release(t1, t2)
+        //GfP.release(t1, t2)
+        GfPPool1.recycle(t1)
+        GfPPool1.recycle(t2)
         return this
     }
 
@@ -214,7 +218,9 @@ export default class GfP2 {
         this.x.negate(a.x).mul(this.x, t2).mod(this.x, p)
         this.y.mul(a.y, t2).mod(this.y, p)
 
-        GfP.release(t, t2)
+        //GfP.release(t, t2)
+        GfPPool1.recycle(t)
+        GfPPool1.recycle(t2)
 
         return this
     }
@@ -247,11 +253,11 @@ export default class GfP2 {
         return this
     }
 
-    static release(...a:GfP2[]): void{
+    /*static release(...a:GfP2[]): void{
         for(let i = 0; i<a.length; i++){
             GfPPool2.recycle(a[i])
         }
-    }
+    }*/
 
 }
 
