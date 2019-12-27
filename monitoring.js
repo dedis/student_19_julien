@@ -1,7 +1,5 @@
 var button1 = document.getElementById("monitoring");
 var button2 = document.getElementById("monitoring2");
-var button3 = document.getElementById("monitoring3");
-
 const msg = new Uint8Array("abc");
 var maskBuffer = [
   new Uint16Array([0b1]),
@@ -12,6 +10,7 @@ var maskBuffer = [
 ];
 var signingTotal = 0;
 var verifyingTotal = 0;
+var maxjs = [2, 10, 100, 500, 1000];
 button1.onclick = function() {
   for (let i = 0; i < 2; i++) {
     performance.mark("Begin test");
@@ -214,43 +213,24 @@ function verify(signatures, publics, maxj) {
 }
 
 button2.onclick = function() {
-  var maxj = 650;
-  performance.mark("Test start");
-  var values = sign(maxj);
-  var signatures = values[0];
-  var publics = values[1];
-  aggregate(signatures, publics, maxj);
-  verify(signatures, publics, maxj);
-  performance.mark("Test end");
-  performance.measure("Test performance", "Test start", "Test end");
-  const myMeasure = performance.getEntriesByName("Test performance");
-  console.log("In total, the test was: " + myMeasure[0].duration);
-  console.log(
-    "Verifying is : " + verifyingTotal / signingTotal + " longer than signing"
-  );
-};
-
-button3.onclick = function() {
-  var maxj = 2;
-  var values = sign(maxj);
-  var signatures = values[0];
-  var publics = values[1];
-  verify(signatures, publics, maxj);
+  for (let a = 0; a < maxjs.length; a++) {
+    var maxj = maxjs[a];
+    performance.mark("Test start");
+    var values = sign(maxj);
+    var signatures = values[0];
+    var publics = values[1];
+    //aggregate(signatures, publics, maxj);
+    verify(signatures, publics, maxj);
+    performance.mark("Test end");
+    performance.measure("Test performance", "Test start", "Test end");
+    const myMeasure = performance.getEntriesByName("Test performance");
+    console.log("In total, the test was: " + myMeasure[0].duration);
+    console.log(
+      "Verifying is : " + verifyingTotal / signingTotal + " longer than signing"
+    );
+  }
 };
 
 //for 650 keys, verify is 5.17 x longer
 //for 1000 keys, verify is 5.42 x longer
 //for 100 keys, verify is 5.00 x longer
-
-/*Timing master:
-650keys: signing: 23426ms
-          aggregate: 1446ms
-          verify: 115722ms
-*/
-/*Timing BigInt:
-650keys: singing: 8330ms
-          Aggregate: 484ms
-          verify: 38728ms
-          */
-
-//BIGINT: for 650keys, verify is 4.47 x longer
