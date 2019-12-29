@@ -1,5 +1,7 @@
 var button1 = document.getElementById("monitoring");
 var button2 = document.getElementById("monitoring2");
+var button3 = document.getElementById("monitoring3");
+
 const msg = new Uint8Array("abc");
 var maskBuffer = [
   new Uint16Array([0b1]),
@@ -232,7 +234,7 @@ button2.onclick = function() {
 };
 
 button3.onclick = function() {
-  var maxj = maxjs[0];
+  var maxj = maxjs[2];
   performance.mark("Test start");
   var values = sign(maxj);
   var signatures = values[0];
