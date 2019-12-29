@@ -231,6 +231,23 @@ button2.onclick = function() {
   }
 };
 
+button3.onclick = function() {
+  var maxj = maxjs[0];
+  performance.mark("Test start");
+  var values = sign(maxj);
+  var signatures = values[0];
+  var publics = values[1];
+  //aggregate(signatures, publics, maxj);
+  verify(signatures, publics, maxj);
+  performance.mark("Test end");
+  performance.measure("Test performance", "Test start", "Test end");
+  const myMeasure = performance.getEntriesByName("Test performance");
+  console.log("In total, the test was: " + myMeasure[0].duration);
+  console.log(
+    "Verifying is : " + verifyingTotal / signingTotal + " longer than signing"
+  );
+};
+
 //for 650 keys, verify is 5.17 x longer
 //for 1000 keys, verify is 5.42 x longer
 //for 100 keys, verify is 5.00 x longer
